@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Karla } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const titleFont = Karla({
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ].join(" ")}>
       <body className="min-h-dvh bg-white text-zinc-900 antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );
