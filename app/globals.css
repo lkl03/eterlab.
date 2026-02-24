@@ -1,15 +1,198 @@
+@config "../tailwind.config.mjs";
+
+
 @import "tailwindcss";
 
-/* Light theme only */
+@import "tailwindcss";
+
+/* Logo font (Capsuula)
+   Download: https://www.dafont.com/capsuula.font
+   Place file at: /public/fonts/Capsuula.ttf
+*/
+@font-face {
+  font-family: "Capsuula";
+  src: url("../public/fonts/Capsuula.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  tokens                                                                    */
+/* -------------------------------------------------------------------------- */
+
 :root {
-  color-scheme: light;
+  /* These are space-separated RGB values so Tailwind can do: rgb(var(--ink) / <alpha>) */
+  --ink: 33 33 33;
+  --paper: 255 255 255;
+  --paper-muted: 247 247 250;
 }
 
-html, body {
-  height: 100%;
+/* Nice by default across the site */
+html {
+  scroll-behavior: smooth;
 }
 
-@layer base {
-  body { font-family: var(--font-body); }
-  h1,h2,h3,h4,h5,h6 { font-family: var(--font-title); }
+/* -------------------------------------------------------------------------- */
+/*  custom utilities (Tailwind v4)                                            */
+/* -------------------------------------------------------------------------- */
+
+@layer utilities {
+
+  .font-logo {
+    font-family: "Capsuula", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    letter-spacing: 0.01em;
+  }
+
+  /* shared title sizing so sections stay consistent */
+  .eter-title {
+    font-size: clamp(56px, 7.2vw, 112px);
+    line-height: 0.92em;
+    /* apply the "bubble" motion ONLY to titles across the site */
+    animation: eter-bubble 4.4s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* bubble animation (movement only). Useful for smaller titles (cards, etc). */
+  .eter-bubble-title {
+    animation: eter-bubble 4.4s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* subtle floating (logo bubble) */
+  .eter-bubble {
+    animation: eter-bubble 4.8s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* chevron hint */
+  .eter-chevron {
+    animation: eter-chevron 2.2s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* ethereal gradient background (hero / CTA). keep it mostly white/off-white. */
+  .eter-gradient-bg {
+    background:
+      radial-gradient(900px circle at 20% 20%, rgba(138, 180, 255, 0.16), transparent 58%),
+      radial-gradient(780px circle at 72% 30%, rgba(255, 139, 211, 0.12), transparent 60%),
+      radial-gradient(900px circle at 58% 78%, rgba(164, 148, 255, 0.10), transparent 62%),
+      radial-gradient(980px circle at 18% 86%, rgba(138, 180, 255, 0.10), transparent 66%),
+      linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 247, 250, 1));
+    background-size: 140% 140%;
+    animation: eter-gradient 16s ease-in-out infinite;
+  }
+
+  .eter-contact-bg {
+    background:
+      radial-gradient(860px circle at 18% 30%, rgba(138, 180, 255, 0.14), transparent 60%),
+      radial-gradient(760px circle at 75% 38%, rgba(255, 139, 211, 0.12), transparent 62%),
+      radial-gradient(860px circle at 55% 78%, rgba(164, 148, 255, 0.10), transparent 62%),
+      linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 247, 250, 1));
+    background-size: 140% 140%;
+    animation: eter-gradient 18s ease-in-out infinite;
+  }
+
+  /* Featured section background with motion (same vibe as hero, but calmer). */
+  .eter-featured-bg {
+    background:
+      radial-gradient(980px circle at 18% 40%, rgba(138, 180, 255, 0.16), transparent 62%),
+      radial-gradient(880px circle at 78% 52%, rgba(255, 139, 211, 0.12), transparent 64%),
+      radial-gradient(980px circle at 52% 82%, rgba(164, 148, 255, 0.10), transparent 66%),
+      linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 247, 250, 1));
+    background-size: 150% 150%;
+    animation: eter-gradient 20s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eter-title,
+  .eter-bubble-title,
+  .eter-bubble,
+  .eter-chevron,
+  .eter-gradient-bg,
+  .eter-contact-bg,
+  .eter-featured-bg {
+    animation: none !important;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  keyframes                                                                  */
+/* -------------------------------------------------------------------------- */
+
+@keyframes eter-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes eter-bubble {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+@keyframes eter-chevron {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate3d(0, 8px, 0);
+    opacity: 1;
+  }
+}
+
+/*Scrollbar styling (thin, minimal, and mostly transparent) */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  /* thumb | track */
+  scrollbar-color: rgba(247, 247, 250, 1) rgba(255, 255, 255, 0);
+}
+
+/* Chromium / Safari */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* mantiene el look limpio */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.95); /* white thumb */
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(33, 33, 33, 0.08);
+
+  /* Este borde hace que se "recorte" y se vea bien sobre blanco */
+  border: 2px solid rgba(33, 33, 33, 0.10);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(33, 33, 33, 0.16);
+}
+
+/* Text selection styling (subtle highlight that matches the site's palette) */
+
+::selection,
+::-moz-selection {
+  background: rgba(33,33,33, 0.95);
+  color: rgb(var(--paper)); /* texto claro sobre fondo oscuro */
 }

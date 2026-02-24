@@ -2,38 +2,66 @@ import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import "./globals.css";
 
-const titleFont = Karla({
+const karla = Karla({
   subsets: ["latin"],
-  variable: "--font-title",
+  // Include 300 so `font-light` is actually light (used in the hero subtitle).
+  weight: ["300", "400", "600"],
   display: "swap",
-  weight: ["500", "600", "700"],
 });
 
-const bodyFont = Karla({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
-});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eterlab.com";
 
 export const metadata: Metadata = {
-  title: "eterlab.",
-  description: "Coming Soon",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "eterlab.",
+    template: "%s – eterlab.",
+  },
+  description: "Design & development studio — turning ideas into useful digital products.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "eterlab.",
+    title: "eterlab.",
+    description: "Design & development studio — turning ideas into useful digital products.",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "eterlab.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "eterlab.",
+    description: "Design & development studio — turning ideas into useful digital products.",
+    images: ["/og.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es"         className={[
-          titleFont.variable,
-          bodyFont.variable,
-          "font-body min-h-dvh",
-          "bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50",
-          "transition-colors duration-200",
-        ].join(" ")}>
-      <body className="min-h-dvh bg-white text-zinc-900 antialiased">
+    <html lang="es" className="scroll-smooth">
+      <body className={`${karla.className} bg-paper text-ink antialiased`}>
         {children}
       </body>
     </html>
   );
 }
+
+
 

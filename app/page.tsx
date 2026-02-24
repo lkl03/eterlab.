@@ -1,53 +1,107 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import LanguageSwitch from "@/components/LanguageSwitch";
-import { COPY, Lang, STORAGE_KEY } from "@/lib/i18n";
+import React, { useEffect, useMemo, useState } from "react";
+import Navbar from "../components/Navbar";
+import Preloader from "../components/Preloader";
+import MouseDot from "../components/MouseDot";
+import SideMenu from "../components/SideMenu";
+import VenceHeroV4 from "../components/VenceHeroV4";
+import ProjectsSection from "../components/sections/ProjectsSection";
+import FeaturedWorkSection from "../components/sections/FeaturedWorkSection";
+import StatementSection from "../components/sections/StatementSection";
+import ContactSection from "../components/sections/ContactSection";
+import Footer from "../components/Footer";
+import { COPY, Lang, LANG_KEY } from "../lib/i18n";
+import { useActiveSection } from "../hooks/useActiveSection";
 
-export default function Home() {
+export default function Page() {
   const [lang, setLang] = useState<Lang>("es");
+  const [preloaderDone, setPreloaderDone] = useState(false);
+
+  // Para empujar el contenido en desktop según ancho del menu
+  const [sideW, setSideW] = useState<number>(56);
+
+  // IDs que participan del “active link”
+  const sectionIds = useMemo(() => ["projects", "work", "contact"], []);
+  const activeId = useActiveSection(sectionIds);
+
+  const navItems = useMemo(
+    () => [
+      { id: "projects", label: COPY[lang].nav.projects },
+      { id: "work", label: COPY[lang].nav.work },
+      { id: "contact", label: COPY[lang].nav.contact },
+    ],
+    [lang]
+  );
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY) as Lang | null;
+      const saved = localStorage.getItem(LANG_KEY);
       if (saved === "es" || saved === "en") setLang(saved);
     } catch {}
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
+  const onToggleLang = () => {
+    const next: Lang = lang === "es" ? "en" : "es";
+    setLang(next);
+    try {
+      localStorage.setItem(LANG_KEY, next);
+    } catch {}
+  };
+
+  const onNavigate = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <main className="min-h-dvh font-body">
-      {/* Top bar */}
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-end px-4 py-4 sm:px-6">
-        <LanguageSwitch lang={lang} setLang={setLang} />
-      </div>
+    <div
+      className="min-h-dvh bg-white text-ink"
+      style={
+        {
+          ["--side-w" as any]: `${sideW}px`,
+        } as React.CSSProperties
+      }
+    >
+      {!preloaderDone && <Preloader onDone={() => setPreloaderDone(true)} />}
 
-      {/* Centered content */}
-      <div className="mx-auto flex min-h-[calc(100dvh-64px)] w-full max-w-3xl flex-col items-center justify-center gap-6 px-6 pb-12 text-center">
-        <div className="w-full max-w-70">
-          <Image
-            src="/logo.avif"
-            alt="Logo"
-            width={840}
-            height={840}
-            priority
-            className="h-auto w-full select-none"
-          />
-        </div>
+      <Navbar lang={lang} onToggleLang={onToggleLang} />
 
-        <p className="max-w-prose text-2xl font-light leading-relaxed text-[#212121] select-none">
-          {COPY[lang].desc}
-        </p>
+      <MouseDot />
 
-        <p className="font-title text-2xl text-[#212121] font-semibold tracking-tight">
-          {COPY[lang].big}
-        </p>
+      <SideMenu
+        items={navItems}
+        activeId={activeId}
+        onItemClick={onNavigate}
+        langLabel={COPY[lang].nav.toggle}
+        onToggleLang={() => {
+          const next: Lang = lang === "es" ? "en" : "es";
+          setLang(next);
+          try {
+            localStorage.setItem(LANG_KEY, next);
+          } catch {}
+        }}
+        onWidthChange={(w) => setSideW(w)}
+      />
 
-        <a href="mailto:contact.eterlab@gmail.com?Subject=Web Lead -- "  className="mt-4 rounded-lg border border[#212121] px-6 py-3 text-[#212121] hover:bg-[#212121] hover:text-white transition-all ease-in-out duration-300">
-          {COPY[lang].cta}
-        </a>
-      </div>
-    </main>
+      <main className="bg-white">
+        <VenceHeroV4 lang={lang} />
+        <ProjectsSection lang={lang} />
+        <FeaturedWorkSection lang={lang} />
+        <StatementSection lang={lang} />
+        <ContactSection lang={lang} />
+        <Footer lang={lang} />
+      </main>
+    </div>
   );
 }
+
+
+
+
 

@@ -1,0 +1,30 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7F3D0"/>
+      <stop offset="0.5" stop-color="#93C5FD"/>
+      <stop offset="1" stop-color="#C4B5FD"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 260) rotate(35) scale(560 420)">
+      <stop stop-color="rgba(255,255,255,0.7)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="blur" x="-40" y="-40" width="1280" height="830" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="750" rx="48" fill="url(#g)"/>
+
+  <g filter="url(#blur)">
+    <circle cx="380" cy="250" r="240" fill="url(#r)"/>
+    <circle cx="920" cy="540" r="240" fill="rgba(255,255,255,0.22)"/>
+  </g>
+
+  <g opacity="0.95">
+    <path d="M320 520C380 450 460 410 560 400C680 388 780 425 880 520" stroke="rgba(17,17,26,0.12)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M300 580C380 490 480 440 600 430C740 418 850 470 960 580" stroke="rgba(17,17,26,0.09)" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <text x="64" y="120" font-family="ui-sans-serif, system-ui" font-size="40" font-weight="700" fill="rgba(17,17,26,0.58)">bioprotece3d</text>
+</svg>

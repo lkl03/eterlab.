@@ -1,0 +1,29 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#93C5FD"/>
+      <stop offset="0.5" stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#F0ABFC"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 310) rotate(45) scale(520 360)">
+      <stop stop-color="rgba(255,255,255,0.65)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="blur" x="-40" y="-40" width="1280" height="830" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="750" rx="48" fill="url(#g)"/>
+  <g filter="url(#blur)">
+    <circle cx="260" cy="220" r="180" fill="url(#r)"/>
+    <circle cx="900" cy="520" r="220" fill="rgba(255,255,255,0.25)"/>
+  </g>
+
+  <g opacity="0.9">
+    <path d="M220 530C360 420 480 390 640 410C800 430 880 520 980 600" stroke="rgba(17,17,26,0.18)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M260 590C420 470 560 440 710 460C860 480 930 560 1020 630" stroke="rgba(17,17,26,0.12)" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <text x="64" y="120" font-family="ui-sans-serif, system-ui" font-size="40" font-weight="700" fill="rgba(17,17,26,0.58)">promptea</text>
+</svg>

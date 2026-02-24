@@ -1,0 +1,30 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBCFE8"/>
+      <stop offset="0.55" stop-color="#C4B5FD"/>
+      <stop offset="1" stop-color="#93C5FD"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(820 240) rotate(45) scale(520 360)">
+      <stop stop-color="rgba(255,255,255,0.65)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="blur" x="-40" y="-40" width="1280" height="830" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="750" rx="48" fill="url(#g)"/>
+
+  <g filter="url(#blur)">
+    <circle cx="880" cy="220" r="220" fill="url(#r)"/>
+    <circle cx="320" cy="560" r="230" fill="rgba(255,255,255,0.22)"/>
+  </g>
+
+  <g opacity="0.9">
+    <path d="M250 270C380 180 520 160 650 190C780 220 880 320 980 410" stroke="rgba(17,17,26,0.14)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M230 330C400 210 560 190 690 225C820 260 920 360 1030 460" stroke="rgba(17,17,26,0.10)" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <text x="64" y="120" font-family="ui-sans-serif, system-ui" font-size="40" font-weight="700" fill="rgba(17,17,26,0.58)">moonlight</text>
+</svg>

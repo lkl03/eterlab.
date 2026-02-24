@@ -1,0 +1,25 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A6C8FF"/>
+      <stop offset="0.55" stop-color="#B79BFF"/>
+      <stop offset="1" stop-color="#FF9AD9"/>
+    </linearGradient>
+    <filter id="blur" x="-40" y="-40" width="1680" height="1080" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+  </defs>
+
+  <rect x="20" y="20" width="1560" height="960" rx="48" fill="url(#g)"/>
+
+  <g opacity="0.35" filter="url(#blur)">
+    <circle cx="360" cy="280" r="220" fill="#FFFFFF"/>
+    <circle cx="1210" cy="640" r="260" fill="#FFFFFF"/>
+  </g>
+
+  <path d="M360 640C540 480 760 440 980 540C1120 604 1250 720 1380 820" stroke="#1F1F29" stroke-opacity="0.18" stroke-width="10" stroke-linecap="round"/>
+  <path d="M360 720C560 560 780 520 980 610C1125 674 1240 770 1360 860" stroke="#1F1F29" stroke-opacity="0.14" stroke-width="10" stroke-linecap="round"/>
+
+  <text x="92" y="150" fill="#1F1F29" fill-opacity="0.55" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="44" font-weight="700" letter-spacing="0.02em">before</text>
+  <text x="92" y="210" fill="#1F1F29" fill-opacity="0.42" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="18" font-weight="600" letter-spacing="0.18em">PLACEHOLDER</text>
+</svg>
