@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Karla } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const karla = Karla({
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className="scroll-smooth">
       <body className={`${karla.className} bg-paper text-ink antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
