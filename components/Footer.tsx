@@ -34,26 +34,26 @@ export default function Footer({ lang }: Props) {
 
             <div className={c.footer.phone ? "mt-8" : ""}>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45">{c.footer.emailUs}</div>
-<a
-  href={`mailto:${c.footer.email}`}
-  className="group relative isolate mt-2 inline-flex w-fit"
->
-  {/* glow (no z negativo) */}
-  <span
-    aria-hidden
-    className="pointer-events-none absolute left-[-0.14em] right-[-0.14em] bottom-[0.10em] top-[0.10em] rounded-2xl
+              <a
+                href={`mailto:${c.footer.email}`}
+                className="group relative isolate mt-2 inline-flex w-fit"
+              >
+                {/* glow (no z negativo) */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-[-0.14em] right-[-0.14em] bottom-[0.10em] top-[0.10em] rounded-2xl
       bg-[linear-gradient(90deg,rgba(138,180,255,0.40),rgba(255,139,211,0.32))]
       blur-[18px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-  />
-  <span className="relative z-10 block rounded-2xl px-4 py-2">
-    <span className="text-lg font-semibold tracking-tight text-ink transition-colors duration-200 group-hover:text-ink/80 sm:text-2xl">
-      {c.footer.email}
-    </span>
-  </span>
-</a>
+                />
+                <span className="relative z-10 block rounded-2xl px-4 py-2">
+                  <span className="text-lg font-semibold tracking-tight text-ink transition-colors duration-200 group-hover:text-ink/80 sm:text-2xl">
+                    {c.footer.email}
+                  </span>
+                </span>
+              </a>
             </div>
 
-            <div className="mt-7">
+            {/*<div className="mt-7">
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45">{c.footer.followUsOn}</div>
               <a
                 href={c.footer.social.tiktok}
@@ -64,7 +64,7 @@ export default function Footer({ lang }: Props) {
               >
                 <TikTokIcon />
               </a>
-            </div>
+            </div>*/}
           </div>
 
           {/* wordmark */}
@@ -86,7 +86,7 @@ export default function Footer({ lang }: Props) {
           <button
             type="button"
             aria-label={c.footer.backToTop}
-            className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-white/80 transition hover:bg-white/10 hover:text-white"
+            className="inline-flex h-10 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-white/80 transition hover:bg-white/10 hover:text-white cursor-pointer"
             onClick={() => {
               const el = document.querySelector("#home");
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });

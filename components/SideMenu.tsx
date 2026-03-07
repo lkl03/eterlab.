@@ -75,7 +75,7 @@ export default function SideMenu({
   const [hoverOpen, setHoverOpen] = useState(false);
   const open = pinned || hoverOpen;
 
-  // <2xl drawer:
+  // <2xl drawer
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // hover highlight (para hover FX)
@@ -146,6 +146,21 @@ export default function SideMenu({
 
   // ======== Handle opener (<2xl) =========
   const handleDragX = useRef(0);
+  const handleX = useMotionValue(0);
+
+  const resetHandlePosition = (immediate = false) => {
+    handleDragX.current = 0;
+
+    if (immediate) {
+      handleX.set(0);
+      return;
+    }
+
+    animate(handleX, 0, {
+      duration: 0.18,
+      ease: EASE_IO,
+    });
+  };
 
   // ======== Drawer motion values =========
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -183,13 +198,23 @@ export default function SideMenu({
     return () => ro.disconnect();
   }, [drawerOpen]);
 
+  // Garantiza que el handle nunca quede “colgado” después de cerrar
+  useEffect(() => {
+    if (!drawerOpen) {
+      resetHandlePosition();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drawerOpen]);
+
   const ensureClosedPosition = () => {
     const w = panelW || 360;
     x.set(-w);
   };
 
   const openDrawer = () => {
+    resetHandlePosition(true);
     setDrawerOpen(true);
+
     requestAnimationFrame(() => {
       const w = panelW || 360;
       x.set(-w);
@@ -201,6 +226,7 @@ export default function SideMenu({
     const w = panelW || 360;
     await animate(x, -w, { duration: 0.34, ease: EASE_IO }).finished;
     setDrawerOpen(false);
+    resetHandlePosition(true);
   };
 
   // ======== Edge swipe / edge drag (ONLY mobile) =========
@@ -266,16 +292,17 @@ export default function SideMenu({
       if (shouldOpen) {
         animate(x, 0, { duration: 0.22, ease: EASE_IO });
       } else {
-        animate(x, -w, { duration: 0.22, ease: EASE_IO }).finished.then(() => setDrawerOpen(false));
+        animate(x, -w, { duration: 0.22, ease: EASE_IO }).finished.then(() => {
+          setDrawerOpen(false);
+          resetHandlePosition(true);
+        });
       }
     };
 
-    // Pointer events (con capture para que no se los “coma” algo)
     const onPointerDown = (e: PointerEvent) => begin(e.clientX, e.clientY);
     const onPointerMove = (e: PointerEvent) => move(e.clientX, e.clientY);
     const onPointerUp = () => end();
 
-    // Mouse fallback (Chrome responsive)
     const onMouseDown = (e: MouseEvent) => {
       if (e.button !== 0) return;
       begin(e.clientX, e.clientY);
@@ -283,7 +310,6 @@ export default function SideMenu({
     const onMouseMove = (e: MouseEvent) => move(e.clientX, e.clientY);
     const onMouseUp = () => end();
 
-    // Touch fallback
     const onTouchStart = (e: TouchEvent) => {
       if (!e.touches?.[0]) return;
       begin(e.touches[0].clientX, e.touches[0].clientY);
@@ -450,61 +476,76 @@ export default function SideMenu({
       </motion.aside>
 
       {/* ===================== <2xl HANDLE OPENER (fade con progreso) ===================== */}
-      <motion.div
+      <div
         className="fixed left-0 top-1/2 z-60 2xl:hidden"
         style={{
           transform: "translateY(-50%)",
-          touchAction: "none",
-          opacity: 1 - openProgress,
           pointerEvents: drawerOpen ? "none" : "auto",
-          filter: "blur(0px)",
         }}
-        initial={false}
-        animate={{ opacity: 1 - openProgress }}
-        transition={{ duration: 0.12 }}
-        drag={drawerOpen ? false : "x"}
-        dragConstraints={{ left: 0, right: 90 }}
-        dragElastic={0.12}
-        onDrag={(e, info) => {
-          handleDragX.current = info.offset.x;
-        }}
-        onDragEnd={() => {
-          if (drawerOpen) return;
-          if (handleDragX.current > 36) openDrawer();
-          handleDragX.current = 0;
-        }}
-        onClick={() => {
-          if (!drawerOpen) openDrawer();
-        }}
-        role="button"
-        aria-label="Open menu"
       >
-        <div
-          className="flex h-20 w-9 items-center justify-center rounded-r-full"
+        <motion.div
           style={{
-            background: "rgba(255,255,255,0.82)",
-            border: "1px solid rgba(33,33,33,0.06)",
-            boxShadow: "rgba(17, 17, 26, 0.06) 0px 12px 28px",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
+            x: handleX,
+            touchAction: "none",
+            opacity: 1 - openProgress,
+            filter: "blur(0px)",
           }}
+          initial={false}
+          animate={{ opacity: 1 - openProgress }}
+          transition={{ duration: 0.12 }}
+          drag={drawerOpen ? false : "x"}
+          dragConstraints={{ left: 0, right: 90 }}
+          dragElastic={0.12}
+          dragMomentum={false}
+          onDrag={(e, info) => {
+            handleDragX.current = info.offset.x;
+          }}
+          onDragEnd={() => {
+            if (drawerOpen) {
+              resetHandlePosition();
+              return;
+            }
+
+            const shouldOpen = handleDragX.current > 36;
+            resetHandlePosition();
+
+            if (shouldOpen) {
+              openDrawer();
+            }
+          }}
+          onClick={() => {
+            if (!drawerOpen) openDrawer();
+          }}
+          role="button"
+          aria-label="Open menu"
         >
-          {isMobile ? (
-            <div className="h-10 w-1 rounded-full" style={{ background: "rgba(33,33,33,0.20)" }} />
-          ) : (
-            <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
-              <path
-                d="M9 6l6 6-6 6"
-                fill="none"
-                stroke="rgba(33,33,33,0.45)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </div>
-      </motion.div>
+          <div
+            className="flex h-20 w-9 items-center justify-center rounded-r-full"
+            style={{
+              background: "rgba(255,255,255,0.82)",
+              border: "1px solid rgba(33,33,33,0.06)",
+              boxShadow: "rgba(17, 17, 26, 0.06) 0px 12px 28px",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+            }}
+          >
+            {isMobile ? (
+              <div className="h-10 w-1 rounded-full" style={{ background: "rgba(33,33,33,0.20)" }} />
+            ) : (
+              <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
+                <path
+                  d="M9 6l6 6-6 6"
+                  fill="none"
+                  stroke="rgba(33,33,33,0.45)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </div>
+        </motion.div>
+      </div>
 
       {/* ===================== <2xl DRAWER ===================== */}
       <AnimatePresence>
