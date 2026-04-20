@@ -57,12 +57,12 @@ export const WORKS: Work[] = [
       en: "3 min",
     },
     stack: ["next.js", "typescript", "tailwind", "motion"],
-    liveUrl: "https://www.dvlegales.com.ar",
+    liveUrl: "https://dvlegales.com.ar",
     coverByLang: {
-      es: "/work/dvlegales-cover-es.svg",
-      en: "/work/dvlegales-cover-en.svg",
+      es: "/work/dvlegales-cover-es.jpg",
+      en: "/work/dvlegales-cover-en.jpg",
     },
-    coverImage: "/work/dvlegales-cover.svg",
+    coverImage: "/work/dvlegales-cover.jpg",
     sections: [
       {
         title: { es: "contexto", en: "context" },

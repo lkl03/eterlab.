@@ -34,6 +34,9 @@ export default function FeaturedWorkSection({ lang }: Props) {
   const [direction, setDirection] = useState<1 | -1>(1);
   const [paused, setPaused] = useState(false);
   const autoplayRef = useRef<number | null>(null);
+  // Set during a pointer drag so the click handler on the slide link can
+  // suppress navigation when the gesture was actually a swipe.
+  const isDraggingRef = useRef(false);
 
   const goTo = useCallback(
     (next: number, dir: 1 | -1 = 1) => {
@@ -141,141 +144,213 @@ export default function FeaturedWorkSection({ lang }: Props) {
           aria-roledescription={hasMultiple ? "carousel" : undefined}
           aria-label={hasMultiple ? c.featured.title : undefined}
         >
-          {/* Slideshow stage — fixed aspect + absolutely-positioned slides
-              so transitions don't collapse layout. */}
-          <div className="relative">
-            <div className="relative aspect-[16/9] w-full">
-              <AnimatePresence initial={false} custom={direction} mode="sync">
+          {/* Outer row: arrows live OUTSIDE the card on wide viewports.
+              On narrower desktop widths (< lg) there may not be enough room
+              beside the card, so we hide the outer arrows there and fall
+              back to a compact arrow pair placed between the card and the
+              dots (see below). */}
+          <div className="relative flex items-stretch gap-5">
+            {/* Left arrow — outside the card (hidden under lg). */}
+            {hasMultiple && (
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="Previous slide"
+                className="hidden shrink-0 self-center h-12 w-12 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_8px_24px_rgba(17,17,26,0.10)] backdrop-blur transition hover:-translate-y-[1px] hover:text-ink lg:flex"
+              >
+                <ArrowLeft size={18} />
+              </button>
+            )}
+
+            {/* Slideshow stage — fixed aspect; absolutely-positioned slides
+                so transitions don't collapse layout. Drag handle is on the
+                outer stage so it survives slide re-keying. */}
+            <div className="relative min-w-0 flex-1">
+              <div className="relative aspect-[16/9] w-full">
+                {/* Drag layer: captures pointer drags on the cover area
+                    without re-mounting when the slide changes. framer's
+                    AnimatePresence sits inside this layer. */}
                 <motion.div
-                  key={currentWork.slug || `slide-${index}`}
-                  custom={direction}
-                  initial={
-                    reduceMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, x: direction === 1 ? 60 : -60, scale: 0.995 }
-                  }
-                  animate={
-                    reduceMotion
-                      ? { opacity: 1 }
-                      : { opacity: 1, x: 0, scale: 1 }
-                  }
-                  exit={
-                    reduceMotion
-                      ? { opacity: 0 }
-                      : { opacity: 0, x: direction === 1 ? -60 : 60, scale: 0.995 }
-                  }
-                  transition={{ duration: reduceMotion ? 0.2 : 0.65, ease: EASE }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 cursor-grab active:cursor-grabbing touch-pan-y"
+                  drag={hasMultiple ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.18}
+                  dragMomentum={false}
+                  onDragStart={() => {
+                    isDraggingRef.current = true;
+                    setPaused(true);
+                  }}
+                  onDragEnd={(_, info) => {
+                    isDraggingRef.current = false;
+                    // Swipe decision: whichever of distance or velocity
+                    // crosses its threshold triggers the slide change.
+                    const offset = info.offset.x;
+                    const velocity = info.velocity.x;
+                    const OFFSET_THRESHOLD = 80;   // px
+                    const VELOCITY_THRESHOLD = 500; // px/s
+                    if (offset < -OFFSET_THRESHOLD || velocity < -VELOCITY_THRESHOLD) {
+                      goNext();
+                    } else if (offset > OFFSET_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
+                      goPrev();
+                    }
+                    // Resume autoplay shortly after drag ends.
+                    window.setTimeout(() => setPaused(false), 200);
+                  }}
                 >
-                  <a
-                    href={`/work/${currentWork.slug}`}
-                    aria-label={c.featured.ctaMore}
-                    className="block h-full w-full overflow-hidden rounded-t-[30px] border border-b-0 border-ink/10 bg-white/60 shadow-[0_18px_90px_rgba(17,17,26,0.10)] backdrop-blur"
-                  >
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={currentCoverSrc}
-                        alt={currentWork.title}
-                        fill
-                        sizes="(min-width: 1024px) 1024px, 100vw"
-                        priority={index === 0}
-                        className="object-cover transition duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-[1.01] group-hover:saturate-[1.05]"
-                      />
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
-                      />
-                    </div>
-                  </a>
+                  <AnimatePresence initial={false} custom={direction} mode="sync">
+                    <motion.div
+                      key={currentWork.slug || `slide-${index}`}
+                      custom={direction}
+                      initial={
+                        reduceMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, x: direction === 1 ? 60 : -60, scale: 0.995 }
+                      }
+                      animate={
+                        reduceMotion
+                          ? { opacity: 1 }
+                          : { opacity: 1, x: 0, scale: 1 }
+                      }
+                      exit={
+                        reduceMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, x: direction === 1 ? -60 : 60, scale: 0.995 }
+                      }
+                      transition={{ duration: reduceMotion ? 0.2 : 0.65, ease: EASE }}
+                      className="absolute inset-0"
+                    >
+                      {/* onClick guard: if the pointer-up happened after a
+                          drag we don't want to follow the link. */}
+                      <a
+                        href={`/work/${currentWork.slug}`}
+                        aria-label={c.featured.ctaMore}
+                        onClick={(e) => {
+                          if (isDraggingRef.current) {
+                            e.preventDefault();
+                          }
+                        }}
+                        draggable={false}
+                        className="block h-full w-full overflow-hidden rounded-t-[30px] border border-b-0 border-ink/10 bg-white/60 shadow-[0_18px_90px_rgba(17,17,26,0.10)] backdrop-blur"
+                      >
+                        <div className="relative h-full w-full">
+                          <Image
+                            src={currentCoverSrc}
+                            alt={currentWork.title}
+                            fill
+                            sizes="(min-width: 1024px) 1024px, 100vw"
+                            priority={index === 0}
+                            draggable={false}
+                            className="pointer-events-none select-none object-cover transition duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-[1.01] group-hover:saturate-[1.05]"
+                          />
+                          <div
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
+                          />
+                        </div>
+                      </a>
+                    </motion.div>
+                  </AnimatePresence>
                 </motion.div>
-              </AnimatePresence>
+              </div>
 
-              {/* Prev / next arrows */}
-              {hasMultiple && (
-                <>
-                  <button
-                    type="button"
-                    onClick={goPrev}
-                    aria-label="Previous slide"
-                    className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_8px_24px_rgba(17,17,26,0.10)] backdrop-blur transition hover:text-ink"
+              {/* Meta block under the cover (also animated with the slide). */}
+              <div className="relative">
+                <AnimatePresence initial={false} mode="wait">
+                  <motion.div
+                    key={`meta-${currentWork.slug || index}`}
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                    animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                    transition={{ duration: reduceMotion ? 0.2 : 0.45, ease: EASE }}
+                    className="overflow-hidden rounded-b-[30px] border border-t-0 border-ink/10 bg-white/70 p-7 shadow-[0_18px_90px_rgba(17,17,26,0.10)] backdrop-blur sm:p-9"
                   >
-                    <ArrowLeft size={18} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={goNext}
-                    aria-label="Next slide"
-                    className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_8px_24px_rgba(17,17,26,0.10)] backdrop-blur transition hover:text-ink"
-                  >
-                    <ArrowRight size={18} />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Meta block under the cover (also animated with the slide). */}
-            <div className="relative">
-              <AnimatePresence initial={false} mode="wait">
-                <motion.div
-                  key={`meta-${currentWork.slug || index}`}
-                  initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
-                  animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                  exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                  transition={{ duration: reduceMotion ? 0.2 : 0.45, ease: EASE }}
-                  className="overflow-hidden rounded-b-[30px] border border-t-0 border-ink/10 bg-white/70 p-7 shadow-[0_18px_90px_rgba(17,17,26,0.10)] backdrop-blur sm:p-9"
-                >
-                  <div className="flex flex-wrap items-end justify-between gap-4">
-                    <div>
-                      <div className="text-xs font-semibold uppercase tracking-[0.16em] text-ink/45">
-                        {currentWork.badge[lang]}
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-ink/45">
+                          {currentWork.badge[lang]}
+                        </div>
+                        <h3 className="eter-bubble-title mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+                          {currentWork.title}
+                        </h3>
                       </div>
-                      <h3 className="eter-bubble-title mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-                        {currentWork.title}
-                      </h3>
+                      <div className="text-xs font-medium text-ink/40">{currentWork.year}</div>
                     </div>
-                    <div className="text-xs font-medium text-ink/40">{currentWork.year}</div>
-                  </div>
 
-                  <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink/60 sm:text-base">
-                    {currentWork.summary[lang]}
-                  </p>
+                    <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink/60 sm:text-base">
+                      {currentWork.summary[lang]}
+                    </p>
 
-                  <div className="mt-7 flex flex-col gap-3 sm:items-end">
-                    {currentWork.liveUrl ? (
-                      <Button variant="dark" href={currentWork.liveUrl} ariaLabel="Visit site" className="w-full sm:w-auto">
-                        {c.featured.ctaLive}
+                    <div className="mt-7 flex flex-col gap-3 sm:items-end">
+                      {currentWork.liveUrl ? (
+                        <Button variant="dark" href={currentWork.liveUrl} ariaLabel="Visit site" className="w-full sm:w-auto">
+                          {c.featured.ctaLive}
+                        </Button>
+                      ) : null}
+
+                      <Button variant="light" href={`/work/${currentWork.slug}`} ariaLabel="Learn more" className="w-full sm:w-auto">
+                        {c.featured.ctaMore}
                       </Button>
-                    ) : null}
-
-                    <Button variant="light" href={`/work/${currentWork.slug}`} ariaLabel="Learn more" className="w-full sm:w-auto">
-                      {c.featured.ctaMore}
-                    </Button>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
+
+            {/* Right arrow — outside the card (hidden under lg). */}
+            {hasMultiple && (
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="Next slide"
+                className="hidden shrink-0 self-center h-12 w-12 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_8px_24px_rgba(17,17,26,0.10)] backdrop-blur transition hover:-translate-y-[1px] hover:text-ink lg:flex"
+              >
+                <ArrowRight size={18} />
+              </button>
+            )}
           </div>
 
-          {/* Dots */}
+          {/* Compact fallback arrows + dots row.
+              Arrows render here on screens < lg (where outer arrows are
+              hidden). Dots always render in this row for both sizes. */}
           {hasMultiple && (
-            <div className="mt-7 flex items-center justify-center gap-2.5" role="tablist" aria-label="Slide indicators">
-              {slides.map((s, i) => {
-                const active = i === index;
-                return (
-                  <button
-                    key={s.slug || `dot-${i}`}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => goTo(i, i > index ? 1 : -1)}
-                    className={
-                      "h-1.5 rounded-full transition-all duration-300 " +
-                      (active ? "w-8 bg-ink/80" : "w-2.5 bg-ink/25 hover:bg-ink/45")
-                    }
-                  />
-                );
-              })}
+            <div className="mt-7 flex items-center justify-center gap-4">
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="Previous slide"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_6px_18px_rgba(17,17,26,0.08)] backdrop-blur transition hover:-translate-y-[1px] hover:text-ink lg:hidden"
+              >
+                <ArrowLeft size={16} />
+              </button>
+
+              <div className="flex items-center gap-2.5" role="tablist" aria-label="Slide indicators">
+                {slides.map((s, i) => {
+                  const active = i === index;
+                  return (
+                    <button
+                      key={s.slug || `dot-${i}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      aria-label={`Go to slide ${i + 1}`}
+                      onClick={() => goTo(i, i > index ? 1 : -1)}
+                      className={
+                        "h-1.5 rounded-full transition-all duration-300 " +
+                        (active ? "w-8 bg-ink/80" : "w-2.5 bg-ink/25 hover:bg-ink/45")
+                      }
+                    />
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="Next slide"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/70 shadow-[0_6px_18px_rgba(17,17,26,0.08)] backdrop-blur transition hover:-translate-y-[1px] hover:text-ink lg:hidden"
+              >
+                <ArrowRight size={16} />
+              </button>
             </div>
           )}
         </div>
