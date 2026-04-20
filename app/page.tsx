@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Preloader from "../components/Preloader";
+import PostPreloaderSound from "../components/PostPreloaderSound";
 import MouseDot from "../components/MouseDot";
 import SideMenu from "../components/SideMenu";
 import VenceHeroV4 from "../components/VenceHeroV4";
@@ -69,6 +70,9 @@ export default function Page() {
       }
     >
       {!preloaderDone && <Preloader onDone={() => setPreloaderDone(true)} />}
+
+      {/* Plays a short intro sound once, the moment the preloader finishes. */}
+      <PostPreloaderSound trigger={preloaderDone} />
 
       <Navbar lang={lang} onToggleLang={onToggleLang} />
 
