@@ -27,9 +27,78 @@ export type Work = {
 const CURRENT_YEAR = String(new Date().getFullYear());
 
 /** Featured work on the homepage. */
-export const LATEST_WORK_SLUG = "bioprotece3d";
+export const LATEST_WORK_SLUG = "dvlegales";
+
+/**
+ * Slugs that should render as large hero slides in the featured slideshow
+ * on the homepage (desktop). Order here controls the slideshow order.
+ */
+export const FEATURED_SLIDESHOW_SLUGS: string[] = ["dvlegales", "bioprotece3d"];
 
 export const WORKS: Work[] = [
+  {
+    slug: "dvlegales",
+    title: "DV Legales",
+    badge: {
+      es: "sitio para cliente",
+      en: "client website",
+    },
+    summary: {
+      es: "Nueva web para DV Legales — estudio jurídico con foco en asesoramiento claro, estratégico y humano. Rediseño y desarrollo priorizando claridad, confianza y performance.",
+      en: "New website for DV Legales — a law firm focused on clear, strategic and human legal counsel. Redesign + build prioritizing clarity, trust and performance.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • frontend",
+      en: "design • frontend",
+    },
+    readingTime: {
+      es: "3 min",
+      en: "3 min",
+    },
+    stack: ["next.js", "typescript", "tailwind", "motion"],
+    liveUrl: "https://www.dvlegales.com.ar",
+    coverByLang: {
+      es: "/work/dvlegales-cover-es.svg",
+      en: "/work/dvlegales-cover-en.svg",
+    },
+    coverImage: "/work/dvlegales-cover.svg",
+    sections: [
+      {
+        title: { es: "contexto", en: "context" },
+        body: {
+          es: `DV Legales es un estudio jurídico que acompaña a personas, empresas y organizaciones en decisiones sensibles: desde asesoramiento tributario y laboral hasta procesos de familia, daños y penal.
+
+Necesitaban una web que transmitiera respaldo técnico y cercanía a la vez — sin la frialdad del típico sitio de estudio jurídico, pero con toda la solidez que el rubro exige.`,
+          en: `DV Legales is a law firm that guides individuals, companies and organizations through sensitive decisions: from tax and labor advisory to family, damages and criminal matters.
+
+They needed a website that conveyed both technical authority and a human, approachable tone — without the coldness typical of law-firm sites, but with all the solidity the industry demands.`,
+        },
+      },
+      {
+        title: { es: "qué hicimos", en: "what we built" },
+        body: {
+          es: `- Arquitectura de información clara: inicio, estudio, servicios, equipo y contacto, con un flujo pensado para que el visitante entienda rápido qué hace el estudio y cómo trabajan.
+- Sección de áreas de práctica modular (tributario, laboral empresarial, comercial y societario, penal, familia y sucesiones, daños) con un patrón reutilizable para sumar nuevas áreas sin rediseñar.
+- Sistema visual sobrio — tipografía con jerarquía fuerte, paleta calma y micro-interacciones medidas — para transmitir seriedad sin ser aburrido.
+- CTA de “solicitar consulta” presentes en los puntos de decisión, sin saturar.
+- Performance y SEO técnico como base: imágenes optimizadas, metadata por sección y tiempos de carga cuidados.`,
+          en: `- Clear information architecture: home, firm, services, team and contact, with a flow designed so visitors quickly grasp what the firm does and how they work.
+- Modular practice-area section (tax, corporate labor, commercial and corporate, criminal, family and probate, damages) built as a reusable pattern so new areas can be added without a redesign.
+- A sober visual system — strong typographic hierarchy, calm palette and measured micro-interactions — conveying seriousness without being dull.
+- "Request a consultation" CTAs placed at decision points, without clutter.
+- Performance and technical SEO as the baseline: optimized images, per-section metadata and careful load times.`,
+        },
+      },
+      {
+        title: { es: "resultado", en: "result" },
+        body: {
+          es: "Una web que se siente como el estudio: profesional, ordenada y humana. La página comunica el valor del servicio antes del primer contacto y funciona como un canal real de captación de consultas.",
+          en: "A site that feels like the firm itself: professional, structured and human. It communicates the value of the service before the first contact and works as a real channel for inbound consultations.",
+        },
+      },
+    ],
+  },
   {
     slug: "bioprotece3d",
     title: "Bioprotece3D",
@@ -227,6 +296,17 @@ The goal: make prompt writing as dev-friendly as versioning code.`,
 
 /** Convenience export used by the homepage featured section. */
 export const LATEST_WORK: Work = getWorkBySlug(LATEST_WORK_SLUG) ?? WORKS[0];
+
+/**
+ * Ordered list of works that render as large hero slides in the homepage
+ * slideshow. Falls back to [LATEST_WORK] if none of the curated slugs resolve.
+ */
+export const FEATURED_SLIDESHOW_WORKS: Work[] = (() => {
+  const resolved = FEATURED_SLIDESHOW_SLUGS
+    .map((slug) => getWorkBySlug(slug))
+    .filter((w): w is Work => Boolean(w));
+  return resolved.length > 0 ? resolved : [LATEST_WORK];
+})();
 
 function normalizeSlug(slug: string) {
   let decoded = slug;
