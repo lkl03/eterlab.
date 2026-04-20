@@ -1,0 +1,30 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1200" y2="750" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9D5FF"/>
+      <stop offset="0.5" stop-color="#BFDBFE"/>
+      <stop offset="1" stop-color="#FDE68A"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(760 260) rotate(40) scale(560 400)">
+      <stop stop-color="rgba(255,255,255,0.7)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="blur" x="-40" y="-40" width="1280" height="830" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="750" rx="48" fill="url(#g)"/>
+
+  <g filter="url(#blur)">
+    <circle cx="820" cy="230" r="230" fill="url(#r)"/>
+    <circle cx="280" cy="560" r="230" fill="rgba(255,255,255,0.22)"/>
+  </g>
+
+  <g opacity="0.9">
+    <path d="M260 300C380 230 520 220 650 250C780 280 880 370 1000 450" stroke="rgba(17,17,26,0.14)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M240 370C400 260 560 240 690 275C820 310 920 400 1040 500" stroke="rgba(17,17,26,0.10)" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <text x="64" y="120" font-family="ui-sans-serif, system-ui" font-size="40" font-weight="700" fill="rgba(17,17,26,0.58)">dvlegales</text>
+</svg>
