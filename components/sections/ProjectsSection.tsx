@@ -70,7 +70,7 @@ const cards = useMemo(
       badge: c.projects.cards.moonlight.badge,
       desc: c.projects.cards.moonlight.desc,
       image: "/work/moonlight-cover.jpg",
-      url: "#",
+      url: "https://moonlightwebdesigns.com/",
       comingSoon: false, // Set to MOONLIGHT_COMING_SOON when the project is launched.
     },
   ],
