@@ -14,6 +14,14 @@ function TikTokIcon() {
   );
 }
 
+function InstagramIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
+      <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2Zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20h8.5A4.25 4.25 0 0020.5 15.25v-8.5A4.25 4.25 0 0016.25 3h-8.5ZM12 7a5 5 0 110 10 5 5 0 010-10Zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7Zm4.75-.75a1.25 1.25 0 112.5 0 1.25 1.25 0 01-2.5 0Z" />
+    </svg>
+  );
+}
+
 export default function Footer({ lang }: Props) {
   const c = COPY[lang];
   const year = new Date().getFullYear();
@@ -53,8 +61,18 @@ export default function Footer({ lang }: Props) {
               </a>
             </div>
 
-            {/*<div className="mt-7">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45">{c.footer.followUsOn}</div>
+            <div className="mt-7">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45 gap-1">{c.footer.followUsOn}</div>
+              <div className="flex flex-wrap gap-2 items-center">
+              <a
+                href={c.footer.social.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram"
+                className="mt-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/70 text-ink/70 backdrop-blur transition-colors duration-300 ease-in-out hover:bg-white hover:text-ink"
+              >
+                <InstagramIcon />
+              </a>
               <a
                 href={c.footer.social.tiktok}
                 target="_blank"
@@ -64,7 +82,8 @@ export default function Footer({ lang }: Props) {
               >
                 <TikTokIcon />
               </a>
-            </div>*/}
+              </div>
+            </div>
           </div>
 
           {/* wordmark */}

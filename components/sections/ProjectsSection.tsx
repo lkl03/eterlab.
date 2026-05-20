@@ -66,12 +66,12 @@ const cards = useMemo(
     },
     {
       key: "moonlight",
-      title: "moonlight web design",
+      title: "moonlight web designs",
       badge: c.projects.cards.moonlight.badge,
       desc: c.projects.cards.moonlight.desc,
-      image: "/work/moonlight-cover.svg",
+      image: "/work/moonlight-cover.jpg",
       url: "#",
-      comingSoon: MOONLIGHT_COMING_SOON,
+      comingSoon: false, // Set to MOONLIGHT_COMING_SOON when the project is launched.
     },
   ],
   [c, lang]

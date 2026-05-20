@@ -221,12 +221,12 @@ export const COPY: Record<Lang, Copy> = {
       cards: {
         promptea: {
           badge: "AI tool",
-          desc: "Analyze your prompt, detect issues, and optimize it for each AI.",
+          desc: "Analyze your prompts, detect issues, and optimize them for each AI.",
           ctaPrimary: BUTTONS.en.view,
           ctaSecondary: BUTTONS.en.visitSite,
         },
         moonlight: {
-          badge: "design subscription",
+          badge: "design subscription service",
           desc: "We offer 100% handcrafted websites tailored exclusively for your business. Achieve better results at a better price.",
           ctaSecondary: BUTTONS.en.visitSite,
           comingSoon: BUTTONS.en.comingSoon,
@@ -297,7 +297,7 @@ export const COPY: Record<Lang, Copy> = {
       socialTitle: "Social",
       social: {
         twitter: "#",
-        instagram: "#",
+        instagram: "https://www.instagram.com/eterlab_/",
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
       },
@@ -369,8 +369,8 @@ export const COPY: Record<Lang, Copy> = {
           ctaSecondary: BUTTONS.es.visitSite,
         },
         moonlight: {
-          badge: "suscripción de diseño",
-          desc: "Hacemos sitios 100% handcrafted, hechos a medida para tu negocio. Mejores resultados, a mejor precio.",
+          badge: "servicio de suscripción de diseño",
+          desc: "Hacemos sitios 100% a medida, hechos a medida para tu negocio. Mejores resultados, a mejor precio.",
           ctaSecondary: BUTTONS.es.visitSite,
           comingSoon: BUTTONS.es.comingSoon,
           overlay: BUTTONS.es.comingSoon,

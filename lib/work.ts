@@ -217,7 +217,7 @@ The goal: make prompt writing as dev-friendly as versioning code.`,
   // ——— placeholders for upcoming work tiles (you can replace later) ———
   {
     slug: "",
-    title: "moonlight web design",
+    title: "moonlight web designs",
     badge: {
       es: "design subscription",
       en: "design subscription",
