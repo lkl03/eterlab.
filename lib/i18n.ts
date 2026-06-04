@@ -442,7 +442,7 @@ export const COPY: Record<Lang, Copy> = {
       socialTitle: "Social",
       social: {
         twitter: "#",
-        instagram: "#",
+        instagram: "https://www.instagram.com/eterlab_/",
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
       },
