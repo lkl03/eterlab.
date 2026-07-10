@@ -62,6 +62,7 @@ const cards = useMemo(
       desc: c.projects.cards.promptea.desc,
       image: prompteaCoverByLang[lang],
       url: "https://promptea.me",
+      cta: c.projects.cards.promptea.ctaSecondary,
       comingSoon: false,
     },
     {
@@ -71,7 +72,18 @@ const cards = useMemo(
       desc: c.projects.cards.moonlight.desc,
       image: "/work/moonlight-cover.jpg",
       url: "https://moonlightwebdesigns.com/",
+      cta: c.projects.cards.moonlight.ctaSecondary,
       comingSoon: false, // Set to MOONLIGHT_COMING_SOON when the project is launched.
+    },
+    {
+      key: "nodo",
+      title: "nodo",
+      badge: c.projects.cards.nodo.badge,
+      desc: c.projects.cards.nodo.desc,
+      image: "/work/nodo-cover.jpg",
+      url: "https://nodoar.app",
+      cta: c.projects.cards.nodo.ctaSecondary,
+      comingSoon: false,
     },
   ],
   [c, lang]
@@ -191,9 +203,7 @@ const cards = useMemo(
                         disabled={card.comingSoon}
                         ariaLabel="Visit site"
                       >
-                        {card.key === "moonlight"
-                          ? c.projects.cards.moonlight.ctaSecondary
-                          : c.projects.cards.promptea.ctaSecondary}
+                        {card.cta}
                       </Button>
                     </div>
                   </div>

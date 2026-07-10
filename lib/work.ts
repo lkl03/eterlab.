@@ -33,7 +33,7 @@ export const LATEST_WORK_SLUG = "dvlegales";
  * Slugs that should render as large hero slides in the featured slideshow
  * on the homepage (desktop). Order here controls the slideshow order.
  */
-export const FEATURED_SLIDESHOW_SLUGS: string[] = ["dvlegales", "bioprotece3d"];
+export const FEATURED_SLIDESHOW_SLUGS: string[] = ["dvlegales", "warriors-sport-arg", "bioprotece3d"];
 
 export const WORKS: Work[] = [
   {
@@ -95,6 +95,63 @@ They needed a website that conveyed both technical authority and a human, approa
         body: {
           es: "Una web que se siente como el estudio: profesional, ordenada y humana. La página comunica el valor del servicio antes del primer contacto y funciona como un canal real de captación de consultas.",
           en: "A site that feels like the firm itself: professional, structured and human. It communicates the value of the service before the first contact and works as a real channel for inbound consultations.",
+        },
+      },
+    ],
+  },
+  {
+    slug: "warriors-sport-arg",
+    title: "Warriors Sport Arg",
+    badge: {
+      es: "sitio para cliente",
+      en: "client website",
+    },
+    summary: {
+      es: "Nueva web para Warriors Sport Arg — gimnasio con varias sedes. Diseño y desarrollo con foco en horarios claros, sedes y captación de nuevos socios.",
+      en: "New website for Warriors Sport Arg — a multi-location gym. Design and build focused on clear schedules, locations and new-member acquisition.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • frontend",
+      en: "design • frontend",
+    },
+    readingTime: {
+      es: "2 min",
+      en: "2 min",
+    },
+    stack: ["next.js", "typescript", "tailwind", "motion"],
+    liveUrl: "https://warriorssportarg.com.ar",
+    coverImage: "/work/warriors-sport-arg-cover.jpg",
+    sections: [
+      {
+        title: { es: "contexto", en: "context" },
+        body: {
+          es: `Warriors Sport Arg es un gimnasio con varias sedes y una comunidad fuerte. Su presencia online no acompañaba esa energía: la información de horarios y sedes estaba dispersa y no había un camino claro para sumarse.
+
+Necesitaban una web que transmitiera intensidad y pertenencia, y que al mismo tiempo resolviera lo práctico en pocos clics.`,
+          en: `Warriors Sport Arg is a multi-location gym with a strong community. Their online presence didn't match that energy: schedules and location info were scattered and there was no clear path to sign up.
+
+They needed a site that conveyed intensity and belonging while solving the practical questions in a couple of clicks.`,
+        },
+      },
+      {
+        title: { es: "qué hicimos", en: "what we built" },
+        body: {
+          es: `- Home con slideshow a pantalla completa mostrando las instalaciones reales.
+- Secciones de horarios y sedes con estructura clara y fácil de actualizar.
+- Identidad visual oscura con acento verde, alineada a la marca.
+- CTA de contacto directo por WhatsApp siempre a mano.`,
+          en: `- Full-screen hero slideshow showcasing the real facilities.
+- Schedule and location sections with a clear, easy-to-update structure.
+- Dark visual identity with a green accent, aligned with the brand.
+- Direct WhatsApp contact CTA always within reach.`,
+        },
+      },
+      {
+        title: { es: "resultado", en: "result" },
+        body: {
+          es: "Una web que se siente como el gimnasio: intensa, clara y directa. El visitante entiende dónde entrenar, a qué hora y cómo empezar.",
+          en: "A site that feels like the gym: intense, clear and direct. Visitors instantly know where to train, at what time and how to start.",
         },
       },
     ],

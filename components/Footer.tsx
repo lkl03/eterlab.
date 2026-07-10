@@ -22,6 +22,14 @@ function InstagramIcon() {
   );
 }
 
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
+      <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.47 1.34 4.98L2 22l5.2-1.36a9.94 9.94 0 004.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.9 9.9 0 0012.04 2Zm0 1.8a8.13 8.13 0 015.78 2.39 8.11 8.11 0 012.4 5.77c0 4.5-3.67 8.16-8.18 8.16a8.2 8.2 0 01-4.16-1.14l-.3-.18-3.09.81.82-3.01-.19-.31a8.11 8.11 0 01-1.25-4.33c0-4.5 3.67-8.16 8.17-8.16Zm-3.6 4.06c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.6.13.17 1.75 2.67 4.25 3.74.59.26 1.05.41 1.41.52.6.19 1.14.16 1.57.1.48-.07 1.48-.6 1.69-1.19.2-.58.2-1.08.14-1.19-.06-.1-.23-.16-.48-.29-.25-.12-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.12-.17.25-.65.81-.79.98-.15.16-.29.19-.54.06-.25-.12-1.06-.39-2.01-1.24-.74-.66-1.25-1.48-1.39-1.73-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.09-.17.04-.31-.02-.44-.06-.12-.56-1.36-.77-1.86-.2-.48-.4-.42-.56-.43-.14 0-.31-.02-.48-.02Z" />
+    </svg>
+  );
+}
+
 export default function Footer({ lang }: Props) {
   const c = COPY[lang];
   const year = new Date().getFullYear();
@@ -81,6 +89,15 @@ export default function Footer({ lang }: Props) {
                 className="mt-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/70 text-ink/70 backdrop-blur transition-colors duration-300 ease-in-out hover:bg-white hover:text-ink"
               >
                 <TikTokIcon />
+              </a>
+              <a
+                href={c.footer.social.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp"
+                className="mt-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/70 text-ink/70 backdrop-blur transition-colors duration-300 ease-in-out hover:bg-white hover:text-ink"
+              >
+                <WhatsAppIcon />
               </a>
               </div>
             </div>

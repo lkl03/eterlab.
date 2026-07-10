@@ -55,6 +55,11 @@ type Copy = {
         comingSoon: string;
         overlay: string;
       };
+      nodo: {
+        badge: string;
+        desc: string;
+        ctaSecondary: string;
+      };
     };
   };
 
@@ -123,6 +128,7 @@ type Copy = {
       instagram: string;
       dribbble: string;
       tiktok: string;
+      whatsapp: string;
     };
 
     studioLabel: string;
@@ -232,6 +238,11 @@ export const COPY: Record<Lang, Copy> = {
           comingSoon: BUTTONS.en.comingSoon,
           overlay: BUTTONS.en.comingSoon,
         },
+        nodo: {
+          badge: "business management software",
+          desc: "The online system to run your business: contacts, operations, stock and orders — centralized in one place.",
+          ctaSecondary: BUTTONS.en.visitSite,
+        },
       },
     },
 
@@ -300,6 +311,7 @@ export const COPY: Record<Lang, Copy> = {
         instagram: "https://www.instagram.com/eterlab_/",
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
+        whatsapp: "https://wa.me/5491171362144",
       },
 
       studioLabel: "Studio",
@@ -375,6 +387,11 @@ export const COPY: Record<Lang, Copy> = {
           comingSoon: BUTTONS.es.comingSoon,
           overlay: BUTTONS.es.comingSoon,
         },
+        nodo: {
+          badge: "software de gestión",
+          desc: "El sistema online para ordenar tu negocio: contactos, operaciones, stock y pedidos, centralizados en un solo lugar.",
+          ctaSecondary: BUTTONS.es.visitSite,
+        },
       },
     },
 
@@ -445,6 +462,7 @@ export const COPY: Record<Lang, Copy> = {
         instagram: "https://www.instagram.com/eterlab_/",
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
+        whatsapp: "https://wa.me/5491171362144",
       },
 
       studioLabel: "Estudio",
