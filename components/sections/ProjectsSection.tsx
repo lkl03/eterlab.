@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef } from "react";
 
 import { COPY, type Lang } from "../../lib/i18n";
 import { Button } from "../../components/ui/Button";
 import { Reveal } from "../../components/ui/Reveal";
+import { ScrollPreview } from "../../components/ui/ScrollPreview";
 import { SectionTag } from "../../components/ui/SectionTag";
 
 type Props = {
@@ -18,6 +18,9 @@ const EASE: [number, number, number, number] = [0.76, 0, 0.24, 1];
 // Local handle: toggle the “coming soon” styling for Moonlight.
 // Set to false when the project is launched.
 const MOONLIGHT_COMING_SOON = true;
+
+/** Cards sit side by side, so each one only ever needs a third of the row. */
+const CARD_SIZES = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 
 export default function ProjectsSection({ lang }: Props) {
   const c = COPY[lang];
@@ -48,11 +51,6 @@ export default function ProjectsSection({ lang }: Props) {
     : ["design", "development", "product", "web", "interfaces"];
   }, [lang]);
 
-const prompteaCoverByLang: Record<Lang, string> = {
-  es: "/work/promptea-cover-es.jpg",
-  en: "/work/promptea-cover-en.jpg",
-};
-
 const cards = useMemo(
   () => [
     {
@@ -60,7 +58,8 @@ const cards = useMemo(
       title: "promptea.me",
       badge: c.projects.cards.promptea.badge,
       desc: c.projects.cards.promptea.desc,
-      image: prompteaCoverByLang[lang],
+      preview: "/work/previews/promptea",
+      previewPoster: "/work/previews/promptea-poster.jpg",
       url: "https://promptea.me",
       cta: c.projects.cards.promptea.ctaSecondary,
       comingSoon: false,
@@ -70,7 +69,8 @@ const cards = useMemo(
       title: "moonlight web designs",
       badge: c.projects.cards.moonlight.badge,
       desc: c.projects.cards.moonlight.desc,
-      image: "/work/moonlight-cover.jpg",
+      preview: "/work/previews/moonlight",
+      previewPoster: "/work/previews/moonlight-poster.jpg",
       url: "https://moonlightwebdesigns.com/",
       cta: c.projects.cards.moonlight.ctaSecondary,
       comingSoon: false, // Set to MOONLIGHT_COMING_SOON when the project is launched.
@@ -80,13 +80,14 @@ const cards = useMemo(
       title: "nodo",
       badge: c.projects.cards.nodo.badge,
       desc: c.projects.cards.nodo.desc,
-      image: "/work/nodo-cover.jpg",
+      preview: "/work/previews/nodo",
+      previewPoster: "/work/previews/nodo-poster.jpg",
       url: "https://nodoar.app",
       cta: c.projects.cards.nodo.ctaSecondary,
       comingSoon: false,
     },
   ],
-  [c, lang]
+  [c]
 );
 
   return (
@@ -147,16 +148,17 @@ const cards = useMemo(
           </Reveal>
         </div>
 
-        {/* cards */}
-        <div className="mt-14 grid gap-10">
+        {/* cards — one row of three on desktop so the whole set is visible
+            without scrolling; 2-up on tablet and stacked on phones. */}
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 sm:gap-7 lg:grid-cols-3">
           {cards.map((card, idx) => (
             <motion.article
               key={card.key}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
-              transition={{ duration: 0.85, ease: EASE, delay: idx * 0.05 }}
-              className="group relative overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_10px_40px_rgba(17,17,26,0.06)] transition-shadow duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] hover:shadow-[0_16px_70px_rgba(17,17,26,0.10)]"
+              transition={{ duration: 0.85, ease: EASE, delay: idx * 0.08 }}
+              className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_10px_40px_rgba(17,17,26,0.06)] transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_70px_rgba(17,17,26,0.10)]"
             >
               {/* Coming soon overlay (Moonlight) */}
               {card.comingSoon ? (
@@ -170,43 +172,47 @@ const cards = useMemo(
                 </div>
               ) : null}
 
-              <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
-                {/* image side */}
-                <div className="relative overflow-hidden">
-                  <div className="relative aspect-[16/10] w-full">
-                    <Image src={card.image} alt={card.title} fill priority={false} className="object-cover" />
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
-                    />
-                  </div>
+              {/* live scroll-through of the real site */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-zinc-200/80">
+                <ScrollPreview
+                  video={card.comingSoon ? undefined : card.preview}
+                  poster={card.previewPoster}
+                  alt={card.title}
+                  sizes={CARD_SIZES}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
+                />
+              </div>
+
+              {/* content */}
+              <div
+                className={
+                  "relative flex flex-1 flex-col p-6 sm:p-7 " + (card.comingSoon ? "opacity-70" : "")
+                }
+              >
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-3 py-1 text-xs font-semibold text-ink/70 backdrop-blur">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ink/25" />
+                  {card.badge}
                 </div>
 
-                {/* content side */}
-                <div className="relative flex flex-col justify-center p-7 sm:p-9">
-                  <div className={card.comingSoon ? "relative opacity-70" : "relative"}>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-3 py-1 text-xs font-semibold text-ink/70 backdrop-blur">
-                      <span className="h-1.5 w-1.5 rounded-full bg-ink/25" />
-                      {card.badge}
-                    </div>
+                <h3 className="eter-bubble-title mt-4 text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                  {card.title}
+                </h3>
 
-                    <h3 className="eter-bubble-title mt-4 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-                      {card.title}
-                    </h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink/60">{card.desc}</p>
 
-                    <p className="mt-3 max-w-md text-sm leading-relaxed text-ink/60">{card.desc}</p>
-
-                    <div className="mt-7 flex flex-wrap items-center gap-3">
-                      <Button
-                        variant="dark"
-                        href={card.comingSoon ? undefined : card.url}
-                        disabled={card.comingSoon}
-                        ariaLabel="Visit site"
-                      >
-                        {card.cta}
-                      </Button>
-                    </div>
-                  </div>
+                <div className="mt-6 flex flex-wrap items-center gap-3 pt-1 sm:mt-auto">
+                  <Button
+                    variant="dark"
+                    href={card.comingSoon ? undefined : card.url}
+                    disabled={card.comingSoon}
+                    ariaLabel="Visit site"
+                    className="w-full sm:w-auto"
+                  >
+                    {card.cta}
+                  </Button>
                 </div>
               </div>
             </motion.article>
@@ -216,4 +222,3 @@ const cards = useMemo(
     </section>
   );
 }
-

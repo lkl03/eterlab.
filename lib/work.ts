@@ -19,6 +19,13 @@ export type Work = {
   liveUrl?: string;
   coverByLang?: Record<Lang, string>;
   coverImage: string; // path inside /public
+  /**
+   * Basename of the scroll-through capture of the live site, without
+   * extension — `${preview}.webm` and `${preview}.mp4` must both exist.
+   */
+  preview?: string;
+  /** First frame of `preview`; also used while the clip loads. */
+  previewPoster?: string;
   sections: WorkSection[];
   /** Optional flag for not-yet-launched items */
   comingSoon?: boolean;
@@ -27,15 +34,83 @@ export type Work = {
 const CURRENT_YEAR = String(new Date().getFullYear());
 
 /** Featured work on the homepage. */
-export const LATEST_WORK_SLUG = "dvlegales";
+export const LATEST_WORK_SLUG = "kivnon-sas";
 
 /**
  * Slugs that should render as large hero slides in the featured slideshow
  * on the homepage (desktop). Order here controls the slideshow order.
  */
-export const FEATURED_SLIDESHOW_SLUGS: string[] = ["dvlegales", "warriors-sport-arg", "bioprotece3d"];
+export const FEATURED_SLIDESHOW_SLUGS: string[] = [
+  "kivnon-sas",
+  "warriors-sport-arg",
+  "dvlegales",
+  "bioprotece3d",
+];
 
 export const WORKS: Work[] = [
+  {
+    slug: "kivnon-sas",
+    title: "KIVNON SAS",
+    badge: {
+      es: "sitio para cliente",
+      en: "client website",
+    },
+    summary: {
+      es: "Web institucional para KIVNON SAS — división de I+D de Milfarma dedicada a implantes personalizados. Diseño y desarrollo bilingüe con foco en respaldo técnico, claridad clínica y captación de consultas.",
+      en: "Institutional website for KIVNON SAS — Milfarma's R&D division for custom implants. Bilingual design and build focused on technical authority, clinical clarity and inbound consultations.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • frontend",
+      en: "design • frontend",
+    },
+    readingTime: {
+      es: "3 min",
+      en: "3 min",
+    },
+    stack: ["next.js", "typescript", "tailwind", "i18n", "seo"],
+    liveUrl: "https://www.kivnonsas.com.ar",
+    coverImage: "/work/previews/kivnon-sas-poster.jpg",
+    preview: "/work/previews/kivnon-sas",
+    previewPoster: "/work/previews/kivnon-sas-poster.jpg",
+    sections: [
+      {
+        title: { es: "contexto", en: "context" },
+        body: {
+          es: `KIVNON SAS es la división de I+D de Milfarma SAS: bioingeniería médica aplicada a implantes personalizados para casos complejos — craneoplastías, columna, espaciadores de PMMA y endoprótesis temporales de rodilla, cadera y hombro.
+
+Su público no es masivo: son cirujanos, instituciones y distribuidores que necesitan entender rápido el proceso, la validación médica y las capacidades de fabricación antes de acercar un caso. La web tenía que sostener ese nivel de exigencia técnica sin volverse un catálogo frío.`,
+          en: `KIVNON SAS is the R&D division of Milfarma SAS: medical bioengineering applied to custom implants for complex cases — cranioplasty, spine, PMMA spacers and temporary knee, hip and shoulder endoprostheses.
+
+Their audience isn't mass market: surgeons, institutions and distributors who need to quickly grasp the process, the medical validation and the manufacturing capabilities before bringing in a case. The site had to hold that level of technical rigor without turning into a cold catalog.`,
+        },
+      },
+      {
+        title: { es: "qué hicimos", en: "what we built" },
+        body: {
+          es: `- Sitio bilingüe ES/EN resuelto del lado del cliente, sin duplicar URLs ni fragmentar el SEO.
+- Narrativa del proceso completo: diseño sobre la anatomía del caso, validación con el profesional tratante, manufactura aditiva y acompañamiento hasta la asistencia en quirófano.
+- Sistema visual medtech — azul institucional con acento teal, jerarquía tipográfica firme y motion medido — que transmite precisión sin enfriar la lectura.
+- Bento de capacidades con lightbox y tiras "del defecto a la placa" para mostrar casos reales paso a paso.
+- Curaduría de material clínico con criterio de privacidad: cada imagen se revisa antes de publicarse y se importa despersonalizada.
+- Formulario de consulta verificado punta a punta, WhatsApp flotante hacia la línea que realmente atiende, y base técnica de SEO (metadata, JSON-LD de organización médica, sitemap y canónicas sobre el dominio productivo).`,
+          en: `- Bilingual ES/EN site resolved client-side, without duplicating URLs or fragmenting SEO.
+- The full process as narrative: design over each case's anatomy, validation with the treating physician, additive manufacturing and support all the way into the operating room.
+- A medtech visual system — institutional blue with a teal accent, firm typographic hierarchy and measured motion — that reads precise without going cold.
+- A capabilities bento with lightbox plus "from defect to plate" strips that walk through real cases step by step.
+- Clinical material curated for privacy: every image is reviewed before publishing and imported de-identified.
+- An enquiry form verified end to end, a floating WhatsApp CTA pointing at the line that actually answers, and a technical SEO baseline (metadata, medical-organization JSON-LD, sitemap and canonicals on the production domain).`,
+        },
+      },
+      {
+        title: { es: "resultado", en: "result" },
+        body: {
+          es: "Una web que ordena un servicio difícil de explicar y lo vuelve consultable: el profesional entiende el proceso, ve casos reales y tiene un camino claro para acercar el suyo. Online en su dominio propio, bilingüe y lista para escalar a nuevas líneas.",
+          en: "A site that structures a service that's hard to explain and makes it approachable: professionals understand the process, see real cases and have a clear path to bring in their own. Live on its own domain, bilingual and ready to scale to new product lines.",
+        },
+      },
+    ],
+  },
   {
     slug: "dvlegales",
     title: "DV Legales",
@@ -63,6 +138,8 @@ export const WORKS: Work[] = [
       en: "/work/dvlegales-cover-en.jpg",
     },
     coverImage: "/work/dvlegales-cover.jpg",
+    preview: "/work/previews/dvlegales",
+    previewPoster: "/work/previews/dvlegales-poster.jpg",
     sections: [
       {
         title: { es: "contexto", en: "context" },
@@ -122,6 +199,8 @@ They needed a website that conveyed both technical authority and a human, approa
     stack: ["next.js", "typescript", "tailwind", "motion"],
     liveUrl: "https://warriorssportarg.com.ar",
     coverImage: "/work/warriors-sport-arg-cover.jpg",
+    preview: "/work/previews/warriors-sport-arg",
+    previewPoster: "/work/previews/warriors-sport-arg-poster.jpg",
     sections: [
       {
         title: { es: "contexto", en: "context" },
@@ -183,6 +262,8 @@ They needed a site that conveyed intensity and belonging while solving the pract
       en: "/work/bioprotece3d-cover-en.jpg",
     },
     coverImage: "/work/bioprotece3d-cover.svg",
+    preview: "/work/previews/bioprotece3d",
+    previewPoster: "/work/previews/bioprotece3d-poster.jpg",
     sections: [
       {
         title: { es: "contexto", en: "context" },
