@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -9,6 +8,7 @@ import { COPY, type Lang } from "../../lib/i18n";
 import { FEATURED_SLIDESHOW_WORKS, type Work } from "../../lib/work";
 import { Button } from "../../components/ui/Button";
 import { Reveal } from "../../components/ui/Reveal";
+import { ScrollPreview } from "../../components/ui/ScrollPreview";
 import { SectionTag } from "../../components/ui/SectionTag";
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 };
 
 const EASE: [number, number, number, number] = [0.76, 0, 0.24, 1];
-const AUTOPLAY_MS = 6500;
+const AUTOPLAY_MS = 9000;
 
 export default function FeaturedWorkSection({ lang }: Props) {
   const c = COPY[lang];
@@ -26,8 +26,8 @@ export default function FeaturedWorkSection({ lang }: Props) {
   const slides = useMemo<Work[]>(() => FEATURED_SLIDESHOW_WORKS, []);
   const hasMultiple = slides.length > 1;
 
-  // Mobile shows up to 3 tiles stacked, then a "view all" CTA.
-  const mobileCards = useMemo<Work[]>(() => slides.slice(0, 3), [slides]);
+  // Mobile stacks every featured work, then offers a "view all" CTA.
+  const mobileCards = useMemo<Work[]>(() => slides, [slides]);
 
   // Slideshow state.
   const [index, setIndex] = useState(0);
@@ -233,14 +233,13 @@ export default function FeaturedWorkSection({ lang }: Props) {
                         className="block h-full w-full overflow-hidden rounded-t-[30px] border border-b-0 border-ink/10 bg-white/60 shadow-[0_18px_90px_rgba(17,17,26,0.10)] backdrop-blur"
                       >
                         <div className="relative h-full w-full">
-                          <Image
-                            src={currentCoverSrc}
+                          <ScrollPreview
+                            video={currentWork.preview}
+                            poster={currentWork.previewPoster ?? currentCoverSrc}
                             alt={currentWork.title}
-                            fill
                             sizes="(min-width: 1024px) 1024px, 100vw"
                             priority={index === 0}
-                            draggable={false}
-                            className="pointer-events-none select-none object-cover transition duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-[1.01] group-hover:saturate-[1.05]"
+                            className="pointer-events-none select-none"
                           />
                           <div
                             aria-hidden
@@ -372,12 +371,12 @@ export default function FeaturedWorkSection({ lang }: Props) {
                 className="group overflow-hidden rounded-[26px] border border-ink/10 bg-white/70 shadow-[0_14px_60px_rgba(17,17,26,0.08)] backdrop-blur"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
-                  <Image
-                    src={coverSrc}
+                  <ScrollPreview
+                    video={w.preview}
+                    poster={w.previewPoster ?? coverSrc}
                     alt={w.title}
-                    fill
                     sizes="100vw"
-                    className="object-cover transition duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-[1.02]"
+                    className="duration-500 group-hover:scale-[1.02]"
                   />
                 </div>
 
