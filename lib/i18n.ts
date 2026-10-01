@@ -63,15 +63,39 @@ type Copy = {
     };
   };
 
+  spotlight: {
+    pill: string;
+    lead: string;
+    ctaCase: string;
+    ctaLive: string;
+  };
+
   featured: {
     tag: string;
     title: string;
     desc: string;
+    hoverHint: string;
     ctaMore: string;
     ctaLive: string;
     moreTitle: string;
     viewAll: string;
     viewLess: string;
+  };
+
+  caseStudy: {
+    allWork: string;
+    client: string;
+    year: string;
+    services: string;
+    stack: string;
+    site: string;
+    before: string;
+    after: string;
+    next: string;
+    ctaTitle: string;
+    ctaBody: string;
+    ctaButton: string;
+    hoverHint: string;
   };
 
   statement: {
@@ -112,6 +136,7 @@ type Copy = {
   footer: {
     phone?: string;
     email: string;
+    whatsappNumber: string;
 
     navTitle: string;
     nav: {
@@ -129,6 +154,7 @@ type Copy = {
       dribbble: string;
       tiktok: string;
       whatsapp: string;
+      linkedin: string;
     };
 
     studioLabel: string;
@@ -246,10 +272,18 @@ export const COPY: Record<Lang, Copy> = {
       },
     },
 
+    spotlight: {
+      pill: "our latest work",
+      lead: "We designed and built jinetes.agency: one landscape from end to end, the agency's campaigns ready to play, and everything you don't see working behind the scenes.",
+      ctaCase: "view case study",
+      ctaLive: BUTTONS.en.visitSite,
+    },
+
     featured: {
       tag: "featured deliveries",
       title: "latest work.",
       desc: "A closer look at our recent client work — from craft to launch, with a commitment to quality and results.",
+      hoverHint: "Hover over a project to see it in motion.",
       ctaMore: BUTTONS.en.learnMore,
       ctaLive: BUTTONS.en.visitSite,
       moreTitle: "more projects",
@@ -292,9 +326,26 @@ export const COPY: Record<Lang, Copy> = {
       error: "Something went wrong",
     },
 
+    caseStudy: {
+      allWork: "all work",
+      client: "client",
+      year: "year",
+      services: "services",
+      stack: "stack",
+      site: "site",
+      before: "before",
+      after: "after",
+      next: "next project",
+      ctaTitle: "Have a project in mind?",
+      ctaBody: "Tell us what you're building and we'll get back to you.",
+      ctaButton: "let's talk",
+      hoverHint: "hover to play",
+    },
+
     footer: {
       phone: "",
       email: "contact.eterlab@gmail.com",
+      whatsappNumber: "+54 9 11 7136-2144",
 
       navTitle: "Navigation",
       nav: {
@@ -312,6 +363,7 @@ export const COPY: Record<Lang, Copy> = {
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
         whatsapp: "https://wa.me/5491171362144",
+        linkedin: "https://www.linkedin.com/company/eterlab-co/",
       },
 
       studioLabel: "Studio",
@@ -395,10 +447,18 @@ export const COPY: Record<Lang, Copy> = {
       },
     },
 
+    spotlight: {
+      pill: "nuestro último trabajo",
+      lead: "Diseñamos y desarrollamos jinetes.agency: un mismo paisaje de punta a punta, las campañas de la agencia listas para ver y todo lo que no se ve funcionando atrás.",
+      ctaCase: "ver case study",
+      ctaLive: BUTTONS.es.visitSite,
+    },
+
     featured: {
       tag: "entregas destacadas",
       title: "trabajos recientes.",
       desc: "Un vistazo a nuestro trabajo para clientes — de la idea al lanzamiento, con compromiso de calidad y resultados garantizados.",
+      hoverHint: "Pasá el cursor sobre cada proyecto para verlo en movimiento.",
       ctaMore: BUTTONS.es.learnMore,
       ctaLive: BUTTONS.es.visitSite,
       moreTitle: "más proyectos",
@@ -443,9 +503,26 @@ export const COPY: Record<Lang, Copy> = {
       error: "Hubo un error",
     },
 
+    caseStudy: {
+      allWork: "todos los trabajos",
+      client: "cliente",
+      year: "año",
+      services: "servicios",
+      stack: "stack",
+      site: "sitio",
+      before: "antes",
+      after: "después",
+      next: "siguiente proyecto",
+      ctaTitle: "¿Tenés un proyecto en mente?",
+      ctaBody: "Contanos qué estás construyendo y te respondemos.",
+      ctaButton: "hablemos",
+      hoverHint: "pasá el cursor para reproducir",
+    },
+
     footer: {
       phone: "",
       email: "contact.eterlab@gmail.com",
+      whatsappNumber: "+54 9 11 7136-2144",
 
       navTitle: "Navegación",
       nav: {
@@ -463,6 +540,7 @@ export const COPY: Record<Lang, Copy> = {
         dribbble: "#",
         tiktok: "https://tiktok.com/@.eterlab",
         whatsapp: "https://wa.me/5491171362144",
+        linkedin: "https://www.linkedin.com/company/eterlab-co/",
       },
 
       studioLabel: "Estudio",

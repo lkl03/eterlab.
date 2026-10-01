@@ -7,6 +7,45 @@ export type WorkSection = {
   body: Localized;
 };
 
+/** A screenshot shown inside a browser ("desktop") or phone ("mobile") frame. */
+export type WorkMedia = {
+  kind: "desktop" | "mobile";
+  src: string;
+  width: number;
+  height: number;
+  alt: Localized;
+  caption?: Localized;
+};
+
+/** One numbered chapter of a full case study. */
+export type CaseChapter = {
+  kicker: Localized;
+  title: Localized;
+  body: Localized;
+  stats?: { value: string; label: Localized }[];
+  features?: { label: Localized; text: Localized }[];
+  media?: WorkMedia[];
+  /** Old page → new page, shown side by side. */
+  pairs?: { before: WorkMedia; after: WorkMedia }[];
+};
+
+/**
+ * Long-form case study. When a work has one, /work/[slug] renders the
+ * chaptered layout instead of the short `sections` page.
+ */
+export type CaseStudy = {
+  theme: "dark" | "light";
+  /** Display face for headlines; omit to keep the site's own type. */
+  displayFont?: "playfair";
+  partnerLogo: { src: string; width: number; height: number; alt: string };
+  kicker: Localized;
+  headline: Localized;
+  intro: Localized;
+  chapters: CaseChapter[];
+  closing: Localized;
+  thanks?: Localized;
+};
+
 export type Work = {
   slug: string;
   title: string;
@@ -27,27 +66,353 @@ export type Work = {
   /** First frame of `preview`; also used while the clip loads. */
   previewPoster?: string;
   sections: WorkSection[];
+  caseStudy?: CaseStudy;
   /** Optional flag for not-yet-launched items */
   comingSoon?: boolean;
 };
 
 const CURRENT_YEAR = String(new Date().getFullYear());
 
-/** Featured work on the homepage. */
-export const LATEST_WORK_SLUG = "kivnon-sas";
+/** The single project spotlighted right below the hero. */
+export const SPOTLIGHT_WORK_SLUG = "jinetes";
 
-/**
- * Slugs that should render as large hero slides in the featured slideshow
- * on the homepage (desktop). Order here controls the slideshow order.
- */
-export const FEATURED_SLIDESHOW_SLUGS: string[] = [
+/** Client work shown in the homepage grid, newest first. */
+export const LATEST_WORK_SLUGS: string[] = [
+  "bioprotece",
   "kivnon-sas",
   "warriors-sport-arg",
   "dvlegales",
   "bioprotece3d",
 ];
 
+const JINETES_D = { width: 1600, height: 1000 };
+const PHONE = { width: 520, height: 1125 };
+
 export const WORKS: Work[] = [
+  {
+    slug: "jinetes",
+    title: "JINETES",
+    badge: {
+      es: "sitio para cliente",
+      en: "client website",
+    },
+    summary: {
+      es: "Sitio web para JINETES, la agencia de publicidad argentina fundada por Salvador Posse y Joaquín Vázquez Blanco. Diseño y desarrollo a medida para llevar su identidad a la web, desde que entrás hasta que salís.",
+      en: "Website for JINETES, the Argentine ad agency founded by Salvador Posse and Joaquín Vázquez Blanco. A custom design and build that carries their identity onto the web, from the moment you land until you leave.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • desarrollo • seo",
+      en: "design • development • seo",
+    },
+    readingTime: { es: "4 min", en: "4 min" },
+    stack: ["next.js", "typescript", "tailwind", "video on demand", "i18n", "seo + geo"],
+    liveUrl: "https://jinetes.agency",
+    coverImage: "/work/previews/jinetes-poster.jpg",
+    preview: "/work/previews/jinetes",
+    previewPoster: "/work/previews/jinetes-poster.jpg",
+    sections: [],
+    caseStudy: {
+      theme: "dark",
+      displayFont: "playfair",
+      partnerLogo: { src: "/work/jinetes/logo-white.webp", width: 475, height: 480, alt: "JINETES" },
+      kicker: { es: "case study — sitio web", en: "case study — website" },
+      headline: {
+        es: "Una agencia rebelde, un sitio disruptivo.",
+        en: "A rebel agency, a disruptive site.",
+      },
+      intro: {
+        es: "Diseñamos y desarrollamos jinetes.agency, el sitio de JINETES: un mismo paisaje de punta a punta, las campañas en video listas para ver, pensado para cada dispositivo y con todo lo que no se ve funcionando atrás.",
+        en: "We designed and built jinetes.agency, the home of JINETES: one landscape from end to end, the agency's campaigns ready to play, made for every device and with everything you don't see working behind the scenes.",
+      },
+      chapters: [
+        {
+          kicker: { es: "punto de partida", en: "starting point" },
+          title: { es: "Nuestra misión.", en: "Our mission." },
+          body: {
+            es: "Llevar la esencia de JINETES a la web, respetando su imagen y su tono en cada rincón del sitio. Desde que entrás hasta que salís.",
+            en: "Bring the essence of JINETES to the web, honoring their image and tone in every corner of the site. From the moment you land until you leave.",
+          },
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-services.webp",
+              ...JINETES_D,
+              alt: { es: "Sección Qué hacemos", en: "What we do section" },
+              caption: { es: "Qué hacemos: la agencia contada en su propio tono.", en: "What we do: the agency, told in its own voice." },
+            },
+          ],
+        },
+        {
+          kicker: { es: "background & details", en: "background & details" },
+          title: { es: "Un mismo paisaje.", en: "One landscape." },
+          body: {
+            es: "Todo el sitio vive sobre un paisaje fijo, y cada sección se apoya encima sin taparlo. Al bajar no cambia la página: cambia la luz, hasta un negro sólido en la sección de trabajos.",
+            en: "The whole site lives on a single fixed landscape, and every section rests on top without covering it. Scrolling doesn't change the page: it changes the light, down to solid black in the work section.",
+          },
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-about.webp",
+              ...JINETES_D,
+              alt: { es: "Sección Nosotros", en: "About section" },
+              caption: { es: "El grabado del manual, a pantalla completa.", en: "The brand-book engraving, full screen." },
+            },
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-work.webp",
+              ...JINETES_D,
+              alt: { es: "Sección Trabajos", en: "Work section" },
+              caption: { es: "Mismo paisaje, otra luz: trabajos, sobre negro sólido.", en: "Same landscape, different light: work, on solid black." },
+            },
+          ],
+        },
+        {
+          kicker: { es: "las campañas", en: "the campaigns" },
+          title: { es: "Una videoteca propia.", en: "A video library of its own." },
+          body: {
+            es: "Las campañas de JINETES se ven directo en el sitio. Los videos cargan bajo demanda, recién cuando alguien los quiere ver, y en la calidad justa para cada pantalla y conexión.",
+            en: "JINETES' campaigns play right on the site. Videos load on demand, only when someone wants to watch them, and at the right quality for every screen and connection.",
+          },
+          stats: [
+            { value: "09", label: { es: "marcas", en: "brands" } },
+            { value: "56", label: { es: "films", en: "films" } },
+          ],
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-mananita.webp",
+              ...JINETES_D,
+              alt: { es: "Página de la campaña Mañanita", en: "Mañanita campaign page" },
+              caption: { es: "Cada campaña con su propia página.", en: "Every campaign gets its own page." },
+            },
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-campanas-row.webp",
+              ...JINETES_D,
+              alt: { es: "Listado de campañas", en: "Campaign index" },
+              caption: { es: "/campañas: todas las marcas, con sus films a un clic.", en: "/campaigns: every brand, its films one click away." },
+            },
+          ],
+        },
+        {
+          kicker: { es: "en cada dispositivo", en: "on every device" },
+          title: { es: "Pensado para cada pantalla.", en: "Made for every screen." },
+          body: {
+            es: "Del celular al escritorio, cada vista tiene su propio diseño: menú, campañas, videos y formularios optimizados para cada dispositivo.",
+            en: "From phone to desktop, every view has its own design: menu, campaigns, videos and forms tuned for each device.",
+          },
+          media: [
+            { kind: "mobile", src: "/work/jinetes/m-hero.webp", ...PHONE, alt: { es: "Home en el celular", en: "Home on mobile" } },
+            { kind: "mobile", src: "/work/jinetes/m-work.webp", ...PHONE, alt: { es: "Trabajos en el celular", en: "Work on mobile" } },
+            { kind: "mobile", src: "/work/jinetes/m-campanas.webp", ...PHONE, alt: { es: "Campañas en el celular", en: "Campaigns on mobile" } },
+            { kind: "mobile", src: "/work/jinetes/m-mananita.webp", ...PHONE, alt: { es: "Una campaña en el celular", en: "A campaign on mobile" } },
+          ],
+        },
+        {
+          kicker: { es: "lo que no se ve", en: "what you don't see" },
+          title: { es: "Detrás del diseño.", en: "Behind the design." },
+          body: {
+            es: "Lo que hace que el sitio funcione todos los días, sin que nadie lo note.",
+            en: "What keeps the site working every day, without anyone noticing.",
+          },
+          features: [
+            {
+              label: { es: "ES / EN", en: "ES / EN" },
+              text: { es: "Todo el sitio en español e inglés, con un toggle de idioma.", en: "The whole site in Spanish and English, with a language toggle." },
+            },
+            {
+              label: { es: "Formularios", en: "Forms" },
+              text: { es: "Consultas y CVs llegan directo a la agencia.", en: "Enquiries and CVs land straight in the agency's inbox." },
+            },
+            {
+              label: { es: "Repercusión", en: "Press" },
+              text: { es: "Los posts reales de X e Instagram, embebidos, junto a la prensa.", en: "Real posts from X and Instagram, embedded next to the press coverage." },
+            },
+            {
+              label: { es: "SEO + GEO", en: "SEO + GEO" },
+              text: { es: "Optimizado para Google y para los buscadores con IA, con las prácticas más actuales.", en: "Optimized for Google and for AI search engines, following current best practices." },
+            },
+            {
+              label: { es: "QA", en: "QA" },
+              text: { es: "Controles automáticos que revisan el sitio en vivo.", en: "Automated checks that keep watching the live site." },
+            },
+          ],
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/jinetes/d-repercusion.webp",
+              ...JINETES_D,
+              alt: { es: "Sección Repercusión", en: "Press section" },
+              caption: { es: "Repercusión: lo que se dijo de la agencia, en vivo.", en: "Press: what people said about the agency, live." },
+            },
+          ],
+        },
+      ],
+      closing: {
+        es: "Un sitio que no pasa desapercibido, para una agencia que tampoco.",
+        en: "A site that doesn't go unnoticed, for an agency that doesn't either.",
+      },
+      thanks: {
+        es: "Gracias Salvador y Joaquín por la confianza.",
+        en: "Thank you Salvador and Joaquín for the trust.",
+      },
+    },
+  },
+  {
+    slug: "bioprotece",
+    title: "Bioprotece S.A.",
+    badge: {
+      es: "sitio + plataforma",
+      en: "website + platform",
+    },
+    summary: {
+      es: "Nuevo sitio y plataforma de gestión para Bioprotece S.A., fabricante argentino de implantes médicos con 26 años de trayectoria. Catálogo con buscador, implantes a medida, certificaciones y un panel propio para el equipo.",
+      en: "New website and management platform for Bioprotece S.A., an Argentine medical-implant manufacturer with 26 years in the field. A searchable catalog, custom implants, certifications and an in-house admin panel.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • desarrollo • plataforma",
+      en: "design • development • platform",
+    },
+    readingTime: { es: "3 min", en: "3 min" },
+    stack: ["next.js", "typescript", "tailwind", "firebase", "i18n", "seo + geo"],
+    liveUrl: "https://www.bioprotece.com.ar",
+    coverImage: "/work/previews/bioprotece-poster.jpg",
+    preview: "/work/previews/bioprotece",
+    previewPoster: "/work/previews/bioprotece-poster.jpg",
+    sections: [],
+    caseStudy: {
+      theme: "light",
+      partnerLogo: { src: "/work/bioprotece/logo.webp", width: 363, height: 102, alt: "Bioprotece S.A." },
+      kicker: { es: "case study — sitio web + plataforma", en: "case study — website + platform" },
+      headline: {
+        es: "Nuevo sitio web y plataforma de gestión.",
+        en: "A new website and management platform.",
+      },
+      intro: {
+        es: "Rediseñamos www.bioprotece.com.ar, el sitio de Bioprotece, fabricante argentino de implantes médicos. Partimos de un sitio de plantilla y construimos uno a medida, con un panel propio para que el equipo lo mantenga por su cuenta.",
+        en: "We redesigned www.bioprotece.com.ar for Bioprotece, an Argentine medical-implant manufacturer. We started from a template site and built a custom one, with an in-house panel so the team can keep it up to date on their own.",
+      },
+      chapters: [
+        {
+          kicker: { es: "antes y después", en: "before and after" },
+          title: { es: "Del sitio de plantilla a uno hecho a medida.", en: "From a template site to a custom one." },
+          body: {
+            es: "El sitio anterior reunía el catálogo y la información de la empresa, pero sin un diseño a la altura de lo que fabrica Bioprotece. El nuevo arranca con un mensaje claro y ordena todo alrededor del catálogo.",
+            en: "The previous site held the catalog and company information, but its design wasn't up to the standard of what Bioprotece manufactures. The new one opens with a clear message and organizes everything around the catalog.",
+          },
+          pairs: [
+            {
+              before: { kind: "desktop", src: "/work/bioprotece/antes-home.webp", width: 1600, height: 805, alt: { es: "Inicio, sitio anterior", en: "Home, previous site" } },
+              after: { kind: "desktop", src: "/work/bioprotece/d-home.webp", width: 1600, height: 829, alt: { es: "Inicio, sitio nuevo", en: "Home, new site" } },
+            },
+            {
+              before: { kind: "desktop", src: "/work/bioprotece/antes-productos.webp", width: 1600, height: 802, alt: { es: "Catálogo, sitio anterior", en: "Catalog, previous site" } },
+              after: { kind: "desktop", src: "/work/bioprotece/d-productos.webp", width: 1600, height: 829, alt: { es: "Catálogo, sitio nuevo", en: "Catalog, new site" } },
+            },
+            {
+              before: { kind: "desktop", src: "/work/bioprotece/antes-implantes.webp", width: 1600, height: 803, alt: { es: "Implantes a medida, sitio anterior", en: "Custom implants, previous site" } },
+              after: { kind: "desktop", src: "/work/bioprotece/d-implantes.webp", width: 1600, height: 829, alt: { es: "Implantes a medida, sitio nuevo", en: "Custom implants, new site" } },
+            },
+          ],
+        },
+        {
+          kicker: { es: "el catálogo", en: "the catalog" },
+          title: { es: "Un catálogo que se recorre solo.", en: "A catalog that's easy to browse." },
+          body: {
+            es: "Buscador, filtros por línea y fichas con medidas por variante. Todo el catálogo pasó al sitio nuevo con sus fotos, y las direcciones anteriores redirigen a las nuevas para no perder posicionamiento.",
+            en: "Search, filters by product line and spec sheets with per-variant sizes. The whole catalog moved over with its photos, and old URLs redirect to the new ones so search rankings aren't lost.",
+          },
+          stats: [
+            { value: "70", label: { es: "productos migrados", en: "products migrated" } },
+            { value: "10", label: { es: "líneas de producto", en: "product lines" } },
+            { value: "26", label: { es: "años de trayectoria", en: "years in the field" } },
+          ],
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/bioprotece/d-lineas.webp",
+              width: 1600,
+              height: 1000,
+              alt: { es: "Líneas de producto", en: "Product lines" },
+              caption: { es: "Las diez líneas, de un vistazo.", en: "All ten product lines at a glance." },
+            },
+            {
+              kind: "desktop",
+              src: "/work/bioprotece/d-ficha.webp",
+              width: 1600,
+              height: 1000,
+              alt: { es: "Ficha de producto", en: "Product page" },
+              caption: { es: "Cada producto con su ficha y medidas.", en: "Every product with its own spec sheet." },
+            },
+          ],
+        },
+        {
+          kicker: { es: "en cada dispositivo", en: "on every device" },
+          title: { es: "Pensado para el celular.", en: "Built for the phone." },
+          body: {
+            es: "Catálogo, fichas, implantes a medida y documentación resueltos para cada pantalla, en español e inglés.",
+            en: "Catalog, product pages, custom implants and documentation, each designed for every screen, in Spanish and English.",
+          },
+          media: [
+            { kind: "mobile", src: "/work/bioprotece/m-home.webp", ...PHONE, alt: { es: "Inicio en el celular", en: "Home on mobile" } },
+            { kind: "mobile", src: "/work/bioprotece/m-productos.webp", ...PHONE, alt: { es: "Catálogo en el celular", en: "Catalog on mobile" } },
+            { kind: "mobile", src: "/work/bioprotece/m-ficha.webp", ...PHONE, alt: { es: "Ficha en el celular", en: "Product page on mobile" } },
+            { kind: "mobile", src: "/work/bioprotece/m-implantes.webp", ...PHONE, alt: { es: "Implantes a medida en el celular", en: "Custom implants on mobile" } },
+          ],
+        },
+        {
+          kicker: { es: "lo que no se ve", en: "what you don't see" },
+          title: { es: "Detrás del sitio, un panel de gestión propio.", en: "Behind the site, an in-house admin panel." },
+          body: {
+            es: "El equipo de Bioprotece carga y actualiza productos, fotos, medidas y documentación por su cuenta, sin tocar código.",
+            en: "The Bioprotece team adds and updates products, photos, sizes and documents on their own, without touching code.",
+          },
+          features: [
+            {
+              label: { es: "Productos", en: "Products" },
+              text: { es: "Alta y edición con fotos, portada y tablas de medidas por variante. Se publican al instante.", en: "Create and edit with photos, cover and per-variant size tables. Published instantly." },
+            },
+            {
+              label: { es: "Documentos", en: "Documents" },
+              text: { es: "Certificaciones ordenadas por carpeta, con visor en la página y descarga en PDF.", en: "Certifications organized in folders, with an in-page viewer and PDF download." },
+            },
+            {
+              label: { es: "Usuarios", en: "Users" },
+              text: { es: "Cada persona con su rol y verificación en dos pasos.", en: "Every person with their own role and two-step verification." },
+            },
+            {
+              label: { es: "ES / EN", en: "ES / EN" },
+              text: { es: "Todo el sitio en español e inglés.", en: "The whole site in Spanish and English." },
+            },
+            {
+              label: { es: "SEO + GEO", en: "SEO + GEO" },
+              text: { es: "Optimizado para Google y para los buscadores con IA.", en: "Optimized for Google and for AI search engines." },
+            },
+          ],
+          media: [
+            {
+              kind: "desktop",
+              src: "/work/bioprotece/d-documentacion.webp",
+              width: 1600,
+              height: 1000,
+              alt: { es: "Documentación descargable", en: "Downloadable documentation" },
+              caption: { es: "Certificaciones, siempre al día y en PDF.", en: "Certifications, always current and in PDF." },
+            },
+          ],
+        },
+      ],
+      closing: {
+        es: "Un sitio a la altura de 26 años de trayectoria.",
+        en: "A website worthy of 26 years in the field.",
+      },
+      thanks: {
+        es: "Gracias al equipo de Bioprotece por la confianza.",
+        en: "Thank you to the Bioprotece team for the trust.",
+      },
+    },
+  },
   {
     slug: "kivnon-sas",
     title: "KIVNON SAS",
@@ -432,19 +797,25 @@ The goal: make prompt writing as dev-friendly as versioning code.`,
   },
 ];
 
-/** Convenience export used by the homepage featured section. */
-export const LATEST_WORK: Work = getWorkBySlug(LATEST_WORK_SLUG) ?? WORKS[0];
+function resolveSlugs(slugs: string[]): Work[] {
+  return slugs.map((slug) => getWorkBySlug(slug)).filter((w): w is Work => Boolean(w));
+}
 
-/**
- * Ordered list of works that render as large hero slides in the homepage
- * slideshow. Falls back to [LATEST_WORK] if none of the curated slugs resolve.
- */
-export const FEATURED_SLIDESHOW_WORKS: Work[] = (() => {
-  const resolved = FEATURED_SLIDESHOW_SLUGS
-    .map((slug) => getWorkBySlug(slug))
-    .filter((w): w is Work => Boolean(w));
-  return resolved.length > 0 ? resolved : [LATEST_WORK];
-})();
+/** The project spotlighted right below the hero. */
+export const SPOTLIGHT_WORK: Work = getWorkBySlug(SPOTLIGHT_WORK_SLUG) ?? WORKS[0];
+
+/** Client work for the homepage grid (excludes the spotlight). */
+export const LATEST_WORKS: Work[] = resolveSlugs(LATEST_WORK_SLUGS);
+
+/** Every client case study, spotlight first — used by /work and "next project". */
+export const CLIENT_WORKS: Work[] = [SPOTLIGHT_WORK, ...LATEST_WORKS.filter((w) => w.slug !== SPOTLIGHT_WORK.slug)];
+
+/** The case study that follows `slug` in CLIENT_WORKS (wraps around). */
+export function getNextWork(slug: string): Work | undefined {
+  const i = CLIENT_WORKS.findIndex((w) => w.slug === slug);
+  if (i === -1 || CLIENT_WORKS.length < 2) return undefined;
+  return CLIENT_WORKS[(i + 1) % CLIENT_WORKS.length];
+}
 
 function normalizeSlug(slug: string) {
   let decoded = slug;

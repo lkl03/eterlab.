@@ -68,11 +68,11 @@ export default function MouseDot() {
     <>
       <div
         ref={ringRef}
-        className="pointer-events-none fixed left-0 top-0 z-[80] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ink/80 bg-transparent backdrop-blur-[1px]"
+        className="pointer-events-none fixed left-0 top-0 z-[80] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/90 bg-transparent mix-blend-difference"
       />
       <div
         ref={dotRef}
-        className="pointer-events-none fixed left-0 top-0 z-[90] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink/5"
+        className="pointer-events-none fixed left-0 top-0 z-[90] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 mix-blend-difference"
       />
     </>
   );
