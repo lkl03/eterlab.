@@ -7,6 +7,7 @@ import PostPreloaderSound from "../components/PostPreloaderSound";
 import MouseDot from "../components/MouseDot";
 import SideMenu from "../components/SideMenu";
 import VenceHeroV4 from "../components/VenceHeroV4";
+import SpotlightSection from "../components/sections/SpotlightSection";
 import ProjectsSection from "../components/sections/ProjectsSection";
 import FeaturedWorkSection from "../components/sections/FeaturedWorkSection";
 import StatementSection from "../components/sections/StatementSection";
@@ -23,13 +24,13 @@ export default function Page() {
   const [sideW, setSideW] = useState<number>(56);
 
   // IDs que participan del “active link”
-  const sectionIds = useMemo(() => ["projects", "work", "contact"], []);
+  const sectionIds = useMemo(() => ["work", "projects", "contact"], []);
   const activeId = useActiveSection(sectionIds);
 
   const navItems = useMemo(
     () => [
-      { id: "projects", label: COPY[lang].nav.projects },
       { id: "work", label: COPY[lang].nav.work },
+      { id: "projects", label: COPY[lang].nav.projects },
       { id: "contact", label: COPY[lang].nav.contact },
     ],
     [lang]
@@ -95,8 +96,9 @@ export default function Page() {
 
       <main className="bg-white">
         <VenceHeroV4 lang={lang} />
-        <ProjectsSection lang={lang} />
+        <SpotlightSection lang={lang} />
         <FeaturedWorkSection lang={lang} />
+        <ProjectsSection lang={lang} />
         <StatementSection lang={lang} />
         <ContactSection lang={lang} />
         <Footer lang={lang} />

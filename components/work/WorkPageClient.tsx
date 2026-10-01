@@ -9,6 +9,9 @@ import Navbar from "../../components/Navbar";
 import MouseDot from "../../components/MouseDot";
 import Footer from "../../components/Footer";
 import { Button } from "../../components/ui/Button";
+import { ScrollPreview } from "../../components/ui/ScrollPreview";
+import { useHoverPreview } from "../../hooks/useHoverPreview";
+import CaseStudyView from "./CaseStudyView";
 import { COPY, LANG_KEY, type Lang } from "../../lib/i18n";
 import type { Work } from "../../lib/work";
 
@@ -21,6 +24,35 @@ function splitParagraphs(text: string) {
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
+}
+
+/** Renders "- " lines as a bullet list and everything else as paragraphs. */
+function Body({ text }: { text: string }) {
+  const blocks: Array<{ kind: "p"; text: string } | { kind: "ul"; items: string[] }> = [];
+  for (const line of splitParagraphs(text)) {
+    if (line.startsWith("- ")) {
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "ul") last.items.push(line.slice(2));
+      else blocks.push({ kind: "ul", items: [line.slice(2)] });
+    } else {
+      blocks.push({ kind: "p", text: line });
+    }
+  }
+  return (
+    <>
+      {blocks.map((b, i) =>
+        b.kind === "p" ? (
+          <p key={i}>{b.text}</p>
+        ) : (
+          <ul key={i} className="list-disc space-y-1.5 pl-5 marker:text-ink/30">
+            {b.items.map((it) => (
+              <li key={it}>{it}</li>
+            ))}
+          </ul>
+        )
+      )}
+    </>
+  );
 }
 
 export default function WorkPageClient({ work }: Props) {
@@ -52,7 +84,23 @@ export default function WorkPageClient({ work }: Props) {
   const beforeSrc = "/work/bioprotece3d-before.jpg";
   const afterSrc = "/work/bioprotece3d-after.jpg";
 
-  const coverSrc = work.coverByLang?.[lang] ?? work.coverImage ?? "../../public/work/bioprotece3d-cover.svg";
+  const coverSrc = work.coverByLang?.[lang] ?? work.coverImage ?? "/work/bioprotece3d-cover.svg";
+  const { ref: previewRef, bind: previewBind, active: previewActive } = useHoverPreview<HTMLDivElement>();
+  const cs = work.caseStudy;
+
+  if (cs) {
+    const dark = cs.theme === "dark";
+    return (
+      <div className={dark ? "min-h-dvh bg-[#111112] text-white" : "min-h-dvh bg-paperMuted text-ink"}>
+        <Navbar lang={lang} onToggleLang={onToggleLang} mobileLangPill />
+        <MouseDot />
+        <main className="pt-16 sm:pt-20">
+          <CaseStudyView work={work} cs={cs} lang={lang} />
+          <Footer lang={lang} />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-paperMuted text-ink">
@@ -71,16 +119,34 @@ export default function WorkPageClient({ work }: Props) {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="relative overflow-hidden rounded-[28px] border border-ink/10 bg-paper shadow-[0_12px_50px_rgba(17,17,26,0.08)]">
-              <Image
-                src={coverSrc}
-                alt={work.title}
-                width={1600}
-                height={1000}
-                className="h-full w-full object-cover"
-                priority
-              />
-            </div>
+            {work.preview ? (
+              <div
+                ref={previewRef}
+                {...previewBind}
+                className="relative aspect-[16/10] overflow-hidden rounded-[28px] border border-ink/10 bg-paper shadow-[0_12px_50px_rgba(17,17,26,0.08)]"
+              >
+                <ScrollPreview
+                  video={work.preview}
+                  poster={work.previewPoster ?? coverSrc}
+                  alt={work.title}
+                  active={previewActive}
+                  priority
+                  sizes="(min-width: 1024px) 640px, 100vw"
+                  className="object-top"
+                />
+              </div>
+            ) : (
+              <div className="relative overflow-hidden rounded-[28px] border border-ink/10 bg-paper shadow-[0_12px_50px_rgba(17,17,26,0.08)]">
+                <Image
+                  src={coverSrc}
+                  alt={work.title}
+                  width={1600}
+                  height={1000}
+                  className="h-full w-full object-cover"
+                  priority
+                />
+              </div>
+            )}
 
             <div className="rounded-[28px] border border-ink/10 bg-paper p-6 shadow-[0_12px_50px_rgba(17,17,26,0.06)]">
               <h1 className="eter-bubble-title mt-3 text-3xl font-semibold tracking-tight text-ink">{work.title}</h1>
@@ -107,9 +173,7 @@ export default function WorkPageClient({ work }: Props) {
               >
                 <h2 className="eter-bubble-title text-xl font-semibold tracking-tight text-ink">{s.title[lang]}</h2>
                 <div className="mt-3 space-y-2 text-sm leading-relaxed text-ink/60">
-                  {splitParagraphs(s.body[lang]).map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
+                  <Body text={s.body[lang]} />
                 </div>
               </article>
             ))}

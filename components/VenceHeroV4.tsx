@@ -171,7 +171,7 @@ export default function VenceHero({ lang }: Props) {
           aria-label={c.hero.scrollAria}
           className="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-ink/15 bg-paper/60 text-ink/70 backdrop-blur transition-colors duration-300 ease-in-out hover:bg-paper hover:text-ink"
           onClick={() => {
-            const el = document.querySelector("#projects");
+            const el = document.querySelector("#spotlight");
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
         >

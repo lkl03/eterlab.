@@ -19,7 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...WORKS.map((w) => ({
+    // Placeholder entries have no slug and no page of their own.
+    ...WORKS.filter((w) => w.slug).map((w) => ({
       url: `${siteUrl}/work/${w.slug}`,
       lastModified: now,
       changeFrequency: "monthly" as const,

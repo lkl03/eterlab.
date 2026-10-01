@@ -11,89 +11,100 @@ type Props = {
    * Leave undefined to fall back to the static poster only.
    */
   video?: string;
-  /** Static frame shown before the clip is ready (and when motion is reduced). */
+  /** Static frame shown while idle (and always when motion is reduced). */
   poster: string;
   alt: string;
+  /** Plays while true — drive it with `useHoverPreview()` on the card. */
+  active?: boolean;
   /** Extra classes for the media itself (both poster and video). */
   className?: string;
   sizes?: string;
   priority?: boolean;
+  /** Small corner badge hinting that the cover is a live preview. */
+  showHint?: boolean;
+  /** Badge colours: "light" sits on light covers, "dark" on dark ones. */
+  hintTone?: "light" | "dark";
 };
 
+const FADE_MS = 500;
+
 /**
- * Cover that plays a short scroll-through of the real site.
+ * Cover that plays a short capture of the real site while its card is active.
  *
- * The clip is only fetched once the card is close to the viewport, plays while
- * visible and pauses when it leaves. `prefers-reduced-motion` keeps the static
- * poster instead, so the section never animates against the user's setting.
+ * Idle cards only show the poster. The clip's metadata is fetched once the card
+ * nears the viewport so the first hover starts quickly; the video itself plays
+ * only while `active`, and rewinds after fading back to the poster so the next
+ * hover starts from the top. `prefers-reduced-motion` keeps the poster only.
  */
 export function ScrollPreview({
   video,
   poster,
   alt,
+  active = false,
   className = "",
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
   priority = false,
+  showHint = true,
+  hintTone = "light",
 }: Props) {
   const reduceMotion = useReducedMotion();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // `armed` gates the network request; `playing` drives the crossfade.
+  // `armed` mounts the <video>; `playing` drives the crossfade.
   const [armed, setArmed] = useState(false);
   const [playing, setPlaying] = useState(false);
 
   const enabled = Boolean(video) && !reduceMotion;
 
+  // Mount the video (metadata only) shortly before the card scrolls in.
   useEffect(() => {
-    if (!enabled) return;
-
+    if (!enabled || armed) return;
     const host = hostRef.current;
     if (!host) return;
 
     if (typeof IntersectionObserver === "undefined") {
-      // No observer to gate on — load it, but off the effect body so the
-      // first paint isn't blocked by a cascading render.
       const id = window.setTimeout(() => setArmed(true), 0);
       return () => window.clearTimeout(id);
     }
 
     const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setArmed(true);
-
-          const el = videoRef.current;
-          if (!el) continue;
-
-          if (entry.isIntersecting) {
-            const attempt = el.play();
-            if (attempt) attempt.catch(() => {});
-          } else {
-            el.pause();
-          }
-        }
+      ([entry]) => {
+        if (entry.isIntersecting) setArmed(true);
       },
-      // Start fetching a little before the card scrolls in so the swap is seamless.
-      { rootMargin: "300px 0px", threshold: 0.2 }
+      { rootMargin: "400px 0px" }
     );
-
     io.observe(host);
     return () => io.disconnect();
-  }, [enabled]);
+  }, [enabled, armed]);
 
-  // Never leave a paused-but-visible clip behind if the tab was backgrounded.
+  // A hover can land before the observer fires (e.g. fast scroll + hover).
+  const mounted = enabled && (armed || active);
+
   useEffect(() => {
-    if (!enabled) return;
-    const onVisibility = () => {
-      const el = videoRef.current;
-      if (!el || document.hidden) return;
+    const el = videoRef.current;
+    if (!mounted || !el) return;
+
+    if (active) {
+      el.preload = "auto";
       const attempt = el.play();
       if (attempt) attempt.catch(() => {});
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, [enabled]);
+      return;
+    }
+
+    el.pause();
+    // Rewind once the poster has faded back in, so it never visibly jumps.
+    const id = window.setTimeout(() => {
+      if (!videoRef.current?.paused) return;
+      try {
+        videoRef.current.currentTime = 0;
+      } catch {}
+    }, FADE_MS);
+    return () => window.clearTimeout(id);
+  }, [active, mounted]);
+
+  const loading = enabled && active && !playing;
+  const fade = `transition-opacity ease-[cubic-bezier(0.76,0,0.24,1)]`;
 
   return (
     <div ref={hostRef} className="absolute inset-0 h-full w-full">
@@ -103,25 +114,25 @@ export function ScrollPreview({
         fill
         sizes={sizes}
         priority={priority}
-        className={`object-cover transition-opacity duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
-          playing ? "opacity-0" : "opacity-100"
-        } ${className}`}
+        style={{ transitionDuration: `${FADE_MS}ms` }}
+        className={`object-cover ${fade} ${playing ? "opacity-0" : "opacity-100"} ${className}`}
       />
 
-      {enabled && armed ? (
+      {mounted ? (
         <video
           ref={videoRef}
           aria-hidden
           muted
           loop
           playsInline
-          autoPlay
-          preload="auto"
+          preload="metadata"
           disablePictureInPicture
-          poster={poster}
+          tabIndex={-1}
           onPlaying={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${
+          onWaiting={() => setPlaying(false)}
+          style={{ transitionDuration: `${FADE_MS}ms` }}
+          className={`absolute inset-0 h-full w-full object-cover ${fade} ${
             playing ? "opacity-100" : "opacity-0"
           } ${className}`}
         >
@@ -129,6 +140,41 @@ export function ScrollPreview({
           <source src={`${video}.mp4`} type="video/mp4" />
         </video>
       ) : null}
+
+      {enabled && showHint ? <PreviewHint state={playing ? "playing" : loading ? "loading" : "idle"} tone={hintTone} /> : null}
     </div>
+  );
+}
+
+/** Corner badge: a play glyph while idle, a spinner while buffering, bars while playing. */
+function PreviewHint({ state, tone }: { state: "idle" | "loading" | "playing"; tone: "light" | "dark" }) {
+  const surface =
+    tone === "dark"
+      ? "border-white/15 bg-black/45 text-white/85"
+      : "border-ink/10 bg-white/80 text-ink/70 shadow-[0_6px_20px_rgba(17,17,26,0.10)]";
+
+  return (
+    <span
+      aria-hidden
+      className={`pointer-events-none absolute bottom-3 right-3 z-[2] grid h-8 w-8 place-items-center rounded-full border backdrop-blur-md transition-opacity duration-300 ${surface}`}
+    >
+      {state === "idle" ? (
+        <svg viewBox="0 0 16 16" className="ml-[1px] h-3 w-3" fill="currentColor">
+          <path d="M4 2.8v10.4c0 .6.66.97 1.17.65l8.1-5.2a.77.77 0 000-1.3l-8.1-5.2A.77.77 0 004 2.8Z" />
+        </svg>
+      ) : state === "loading" ? (
+        <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
+      ) : (
+        <span className="flex h-3 items-end gap-[2px]">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="eter-eq w-[2px] rounded-full bg-current"
+              style={{ animationDelay: `${i * 0.18}s` }}
+            />
+          ))}
+        </span>
+      )}
+    </span>
   );
 }

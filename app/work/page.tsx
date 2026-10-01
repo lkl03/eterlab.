@@ -1,16 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import Navbar from "../../components/Navbar";
 import MouseDot from "../../components/MouseDot";
 import Footer from "../../components/Footer";
 import { Button } from "../../components/ui/Button";
 import { COPY, LANG_KEY, type Lang } from "../../lib/i18n";
-import { FEATURED_SLIDESHOW_WORKS, type Work } from "../../lib/work";
+import { CLIENT_WORKS, type Work } from "../../lib/work";
+import { WorkCard } from "../../components/work/WorkCard";
 
 export default function WorkIndexPage() {
   const router = useRouter();
@@ -36,9 +36,8 @@ export default function WorkIndexPage() {
     } catch {}
   };
 
-  // Show all works featured in the homepage slideshow — keeps parity so
-  // the mobile "ver todos" button and the landing section are in sync.
-  const works = useMemo<Work[]>(() => FEATURED_SLIDESHOW_WORKS, []);
+  // Every client case study: the homepage spotlight first, then the grid.
+  const works = useMemo<Work[]>(() => CLIENT_WORKS, []);
 
   if (works.length === 0) {
     return (
@@ -93,58 +92,12 @@ export default function WorkIndexPage() {
             </p>
           </div>
 
-          {/* All featured works */}
-          <div className="grid gap-8">
-            {works.map((work) => {
-              const coverSrc =
-                work.coverByLang?.[lang] ?? work.coverImage ?? "/og.png";
-
-              return (
-                <div
-                  key={work.slug}
-                  className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]"
-                >
-                  <div className="relative overflow-hidden rounded-[28px] border border-ink/10 bg-paper shadow-[0_12px_50px_rgba(17,17,26,0.08)]">
-                    <Image
-                      src={coverSrc}
-                      alt={work.title}
-                      width={1600}
-                      height={1000}
-                      className="h-full w-full object-cover"
-                      priority={work.slug === works[0].slug}
-                    />
-                  </div>
-
-                  <div className="rounded-[28px] border border-ink/10 bg-paper p-6 shadow-[0_12px_50px_rgba(17,17,26,0.06)]">
-                    <div className="text-xs font-semibold uppercase tracking-[0.16em] text-ink/45">
-                      {work.badge?.[lang] ?? ""}
-                    </div>
-
-                    <h2 className="eter-bubble-title mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-                      {work.title}
-                    </h2>
-
-                    <p className="mt-2 text-sm leading-relaxed text-ink/60">
-                      {work.summary?.[lang] ?? ""}
-                    </p>
-
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <Button variant="light" href={`/work/${work.slug}`} ariaLabel="Learn more">
-                        {c.featured.ctaMore}
-                      </Button>
-
-                      {work.liveUrl ? (
-                        <Button variant="dark" href={work.liveUrl} ariaLabel="Visit site">
-                          {c.featured.ctaLive}
-                          <ArrowUpRight size={16} />
-                        </Button>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* All client work — same cards as the homepage grid (six fill 3×2 / 2×3 evenly) */}
+          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            {works.map((work, i) => (
+              <WorkCard key={work.slug} work={work} lang={lang} index={i} />
+            ))}
+          </ul>
         </section>
 
         <Footer lang={lang} />

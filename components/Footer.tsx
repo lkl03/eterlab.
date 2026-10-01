@@ -1,3 +1,4 @@
+import type React from "react";
 import { ChevronUp } from "lucide-react";
 
 import { COPY, type Lang } from "../lib/i18n";
@@ -22,22 +23,38 @@ function InstagramIcon() {
   );
 }
 
-function WhatsAppIcon() {
+function LinkedInIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
-      <path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.47 1.34 4.98L2 22l5.2-1.36a9.94 9.94 0 004.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.9 9.9 0 0012.04 2Zm0 1.8a8.13 8.13 0 015.78 2.39 8.11 8.11 0 012.4 5.77c0 4.5-3.67 8.16-8.18 8.16a8.2 8.2 0 01-4.16-1.14l-.3-.18-3.09.81.82-3.01-.19-.31a8.11 8.11 0 01-1.25-4.33c0-4.5 3.67-8.16 8.17-8.16Zm-3.6 4.06c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.6.13.17 1.75 2.67 4.25 3.74.59.26 1.05.41 1.41.52.6.19 1.14.16 1.57.1.48-.07 1.48-.6 1.69-1.19.2-.58.2-1.08.14-1.19-.06-.1-.23-.16-.48-.29-.25-.12-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.12-.17.25-.65.81-.79.98-.15.16-.29.19-.54.06-.25-.12-1.06-.39-2.01-1.24-.74-.66-1.25-1.48-1.39-1.73-.15-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.09-.17.04-.31-.02-.44-.06-.12-.56-1.36-.77-1.86-.2-.48-.4-.42-.56-.43-.14 0-.31-.02-.48-.02Z" />
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" />
     </svg>
+  );
+}
+
+/** Contact line (email, WhatsApp) — same hover glow as the side menu. */
+function ContactLink({ href, children, external = false }: { href: string; children: React.ReactNode; external?: boolean }) {
+  return (
+    <a
+      href={href}
+      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+      className="group relative isolate inline-flex w-fit"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-[-0.14em] right-[-0.14em] bottom-[0.10em] top-[0.10em] rounded-2xl bg-[linear-gradient(90deg,rgba(138,180,255,0.40),rgba(255,139,211,0.32))] blur-[18px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+      />
+      <span className="relative z-10 block rounded-2xl px-4 py-1.5">
+        <span className="text-lg font-semibold tracking-tight text-ink transition-colors duration-200 group-hover:text-ink/80 sm:text-2xl">
+          {children}
+        </span>
+      </span>
+    </a>
   );
 }
 
 export default function Footer({ lang }: Props) {
   const c = COPY[lang];
   const year = new Date().getFullYear();
-
-  // Match SideMenu hover glow exactly.
-  const hoverOutlineClass =
-    "pointer-events-none absolute left-[-0.14em] right-[-0.14em] bottom-[0.10em] top-[0.10em] -z-10 rounded-2xl " +
-    "bg-[linear-gradient(90deg,rgba(138,180,255,0.40),rgba(255,139,211,0.32))] blur-[18px] opacity-0 transition-opacity duration-200 group-hover:opacity-100";
 
   return (
     <footer className="bg-paper">
@@ -50,23 +67,13 @@ export default function Footer({ lang }: Props) {
 
             <div className={c.footer.phone ? "mt-8" : ""}>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45">{c.footer.emailUs}</div>
-              <a
-                href={`mailto:${c.footer.email}`}
-                className="group relative isolate mt-2 inline-flex w-fit"
-              >
-                {/* glow (no z negativo) */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute left-[-0.14em] right-[-0.14em] bottom-[0.10em] top-[0.10em] rounded-2xl
-      bg-[linear-gradient(90deg,rgba(138,180,255,0.40),rgba(255,139,211,0.32))]
-      blur-[18px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                />
-                <span className="relative z-10 block rounded-2xl px-4 py-2">
-                  <span className="text-lg font-semibold tracking-tight text-ink transition-colors duration-200 group-hover:text-ink/80 sm:text-2xl">
-                    {c.footer.email}
-                  </span>
-                </span>
-              </a>
+              <div className="mt-2 flex flex-col">
+                <ContactLink href={`mailto:${c.footer.email}`}>{c.footer.email}</ContactLink>
+                <ContactLink href={c.footer.social.whatsapp} external>
+                  <span className="sr-only">WhatsApp </span>
+                  {c.footer.whatsappNumber}
+                </ContactLink>
+              </div>
             </div>
 
             <div className="mt-7">
@@ -91,13 +98,13 @@ export default function Footer({ lang }: Props) {
                 <TikTokIcon />
               </a>
               <a
-                href={c.footer.social.whatsapp}
+                href={c.footer.social.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="WhatsApp"
+                aria-label="LinkedIn"
                 className="mt-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/70 text-ink/70 backdrop-blur transition-colors duration-300 ease-in-out hover:bg-white hover:text-ink"
               >
-                <WhatsAppIcon />
+                <LinkedInIcon />
               </a>
               </div>
             </div>
