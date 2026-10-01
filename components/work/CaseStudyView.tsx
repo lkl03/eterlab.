@@ -32,8 +32,10 @@ function tones(dark: boolean) {
         chip: "border-white/15 bg-white/[0.05] text-white/70",
         dot: "border-white/25",
         frame: "shadow-[0_30px_100px_rgba(0,0,0,0.5)]",
-        ghost: "border-white/20 text-white/85 hover:bg-white/10 hover:text-white",
+        // White pills on the dark page so the way back always stands out.
+        ghost: "border-white bg-white text-ink hover:bg-white/85",
         primary: "bg-white text-ink",
+        lead: "text-white/40",
       }
     : {
         text: "text-ink",
@@ -46,6 +48,7 @@ function tones(dark: boolean) {
         frame: "shadow-[0_18px_70px_rgba(17,17,26,0.10)]",
         ghost: "border-ink/15 bg-white text-ink/80 hover:text-ink",
         primary: "bg-ink text-white",
+        lead: "text-ink/35",
       };
 }
 
@@ -97,6 +100,7 @@ export default function CaseStudyView({ work, cs, lang }: Props) {
             </Reveal>
             <Reveal delay={0.05}>
               <h1 className={`${display} mt-5 text-balance text-[clamp(40px,6.4vw,88px)] leading-[0.95]`}>
+                {cs.headlineLead ? <span className={`block ${t.lead}`}>{cs.headlineLead[lang]}</span> : null}
                 {cs.headline[lang]}
               </h1>
             </Reveal>
@@ -320,7 +324,10 @@ function Chapter({
             </div>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className={`${display} mt-5 text-balance text-[clamp(32px,4.4vw,60px)] leading-[0.98]`}>{ch.title[lang]}</h2>
+            <h2 className={`${display} mt-5 text-balance text-[clamp(32px,4.4vw,60px)] leading-[0.98]`}>
+              {ch.titleLead ? <span className={`block ${t.lead}`}>{ch.titleLead[lang]}</span> : null}
+              {ch.title[lang]}
+            </h2>
           </Reveal>
         </div>
 
@@ -328,6 +335,19 @@ function Chapter({
           <Reveal delay={0.08}>
             <p className={`max-w-xl text-pretty text-base leading-relaxed sm:text-lg ${t.muted}`}>{ch.body[lang]}</p>
           </Reveal>
+
+          {ch.tags?.length ? (
+            <Reveal delay={0.1}>
+              <ul className="mt-7 flex flex-wrap gap-2">
+                {ch.tags.map((tag) => (
+                  <li key={tag.en} className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-medium ${t.chip}`}>
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
+                    {tag[lang]}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
 
           {ch.stats?.length ? (
             <Reveal delay={0.1}>
@@ -381,14 +401,19 @@ function Chapter({
       {ch.pairs?.length ? (
         <div className="mt-12 grid gap-10 sm:mt-16">
           {ch.pairs.map((p) => (
-            <div key={p.after.src} className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-5">
-              <Reveal>
-                <DesktopShot m={p.before} lang={lang} t={t} badge={c.caseStudy.before} muted sizes="(min-width: 768px) 520px, 100vw" />
-              </Reveal>
-              <ArrowRight aria-hidden className={`mx-auto rotate-90 md:rotate-0 ${t.faint}`} size={20} />
-              <Reveal delay={0.06}>
-                <DesktopShot m={p.after} lang={lang} t={t} badge={c.caseStudy.after} sizes="(min-width: 768px) 520px, 100vw" />
-              </Reveal>
+            <div key={p.after.src}>
+              {p.label ? (
+                <div className={`mb-3 font-mono text-[11px] uppercase tracking-[0.18em] ${t.faint}`}>{p.label[lang]}</div>
+              ) : null}
+              <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr] md:gap-5">
+                <Reveal>
+                  <DesktopShot m={p.before} lang={lang} t={t} badge={c.caseStudy.before} muted sizes="(min-width: 768px) 520px, 100vw" />
+                </Reveal>
+                <ArrowRight aria-hidden className={`mx-auto rotate-90 md:rotate-0 ${t.faint}`} size={20} />
+                <Reveal delay={0.06}>
+                  <DesktopShot m={p.after} lang={lang} t={t} badge={c.caseStudy.after} sizes="(min-width: 768px) 520px, 100vw" />
+                </Reveal>
+              </div>
             </div>
           ))}
         </div>

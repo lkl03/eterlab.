@@ -275,7 +275,7 @@ export const COPY: Record<Lang, Copy> = {
     spotlight: {
       pill: "our latest work",
       lead: "We designed and built jinetes.agency: one landscape from end to end, the agency's campaigns ready to play, and everything you don't see working behind the scenes.",
-      ctaCase: "view case study",
+      ctaCase: BUTTONS.en.learnMore,
       ctaLive: BUTTONS.en.visitSite,
     },
 
@@ -450,7 +450,7 @@ export const COPY: Record<Lang, Copy> = {
     spotlight: {
       pill: "nuestro último trabajo",
       lead: "Diseñamos y desarrollamos jinetes.agency: un mismo paisaje de punta a punta, las campañas de la agencia listas para ver y todo lo que no se ve funcionando atrás.",
-      ctaCase: "ver case study",
+      ctaCase: BUTTONS.es.learnMore,
       ctaLive: BUTTONS.es.visitSite,
     },
 
