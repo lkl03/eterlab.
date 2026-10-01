@@ -185,56 +185,59 @@ function ProjectCard({ card, idx, overlay }: { card: ProjectCardData; idx: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
       transition={{ duration: 0.85, ease: EASE, delay: idx * 0.08 }}
-      className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_10px_40px_rgba(17,17,26,0.06)] transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] hover:-translate-y-[3px] hover:shadow-[0_16px_70px_rgba(17,17,26,0.10)]"
+      // Static hover target; only the inner card lifts (see WorkCard).
+      className="group flex h-full"
     >
-      {/* Coming soon overlay (Moonlight) */}
-      {card.comingSoon ? (
-        <div
-          className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-paper/70 backdrop-blur-[2px]"
-          aria-hidden
-        >
-          <div className="rounded-full border border-ink/10 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/60 shadow-[0_14px_60px_rgba(17,17,26,0.10)]">
-            {overlay}
-          </div>
-        </div>
-      ) : null}
-
-      {/* live capture of the real product — plays on hover */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-zinc-200/80">
-        <ScrollPreview
-          video={card.comingSoon ? undefined : card.preview}
-          poster={card.previewPoster}
-          alt={card.title}
-          active={active}
-          sizes={CARD_SIZES}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
-        />
-      </div>
-
-      {/* content */}
-      <div className={"relative flex flex-1 flex-col p-6 sm:p-7 " + (card.comingSoon ? "opacity-70" : "")}>
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-3 py-1 text-xs font-semibold text-ink/70 backdrop-blur">
-          <span className="h-1.5 w-1.5 rounded-full bg-ink/25" />
-          {card.badge}
-        </div>
-
-        <h3 className="eter-bubble-title mt-4 text-xl font-semibold tracking-tight text-ink sm:text-2xl">{card.title}</h3>
-
-        <p className="mt-3 text-sm leading-relaxed text-ink/60">{card.desc}</p>
-
-        <div className="mt-6 flex flex-wrap items-center gap-3 pt-1 sm:mt-auto">
-          <Button
-            variant="dark"
-            href={card.comingSoon ? undefined : card.url}
-            disabled={card.comingSoon}
-            ariaLabel="Visit site"
-            className="w-full sm:w-auto"
+      <div className="relative flex w-full flex-col overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-[0_10px_40px_rgba(17,17,26,0.06)] transition-[translate,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 group-hover:shadow-[0_16px_70px_rgba(17,17,26,0.10)]">
+        {/* Coming soon overlay (Moonlight) */}
+        {card.comingSoon ? (
+          <div
+            className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-paper/70 backdrop-blur-[2px]"
+            aria-hidden
           >
-            {card.cta}
-          </Button>
+            <div className="rounded-full border border-ink/10 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/60 shadow-[0_14px_60px_rgba(17,17,26,0.10)]">
+              {overlay}
+            </div>
+          </div>
+        ) : null}
+
+        {/* live capture of the real product — plays on hover */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-zinc-200/80">
+          <ScrollPreview
+            video={card.comingSoon ? undefined : card.preview}
+            poster={card.previewPoster}
+            alt={card.title}
+            active={active}
+            sizes={CARD_SIZES}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.00),rgba(255,255,255,0.10))]"
+          />
+        </div>
+
+        {/* content */}
+        <div className={"relative flex flex-1 flex-col p-6 sm:p-7 " + (card.comingSoon ? "opacity-70" : "")}>
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-white/70 px-3 py-1 text-xs font-semibold text-ink/70 backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-ink/25" />
+            {card.badge}
+          </div>
+
+          <h3 className="eter-bubble-title mt-4 text-xl font-semibold tracking-tight text-ink sm:text-2xl">{card.title}</h3>
+
+          <p className="mt-3 text-sm leading-relaxed text-ink/60">{card.desc}</p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-3 pt-1 sm:mt-auto">
+            <Button
+              variant="dark"
+              href={card.comingSoon ? undefined : card.url}
+              disabled={card.comingSoon}
+              ariaLabel="Visit site"
+              className="w-full sm:w-auto"
+            >
+              {card.cta}
+            </Button>
+          </div>
         </div>
       </div>
     </motion.article>

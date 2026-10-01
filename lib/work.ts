@@ -20,13 +20,17 @@ export type WorkMedia = {
 /** One numbered chapter of a full case study. */
 export type CaseChapter = {
   kicker: Localized;
+  /** Optional first line of the title, set in a lighter tone. */
+  titleLead?: Localized;
   title: Localized;
   body: Localized;
   stats?: { value: string; label: Localized }[];
   features?: { label: Localized; text: Localized }[];
+  /** Short pills under the body (e.g. "buscador", "filtros por línea"). */
+  tags?: Localized[];
   media?: WorkMedia[];
   /** Old page → new page, shown side by side. */
-  pairs?: { before: WorkMedia; after: WorkMedia }[];
+  pairs?: { label?: Localized; before: WorkMedia; after: WorkMedia }[];
 };
 
 /**
@@ -39,6 +43,8 @@ export type CaseStudy = {
   displayFont?: "playfair";
   partnerLogo: { src: string; width: number; height: number; alt: string };
   kicker: Localized;
+  /** Optional first line of the headline, set in a lighter tone. */
+  headlineLead?: Localized;
   headline: Localized;
   intro: Localized;
   chapters: CaseChapter[];
@@ -263,17 +269,17 @@ export const WORKS: Work[] = [
     slug: "bioprotece",
     title: "Bioprotece S.A.",
     badge: {
-      es: "sitio + plataforma",
-      en: "website + platform",
+      es: "rebranding + dashboard",
+      en: "rebranding + dashboard",
     },
     summary: {
-      es: "Nuevo sitio y plataforma de gestión para Bioprotece S.A., fabricante argentino de implantes médicos con 26 años de trayectoria. Catálogo con buscador, implantes a medida, certificaciones y un panel propio para el equipo.",
-      en: "New website and management platform for Bioprotece S.A., an Argentine medical-implant manufacturer with 26 years in the field. A searchable catalog, custom implants, certifications and an in-house admin panel.",
+      es: "Rebranding y nuevo dashboard para Bioprotece S.A., empresa líder en fabricación de implantes médicos. De un sitio de plantilla a uno a medida: catálogo con buscador, implantes a medida, certificaciones y un panel propio para el equipo.",
+      en: "Rebranding and a new dashboard for Bioprotece S.A., a leading medical-implant manufacturer. From a template site to a custom one: a searchable catalog, custom implants, certifications and an in-house panel for the team.",
     },
     year: "2026",
     role: {
-      es: "diseño • desarrollo • plataforma",
-      en: "design • development • platform",
+      es: "diseño • desarrollo • dashboard",
+      en: "design • development • dashboard",
     },
     readingTime: { es: "3 min", en: "3 min" },
     stack: ["next.js", "typescript", "tailwind", "firebase", "i18n", "seo + geo"],
@@ -285,33 +291,45 @@ export const WORKS: Work[] = [
     caseStudy: {
       theme: "light",
       partnerLogo: { src: "/work/bioprotece/logo.webp", width: 363, height: 102, alt: "Bioprotece S.A." },
-      kicker: { es: "case study — sitio web + plataforma", en: "case study — website + platform" },
+      kicker: { es: "case study — sitio web + dashboard", en: "case study — website + dashboard" },
+      headlineLead: { es: "Bioprotece S.A.", en: "Bioprotece S.A." },
       headline: {
-        es: "Nuevo sitio web y plataforma de gestión.",
-        en: "A new website and management platform.",
+        es: "rebranding\u00a0+ nuevo dashboard.",
+        en: "rebranding\u00a0+ a new dashboard.",
       },
       intro: {
-        es: "Rediseñamos www.bioprotece.com.ar, el sitio de Bioprotece, fabricante argentino de implantes médicos. Partimos de un sitio de plantilla y construimos uno a medida, con un panel propio para que el equipo lo mantenga por su cuenta.",
-        en: "We redesigned www.bioprotece.com.ar for Bioprotece, an Argentine medical-implant manufacturer. We started from a template site and built a custom one, with an in-house panel so the team can keep it up to date on their own.",
+        es: "Case study y work showcase del rediseño integral que hicimos para Bioprotece, empresa líder en fabricación de implantes médicos.",
+        en: "Case study and work showcase of the end-to-end redesign we did for Bioprotece, a leading medical-implant manufacturer.",
       },
       chapters: [
         {
-          kicker: { es: "antes y después", en: "before and after" },
-          title: { es: "Del sitio de plantilla a uno hecho a medida.", en: "From a template site to a custom one." },
+          kicker: { es: "antes → después", en: "before → after" },
+          titleLead: { es: "punto de partida:", en: "starting point:" },
+          title: { es: "el nuevo sitio, hecho a medida.", en: "the new site, built to measure." },
           body: {
-            es: "El sitio anterior reunía el catálogo y la información de la empresa, pero sin un diseño a la altura de lo que fabrica Bioprotece. El nuevo arranca con un mensaje claro y ordena todo alrededor del catálogo.",
-            en: "The previous site held the catalog and company information, but its design wasn't up to the standard of what Bioprotece manufactures. The new one opens with a clear message and organizes everything around the catalog.",
+            es: "El sitio anterior era de plantilla: reunía el catálogo y la información de la empresa, pero sin un diseño a la altura de lo que fabrica Bioprotece. El nuevo tiene un mensaje claro desde el inicio, un catálogo con buscador y filtros por línea, y una página de implantes a medida que explica el proceso paso a paso.",
+            en: "The previous site was a template: it held the catalog and company information, but its design wasn't up to the standard of what Bioprotece manufactures. The new one has a clear message from the start, a catalog with search and filters by product line, and a custom-implants page that explains the process step by step.",
           },
+          tags: [
+            { es: "buscador", en: "search" },
+            { es: "filtros por línea", en: "filters by line" },
+            { es: "fichas con medidas", en: "spec sheets with sizes" },
+            { es: "certificaciones", en: "certifications" },
+            { es: "celular y escritorio", en: "mobile and desktop" },
+          ],
           pairs: [
             {
+              label: { es: "inicio", en: "home" },
               before: { kind: "desktop", src: "/work/bioprotece/antes-home.webp", width: 1600, height: 805, alt: { es: "Inicio, sitio anterior", en: "Home, previous site" } },
               after: { kind: "desktop", src: "/work/bioprotece/d-home.webp", width: 1600, height: 829, alt: { es: "Inicio, sitio nuevo", en: "Home, new site" } },
             },
             {
+              label: { es: "catálogo", en: "catalog" },
               before: { kind: "desktop", src: "/work/bioprotece/antes-productos.webp", width: 1600, height: 802, alt: { es: "Catálogo, sitio anterior", en: "Catalog, previous site" } },
               after: { kind: "desktop", src: "/work/bioprotece/d-productos.webp", width: 1600, height: 829, alt: { es: "Catálogo, sitio nuevo", en: "Catalog, new site" } },
             },
             {
+              label: { es: "implantes a medida", en: "custom implants" },
               before: { kind: "desktop", src: "/work/bioprotece/antes-implantes.webp", width: 1600, height: 803, alt: { es: "Implantes a medida, sitio anterior", en: "Custom implants, previous site" } },
               after: { kind: "desktop", src: "/work/bioprotece/d-implantes.webp", width: 1600, height: 829, alt: { es: "Implantes a medida, sitio nuevo", en: "Custom implants, new site" } },
             },
@@ -319,15 +337,15 @@ export const WORKS: Work[] = [
         },
         {
           kicker: { es: "el catálogo", en: "the catalog" },
-          title: { es: "Un catálogo que se recorre solo.", en: "A catalog that's easy to browse." },
+          titleLead: { es: "todo el catálogo,", en: "the whole catalog," },
+          title: { es: "en el sitio nuevo.", en: "on the new site." },
           body: {
-            es: "Buscador, filtros por línea y fichas con medidas por variante. Todo el catálogo pasó al sitio nuevo con sus fotos, y las direcciones anteriores redirigen a las nuevas para no perder posicionamiento.",
-            en: "Search, filters by product line and spec sheets with per-variant sizes. The whole catalog moved over with its photos, and old URLs redirect to the new ones so search rankings aren't lost.",
+            es: "Todo el catálogo pasó al sitio nuevo con sus fotos y medidas, y las direcciones anteriores redirigen a las nuevas para no perder posicionamiento.",
+            en: "The whole catalog moved to the new site with its photos and sizes, and the old URLs redirect to the new ones so search rankings aren't lost.",
           },
           stats: [
             { value: "70", label: { es: "productos migrados", en: "products migrated" } },
             { value: "10", label: { es: "líneas de producto", en: "product lines" } },
-            { value: "26", label: { es: "años de trayectoria", en: "years in the field" } },
           ],
           media: [
             {
@@ -350,7 +368,8 @@ export const WORKS: Work[] = [
         },
         {
           kicker: { es: "en cada dispositivo", en: "on every device" },
-          title: { es: "Pensado para el celular.", en: "Built for the phone." },
+          titleLead: { es: "celular y escritorio,", en: "mobile and desktop," },
+          title: { es: "pensado para cada pantalla.", en: "made for every screen." },
           body: {
             es: "Catálogo, fichas, implantes a medida y documentación resueltos para cada pantalla, en español e inglés.",
             en: "Catalog, product pages, custom implants and documentation, each designed for every screen, in Spanish and English.",
@@ -364,10 +383,11 @@ export const WORKS: Work[] = [
         },
         {
           kicker: { es: "lo que no se ve", en: "what you don't see" },
-          title: { es: "Detrás del sitio, un panel de gestión propio.", en: "Behind the site, an in-house admin panel." },
+          titleLead: { es: "detrás del sitio,", en: "behind the site," },
+          title: { es: "un dashboard propio.", en: "a dashboard of its own." },
           body: {
-            es: "El equipo de Bioprotece carga y actualiza productos, fotos, medidas y documentación por su cuenta, sin tocar código.",
-            en: "The Bioprotece team adds and updates products, photos, sizes and documents on their own, without touching code.",
+            es: "Un panel de gestión para que el equipo de Bioprotece cargue y actualice productos, fotos, medidas y documentación por su cuenta, sin tocar código.",
+            en: "An admin panel so the Bioprotece team can add and update products, photos, sizes and documents on their own, without touching code.",
           },
           features: [
             {
@@ -381,6 +401,10 @@ export const WORKS: Work[] = [
             {
               label: { es: "Usuarios", en: "Users" },
               text: { es: "Cada persona con su rol y verificación en dos pasos.", en: "Every person with their own role and two-step verification." },
+            },
+            {
+              label: { es: "Contacto", en: "Contact" },
+              text: { es: "Cada ficha consulta directo a ventas, con el producto en el asunto.", en: "Every product page enquires straight to sales, with the product in the subject line." },
             },
             {
               label: { es: "ES / EN", en: "ES / EN" },
