@@ -13,6 +13,7 @@
 import { randomBytes, scryptSync } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { createInterface } from "node:readline";
 
 const ENV_PATH = resolve(process.cwd(), ".env.local");
 
@@ -53,30 +54,21 @@ function base32(buf) {
   return out;
 }
 
+// readline with the echo muted. Raw-mode stdin drops or batches keystrokes in
+// some Windows terminals (the PIN prompt never finished there).
 function askHidden(question) {
   return new Promise((done) => {
-    const { stdin, stdout } = process;
-    stdout.write(question);
-    let input = "";
-    stdin.setRawMode?.(true);
-    stdin.resume();
-    stdin.setEncoding("utf8");
-    const onData = (ch) => {
-      if (ch === "\r" || ch === "\n" || ch === "\u0004") {
-        stdin.setRawMode?.(false);
-        stdin.pause();
-        stdin.off("data", onData);
-        stdout.write("\n");
-        done(input);
-      } else if (ch === "\u0003") {
-        process.exit(130);
-      } else if (ch === "\u007f" || ch === "\b") {
-        input = input.slice(0, -1);
-      } else {
-        input += ch;
-      }
+    const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+    let muted = false;
+    rl._writeToOutput = (s) => {
+      if (!muted || s.includes(question)) process.stdout.write(s);
     };
-    stdin.on("data", onData);
+    rl.question(question, (answer) => {
+      rl.close();
+      process.stdout.write("\n");
+      done(answer.trim());
+    });
+    muted = true;
   });
 }
 
