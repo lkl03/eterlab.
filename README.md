@@ -34,3 +34,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Admin (`/admin`)
+
+Panel interno que muestra la **Client Checklist** (Google Sheet) como dashboard. Solo lectura: los cambios se hacen en el Sheet y el panel los toma en vivo (caché de 60 s; el botón de actualizar fuerza la lectura).
+
+**Login** — mismo esquema que el admin de nodo: email autorizado + PIN + código de Google Authenticator (TOTP), con "recordar este dispositivo 30 días". Sesión de 8 h en cookie httpOnly firmada. Rate limit de 10 intentos / 15 min por IP (en memoria, por instancia).
+
+**Datos** — una service account de Google Cloud (`checklist-reader@eterlab-admin-lkl.iam.gserviceaccount.com`, proyecto `eterlab-admin-lkl`) lee el Sheet con scope `spreadsheets.readonly`. El Sheet sigue privado: solo hay que compartirlo con ese email como **Lector**. Las columnas se reconocen por nombre de encabezado, así que se pueden reordenar o agregar columnas sin romper el panel.
+
+| Variable | Qué es |
+| --- | --- |
+| `ADMIN_ALLOWED_EMAILS` | emails autorizados, separados por coma |
+| `ADMIN_SESSION_SECRET` | clave HMAC de las cookies + salt del PIN (cambiarla invalida PIN y sesiones) |
+| `ADMIN_PIN_HASH` | `scrypt(PIN, ADMIN_SESSION_SECRET)` en hex |
+| `ADMIN_TOTP_SECRET` | secreto base32 de Google Authenticator |
+| `GOOGLE_SERVICE_ACCOUNT_KEY` | JSON de la key de la service account (crudo o base64) |
+| `CLIENTS_SHEET_ID` / `CLIENTS_SHEET_RANGE` | opcionales; por defecto la Client Checklist, primera pestaña `A1:Z500` |
+
+Setup local (escribe en `.env.local`, que está en `.gitignore`):
+
+```bash
+node scripts/admin-setup.mjs        # genera ADMIN_SESSION_SECRET + ADMIN_TOTP_SECRET y muestra la URI para Authenticator
+node scripts/admin-setup.mjs --pin  # pide el PIN (oculto) y guarda ADMIN_PIN_HASH
+```
+
+En local, Node necesita el certificado de AVG para llegar a Google: `NODE_EXTRA_CA_CERTS=C:\Users\Luca\.gcloud-ca\cacert-combined.pem`.
