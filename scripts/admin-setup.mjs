@@ -96,7 +96,7 @@ if (process.argv.includes("--pin")) {
   const updates = {};
   if (!env.get("ADMIN_SESSION_SECRET")) updates.ADMIN_SESSION_SECRET = randomBytes(32).toString("hex");
   if (!env.get("ADMIN_TOTP_SECRET")) updates.ADMIN_TOTP_SECRET = base32(randomBytes(20));
-  if (!env.get("ADMIN_ALLOWED_EMAILS")) updates.ADMIN_ALLOWED_EMAILS = "contact.eterlab@gmail.com,lulago17@gmail.com";
+  if (!env.get("ADMIN_ALLOWED_EMAILS")) updates.ADMIN_ALLOWED_EMAILS = "contact@eterlab.co,contact.eterlab@gmail.com,lulago17@gmail.com";
   writeEnv(updates);
 
   const totp = updates.ADMIN_TOTP_SECRET ?? env.get("ADMIN_TOTP_SECRET");
