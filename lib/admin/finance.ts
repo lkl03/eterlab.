@@ -170,7 +170,7 @@ export function summarizeRevenue(subs: Subscription[]): RevenueByCurrency[] {
 }
 
 async function loadMercadoPago(): Promise<FinancePayload["mp"]> {
-  const token = process.env.MP_ACCESS_TOKEN;
+  const token = process.env.MP_ACCESS_TOKEN?.trim();
   if (!token) return { status: "not_configured", subscriptions: [], revenue: [] };
 
   try {
@@ -339,7 +339,7 @@ export function summarizeSpend(campaigns: Campaign[]): SpendByCurrency[] {
 }
 
 async function loadMeta(): Promise<FinancePayload["meta"]> {
-  const token = process.env.META_ADS_TOKEN;
+  const token = process.env.META_ADS_TOKEN?.trim();
   if (!token) return { status: "not_configured", campaigns: [], spend: [], accounts: [] };
 
   const ids = (process.env.META_AD_ACCOUNT_IDS ?? DEFAULT_AD_ACCOUNTS.join(","))
