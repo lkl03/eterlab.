@@ -85,6 +85,11 @@ export type FinancePayload = {
 
 const CACHE_TTL_MS = 5 * 60_000;
 const DEFAULT_AD_ACCOUNTS = ["287949821825872", "2517150942110792"];
+// Labels for accounts whose Meta name is empty or just the id.
+const ACCOUNT_LABELS: Record<string, string> = {
+  "287949821825872": "nodo (ARS)",
+  "2517150942110792": "nodo (USD)",
+};
 
 /* ── Shared ──────────────────────────────────────────────────────────────── */
 export function productFrom(...texts: Array<string | null | undefined>): Product {
@@ -273,13 +278,11 @@ async function campaignSpend(accountId: string, preset: "maximum" | "this_month"
 }
 
 async function loadAccount(accountId: string, token: string) {
-  const acct = await graph<{ name?: string; currency?: string; business?: { name?: string } }>(
-    `act_${accountId}?fields=name,currency,business{name}`,
-    token,
-  );
+  // Only fields ads_read can see: business{name} needs business_management.
+  const acct = await graph<{ name?: string; currency?: string }>(`act_${accountId}?fields=name,currency`, token);
   const currency = acct.currency ?? "USD";
   const minor = NO_MINOR_UNIT.has(currency) ? 1 : 100;
-  const accountName = acct.name || acct.business?.name || accountId;
+  const accountName = acct.name && acct.name !== accountId ? acct.name : (ACCOUNT_LABELS[accountId] ?? accountId);
 
   const [list, total, month] = await Promise.all([
     graph<{ data?: GraphCampaign[] }>(
@@ -307,7 +310,7 @@ async function loadAccount(accountId: string, token: string) {
       currency,
       // The campaign name decides; the account only breaks a tie (nodo's account
       // also holds unrelated 2022 Marketplace promos).
-      product: byName !== "otro" ? byName : productFrom(acct.name, acct.business?.name),
+      product: byName !== "otro" ? byName : productFrom(accountName),
       status,
       statusLabel: META_STATUS[status] ?? status,
       active: status === "ACTIVE",
