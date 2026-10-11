@@ -6,7 +6,7 @@ import {
   ArrowUpRight, CalendarClock, Check, ChevronDown, Copy, ListChecks, Loader2,
   Plus, RefreshCw, Search, TriangleAlert,
 } from "lucide-react";
-import type { Client, StatusTone } from "../../lib/admin/clients";
+import type { Client, PaymentPart, StatusTone } from "../../lib/admin/clients";
 import { ACCENTS, CARD, EASE, SideCard, ViewHeader, daysUntil, fmtDate, inDays, money, relTime, sentence, useNow, type ViewProps } from "./ui";
 
 type LoadError = { code: "not_configured" | "no_access" | "upstream" | "network"; serviceAccount?: string | null; sheetUrl?: string };
@@ -180,14 +180,18 @@ export function ClientsView({ refreshKey, onBusy, onUnauthorized }: ViewProps) {
 function Kpis({ clients }: { clients: Client[] }) {
   const active = clients.filter((c) => c.status.tone === "active").length;
 
-  const paid = clients.filter((c) => c.payment.amount !== null && c.payment.kind !== "recurring");
+  // One cell can hold several deals ("OTP 300 U$D + AR$30K monthly"), so count parts.
+  const parts = clients.flatMap((c) => c.payment.parts);
+  const paid = parts.filter((p) => p.amount !== null && p.kind !== "recurring");
   const totals = new Map<string, number>();
-  for (const c of paid) totals.set(c.payment.currency ?? "USD", (totals.get(c.payment.currency ?? "USD") ?? 0) + c.payment.amount!);
+  for (const p of paid) totals.set(p.currency ?? "USD", (totals.get(p.currency ?? "USD") ?? 0) + p.amount!);
   const [mainCur, mainTotal] = [...totals.entries()].sort((a, b) => (a[0] === "USD" ? -1 : b[0] === "USD" ? 1 : 0))[0] ?? ["USD", 0];
   const otherTotals = [...totals.entries()].filter(([cur]) => cur !== mainCur);
-  const trades = clients.filter((c) => c.payment.kind === "trade").length;
-  const free = clients.filter((c) => c.payment.kind === "free").length;
-  const monthly = clients.filter((c) => c.payment.kind === "recurring");
+  const trades = parts.filter((p) => p.kind === "trade").length;
+  const free = parts.filter((p) => p.kind === "free").length;
+  const monthly = parts.filter((p) => p.kind === "recurring");
+  const monthlyTotals = new Map<string, number>();
+  for (const p of monthly) if (p.amount !== null) monthlyTotals.set(p.currency ?? "ARS", (monthlyTotals.get(p.currency ?? "ARS") ?? 0) + p.amount);
 
   const sources = groupCount(clients.map((c) => c.source ?? "Sin dato"));
 
@@ -211,11 +215,15 @@ function Kpis({ clients }: { clients: Client[] }) {
       value: money(mainTotal, mainCur),
       foot:
         [
-          `${paid.length} ${paid.length === 1 ? "pago" : "pagos"}`,
+          `${paid.length} ${paid.length === 1 ? "pago único" : "pagos únicos"}`,
+          ...otherTotals.map(([cur, n]) => `+ ${money(n, cur)}`),
+          monthly.length
+            ? `${monthly.length} mensual${monthly.length === 1 ? "" : "es"}${
+                monthlyTotals.size ? ` (${[...monthlyTotals].map(([cur, n]) => `${money(n, cur)}/mes`).join(" + ")})` : ""
+              }`
+            : null,
           trades ? `${trades} canje${trades === 1 ? "" : "s"}` : null,
           free ? `${free} sin cargo` : null,
-          monthly.length ? `${monthly.length} mensual${monthly.length === 1 ? "" : "es"}` : null,
-          ...otherTotals.map(([cur, n]) => `+ ${money(n, cur)}`),
         ]
           .filter(Boolean)
           .join(" · "),
@@ -228,10 +236,8 @@ function Kpis({ clients }: { clients: Client[] }) {
     },
     {
       label: "Próxima renovación",
-      value: upcoming ? fmtDate(upcoming.domain.renewsOn!, { year: false }) : "—",
-      foot: upcoming
-        ? `${upcoming.name} · ${upcoming.domain.renewsOn!.slice(0, 4)} · ${inDays(daysUntil(upcoming.domain.renewsOn!))}`
-        : "Sin fechas cargadas",
+      value: upcoming ? fmtDate(upcoming.domain.renewsOn!) : "—",
+      foot: upcoming ? `${upcoming.name} · ${inDays(daysUntil(upcoming.domain.renewsOn!))}` : "Sin fechas cargadas",
     },
   ];
 
@@ -335,7 +341,18 @@ function StatusFilter({
 
 /* ── Payment ─────────────────────────────────────────────────────────────── */
 function PaymentBadge({ payment }: { payment: Client["payment"] }) {
-  const { kind, amount, currency, label, detail } = payment;
+  if (payment.parts.length === 1) return <PaymentPartBadge part={payment.parts[0]} />;
+  return (
+    <span className="flex flex-col items-start gap-2">
+      {payment.parts.map((p, i) => (
+        <PaymentPartBadge key={i} part={p} />
+      ))}
+    </span>
+  );
+}
+
+function PaymentPartBadge({ part }: { part: PaymentPart }) {
+  const { kind, amount, currency, label, detail } = part;
   if (kind === "free") {
     return <span className="inline-flex rounded-full border border-dashed border-ink/20 px-2.5 py-1 text-xs font-semibold text-ink/50">Sin cargo</span>;
   }
@@ -364,7 +381,7 @@ function PaymentBadge({ payment }: { payment: Client["payment"] }) {
       </span>
     );
   }
-  return <span className="text-xs font-semibold text-ink/60">{payment.raw || "—"}</span>;
+  return <span className="text-xs font-semibold text-ink/60">{part.raw || "—"}</span>;
 }
 
 /* ── Client row ──────────────────────────────────────────────────────────── */

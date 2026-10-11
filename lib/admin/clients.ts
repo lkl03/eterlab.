@@ -12,6 +12,15 @@ export type PaymentKind = "free" | "one_time" | "trade" | "recurring" | "other";
 export type StatusTone = "active" | "paused" | "pending" | "inactive" | "other";
 export type ProjectKind = "vercel" | "github" | "other";
 
+export type PaymentPart = {
+  raw: string;
+  kind: PaymentKind;
+  label: string;
+  amount: number | null;
+  currency: string | null;
+  detail: string | null;
+};
+
 export type Client = {
   number: string;
   name: string;
@@ -20,7 +29,7 @@ export type Client = {
   project: { href: string; kind: ProjectKind } | null;
   start: { raw: string; iso: string | null };
   plan: string | null;
-  payment: { raw: string; kind: PaymentKind; label: string; amount: number | null; currency: string | null; detail: string | null };
+  payment: { raw: string; parts: PaymentPart[] };
   source: string | null;
   brand: string | null;
   status: { raw: string; tone: StatusTone; label: string };
@@ -88,19 +97,32 @@ function toHref(v: string): string | null {
   return null;
 }
 
-const AMOUNT_RE = /(U\$D|U\$S|USD|US\$|ARS|AR\$|\$)\s*([\d][\d.,]*)|([\d][\d.,]*)\s*(U\$D|U\$S|USD|US\$|ARS|AR\$|\$)/i;
+// Symbol before or after the number; "30K" / "1.5M" shorthands allowed.
+const AMOUNT_RE =
+  /(U\$D|U\$S|USD|US\$|ARS|AR\$|\$)\s*(\d[\d.,]*)\s*([km])?(?![a-z])|(\d[\d.,]*)\s*([km])?\s*(U\$D|U\$S|USD|US\$|ARS|AR\$|\$)/i;
 
 function parseAmount(raw: string): { amount: number; currency: string; rest: string } | null {
   const m = raw.match(AMOUNT_RE);
   if (!m) return null;
-  const sym = (m[1] || m[4]).toUpperCase();
-  const num = Number((m[2] || m[3]).replace(/\./g, "").replace(",", "."));
+  const sym = (m[1] || m[6]).toUpperCase();
+  const mult = { k: 1_000, m: 1_000_000 }[(m[3] || m[5] || "").toLowerCase()] ?? 1;
+  const num = Number((m[2] || m[4]).replace(/\./g, "").replace(",", ".")) * mult;
   if (!Number.isFinite(num)) return null;
   const currency = /ARS|AR\$|^\$$/.test(sym) ? "ARS" : "USD";
   return { amount: num, currency, rest: raw.replace(m[0], "").trim() };
 }
 
+/**
+ * A payment cell can hold several deals joined with "+", e.g.
+ * "OTP 300 U$D + AR$30K monthly" → a one-time USD 300 and ARS 30.000 a month.
+ */
 export function parsePayment(raw: string): Client["payment"] {
+  const v = raw.trim();
+  const parts = v ? v.split(/\s*\+\s*/).filter(Boolean).map(parsePaymentPart) : [parsePaymentPart("")];
+  return { raw: v, parts };
+}
+
+function parsePaymentPart(raw: string): PaymentPart {
   const v = raw.trim();
   if (!v || /^(free|gratis|sin cargo|bonificado)$/i.test(v)) {
     return { raw: v, kind: "free", label: "Sin cargo", amount: null, currency: null, detail: null };
