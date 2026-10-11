@@ -52,6 +52,19 @@ Panel interno que muestra la **Client Checklist** (Google Sheet) como dashboard.
 | `GOOGLE_SERVICE_ACCOUNT_KEY` | JSON de la key de la service account (crudo o base64) |
 | `CLIENTS_SHEET_ID` / `CLIENTS_SHEET_RANGE` | opcionales; por defecto la Client Checklist, primera pestaña `A1:Z500` |
 
+### Finanzas (`/admin?vista=finanzas`)
+
+- **Ingresos recurrentes:** suscripciones de MercadoPago (`/preapproval/search`). Solo las `authorized` suman al MRR; el monto se normaliza a un mes según la frecuencia. ARR = MRR × 12. El producto sale del motivo de la suscripción ("nodo …" / "eterlab. …").
+- **Ads:** campañas de Meta de las cuentas publicitarias de nodo, con el gasto del mes y el histórico. El producto sale del nombre de la campaña y, si no lo dice, de la cuenta. Se ocultan las campañas pausadas de hace más de un año que no gastaron nada en el mes.
+- Cada moneda se muestra por separado, sin conversiones. Caché de 5 minutos, y si una fuente falla la otra se sigue mostrando.
+
+| Variable | Qué es |
+| --- | --- |
+| `MP_ACCESS_TOKEN` | Access Token de producción de la app de MercadoPago `eterlab-admin` |
+| `META_ADS_TOKEN` | token de un usuario del sistema del Business Manager de Nodo, con `ads_read` |
+| `META_AD_ACCOUNT_IDS` | opcional; por defecto `287949821825872,2517150942110792` (nodo ARS y nodo USD) |
+| `META_GRAPH_VERSION` | opcional; por defecto `v23.0` |
+
 Setup local (escribe en `.env.local`, que está en `.gitignore`):
 
 ```bash

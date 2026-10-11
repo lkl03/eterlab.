@@ -2,11 +2,23 @@
 
 import { useState } from "react";
 import { AdminLogin } from "./AdminLogin";
-import { AdminDashboard } from "./AdminDashboard";
+import { AdminDashboard, type AdminView } from "./AdminDashboard";
 
-export function AdminClient({ initialEmail, configured }: { initialEmail: string | null; configured: boolean }) {
+export function AdminClient({
+  initialEmail,
+  configured,
+  sheetUrl,
+  initialView,
+}: {
+  initialEmail: string | null;
+  configured: boolean;
+  sheetUrl: string;
+  initialView: AdminView;
+}) {
   const [email, setEmail] = useState<string | null>(initialEmail);
 
-  if (email) return <AdminDashboard email={email} onLogout={() => setEmail(null)} />;
+  if (email) {
+    return <AdminDashboard email={email} sheetUrl={sheetUrl} initialView={initialView} onLogout={() => setEmail(null)} />;
+  }
   return <AdminLogin configured={configured} onSuccess={setEmail} />;
 }
