@@ -14,6 +14,9 @@ const PRODUCTS: Record<Product, { label: string; color: string }> = {
 
 const PRODUCT_ORDER: Product[] = ["eterlab", "nodo", "otro"];
 
+/** 0.04303 → "4,3 %" */
+const pct = (rate: number) => `${(rate * 100).toLocaleString("es-AR", { maximumFractionDigits: 2 })}%`;
+
 /* ── Finance view ────────────────────────────────────────────────────────── */
 export function FinanceView({ refreshKey, onBusy, onUnauthorized }: ViewProps) {
   const [data, setData] = useState<FinancePayload | null>(null);
@@ -85,8 +88,24 @@ function FinanceKpis({ data }: { data: FinancePayload }) {
   const others = revenue.slice(1);
 
   const charged = new Map<string, number>();
-  for (const s of subscriptions) if (s.chargedTotal) charged.set(s.currency, (charged.get(s.currency) ?? 0) + s.chargedTotal);
+  const chargedNet = new Map<string, number>();
+  for (const s of subscriptions) {
+    if (s.chargedTotal) charged.set(s.currency, (charged.get(s.currency) ?? 0) + s.chargedTotal);
+    if (s.chargedNet) chargedNet.set(s.currency, (chargedNet.get(s.currency) ?? 0) + s.chargedNet);
+  }
+  const issues = subscriptions.reduce((n, s) => n + s.issues.length, 0);
   const firstSince = subscriptions.map((s) => s.since).filter(Boolean).sort()[0];
+
+  // Gross on top, what lands after MercadoPago's cut underneath.
+  const grossNet = (gross: number, net: number | null, currency: string) => (
+    <span className="flex flex-col gap-1.5">
+      <span>{money(gross, currency)}</span>
+      {net !== null && (
+        <span className="text-xs font-semibold tracking-normal text-ink/50 sm:text-sm">neto ≈ {money(Math.round(net), currency)}</span>
+      )}
+    </span>
+  );
+  const feeNote = main?.feeRate != null ? `MP retiene ${pct(main.feeRate)}` : "Antes de la comisión de MP";
 
   const spend = data.meta.spend;
   const metaOk = data.meta.status === "ok";
@@ -94,24 +113,47 @@ function FinanceKpis({ data }: { data: FinancePayload }) {
 
   const kpis: Array<{ label: string; value: React.ReactNode; foot: string }> = [
     {
-      label: "MRR",
-      value: !mpOk ? "—" : main ? money(main.mrr, main.currency) : money(0, "ARS"),
+      label: "MRR bruto",
+      value: !mpOk ? "—" : main ? grossNet(main.mrr, main.mrrNet, main.currency) : money(0, "ARS"),
       foot: !mpOk
         ? "MercadoPago sin conectar"
         : [
+            feeNote,
             main?.activeCount === 1 ? "1 suscripción activa" : `${main?.activeCount ?? 0} suscripciones activas`,
             ...others.map((o) => `+ ${money(o.mrr, o.currency)}`),
           ].join(" · "),
     },
     {
-      label: "ARR",
-      value: !mpOk ? "—" : money(main?.arr ?? 0, main?.currency ?? "ARS"),
-      foot: !mpOk ? "MercadoPago sin conectar" : ["MRR × 12", ...others.map((o) => `+ ${money(o.arr, o.currency)}`)].join(" · "),
+      label: "ARR bruto",
+      value: !mpOk ? "—" : main ? grossNet(main.arr, main.arrNet, main.currency) : money(0, "ARS"),
+      foot: !mpOk ? "MercadoPago sin conectar" : [feeNote, "MRR × 12", ...others.map((o) => `+ ${money(o.arr, o.currency)}`)].join(" · "),
     },
     {
-      label: "Cobrado a la fecha",
-      value: !mpOk ? "—" : charged.size ? [...charged].map(([cur, n]) => money(n, cur)).join(" · ") : money(0, "ARS"),
-      foot: !mpOk ? "MercadoPago sin conectar" : firstSince ? `Suscripciones desde ${fmtDate(firstSince, { day: false })}` : "Sin cobros todavía",
+      label: "Cobrado bruto",
+      value: !mpOk ? (
+        "—"
+      ) : charged.size ? (
+        <span className="flex flex-col gap-1.5">
+          {[...charged].map(([cur, n]) => (
+            <span key={cur}>{money(n, cur)}</span>
+          ))}
+          {[...chargedNet].map(([cur, n]) => (
+            <span key={`net-${cur}`} className="text-xs font-semibold tracking-normal text-ink/50 sm:text-sm">
+              acreditado {money(n, cur)}
+            </span>
+          ))}
+        </span>
+      ) : (
+        money(0, "ARS")
+      ),
+      foot: !mpOk
+        ? "MercadoPago sin conectar"
+        : [
+            issues ? `${issues} cobro${issues === 1 ? "" : "s"} con reclamo` : null,
+            firstSince ? `desde ${fmtDate(firstSince, { day: false })}` : "sin cobros todavía",
+          ]
+            .filter(Boolean)
+            .join(" · "),
     },
     {
       label: "Ads este mes",
@@ -172,12 +214,38 @@ function Revenue({ mp }: { mp: FinancePayload["mp"] }) {
               currency={r.currency}
               total={r.mrr}
               parts={PRODUCT_ORDER.filter((p) => r.byProduct[p]).map((p) => [p, r.byProduct[p]!])}
-              caption="MRR por producto"
+              caption="MRR bruto por producto"
             />
           ))}
+          <div className="mx-5 mb-5 flex flex-col gap-3 sm:mx-6">
+            {mp.revenue.map((r) => (
+              <p key={r.currency} className="rounded-2xl border border-dashed border-ink/15 px-4 py-3 text-sm leading-relaxed text-ink/60">
+                Los montos son <span className="font-semibold text-ink/80">brutos</span>. MercadoPago retiene su comisión en
+                cada cobro
+                {r.feeRate !== null && r.mrrNet !== null ? (
+                  <>
+                    {" "}
+                    (en tus últimos cobros, <span className="font-semibold text-ink/80">{pct(r.feeRate)}</span>): de{" "}
+                    {money(r.mrr, r.currency)} por mes te quedan ≈{" "}
+                    <span className="font-semibold text-ink/80">{money(Math.round(r.mrrNet), r.currency)}</span>.
+                  </>
+                ) : (
+                  "; el neto se calcula cuando haya cobros acreditados."
+                )}
+              </p>
+            ))}
+            {mp.subscriptions
+              .filter((s) => s.issues.length)
+              .map((s) => (
+                <Notice key={`issue-${s.id}`}>
+                  <span className="font-semibold">{s.reason}</span> · {s.issues.join(" · ")}. Revisalo en MercadoPago: mientras
+                  dure el reclamo, la plata queda retenida.
+                </Notice>
+              ))}
+          </div>
           <div className="hidden grid-cols-[minmax(0,1.6fr)_minmax(0,0.9fr)_minmax(0,1fr)_minmax(0,1fr)_96px] gap-4 border-y border-ink/[0.07] px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink/40 md:grid">
             <span>Suscripción</span>
-            <span>Monto</span>
+            <span>Monto bruto</span>
             <span>Próximo cobro</span>
             <span>Cobrado</span>
             <span>Estado</span>
@@ -242,6 +310,11 @@ function SubscriptionRow({ sub: s }: { sub: Subscription }) {
       <div className="text-right md:text-left">
         <p className="font-semibold tabular-nums">{s.amount !== null ? money(s.amount, s.currency) : "—"}</p>
         <p className="text-xs text-ink/45">{s.frequencyLabel}</p>
+        {s.amount !== null && s.feeRate !== null && (
+          <p className="text-xs tabular-nums text-ink/45">
+            MP {pct(s.feeRate)} · neto {money(Math.round(s.amount * (1 - s.feeRate) * 100) / 100, s.currency)}
+          </p>
+        )}
       </div>
 
       <div className="text-sm text-ink/65">
@@ -267,6 +340,12 @@ function SubscriptionRow({ sub: s }: { sub: Subscription }) {
                 {s.since ? ` · desde ${fmtDate(s.since, { day: false })}` : ""}
               </span>
             ) : null}
+            {s.charges.length > 0 && (
+              <span className={`block text-xs ${s.issues.length ? "font-semibold text-amber-700" : "text-ink/45"}`}>
+                {s.chargedNet !== null ? `acreditado ${money(s.chargedNet, s.currency)}` : "nada acreditado"}
+                {s.issues.length ? ` · ${s.charges.filter((c) => c.status !== "approved").map((c) => c.statusLabel.toLowerCase()).join(", ")}` : ""}
+              </span>
+            )}
           </>
         ) : (
           "—"

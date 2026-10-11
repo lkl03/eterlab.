@@ -15,6 +15,16 @@
 
 export type Product = "nodo" | "eterlab" | "otro";
 
+/** One real charge of a subscription, with what MercadoPago kept. */
+export type Charge = {
+  date: string | null;
+  gross: number;
+  fee: number | null;
+  net: number | null;
+  status: string;
+  statusLabel: string;
+};
+
 export type Subscription = {
   id: string;
   product: Product;
@@ -32,12 +42,28 @@ export type Subscription = {
   chargedTotal: number | null;
   chargedCount: number | null;
   reference: string | null;
+  /** Real charges, newest first; empty when MercadoPago didn't answer. */
+  charges: Charge[];
+  /** MercadoPago's cut on the latest charge that had one (0.043 = 4,3 %). */
+  feeRate: number | null;
+  /** Monthly amount after MercadoPago's cut, estimated with feeRate. */
+  monthlyNet: number | null;
+  /** Net actually credited by approved charges. */
+  chargedNet: number | null;
+  /** Charges that need a look (mediation, refund, chargeback). */
+  issues: string[];
 };
 
 export type RevenueByCurrency = {
   currency: string;
+  /** Gross: what the subscriptions charge, before MercadoPago's cut. */
   mrr: number;
   arr: number;
+  /** After MercadoPago's cut; null when no charge has fee data yet. */
+  mrrNet: number | null;
+  arrNet: number | null;
+  /** Weighted MercadoPago cut across active subscriptions. */
+  feeRate: number | null;
   byProduct: Partial<Record<Product, number>>;
   activeCount: number;
 };
@@ -139,6 +165,72 @@ function frequencyLabel(frequency?: number | null, type?: string | null): string
   return `${frequency} ${type}`;
 }
 
+type MpAuthorizedPayment = {
+  status?: string;
+  transaction_amount?: number | null;
+  date_created?: string | null;
+  payment?: { id?: number | string | null; status?: string | null } | null;
+};
+
+type MpPayment = {
+  status?: string;
+  transaction_amount?: number | null;
+  date_approved?: string | null;
+  date_created?: string | null;
+  transaction_details?: { net_received_amount?: number | null } | null;
+  fee_details?: Array<{ amount?: number | null; fee_payer?: string | null }> | null;
+};
+
+const PAYMENT_STATUS: Record<string, string> = {
+  approved: "Acreditado",
+  in_mediation: "En mediación",
+  pending: "Pendiente",
+  in_process: "En proceso",
+  authorized: "Autorizado",
+  refunded: "Devuelto",
+  charged_back: "Contracargo",
+  rejected: "Rechazado",
+  cancelled: "Cancelado",
+};
+
+const ISSUE_STATUSES = new Set(["in_mediation", "refunded", "charged_back"]);
+
+export function toCharge(a: MpAuthorizedPayment, pay: MpPayment | null): Charge {
+  const gross = pay?.transaction_amount ?? a.transaction_amount ?? 0;
+  // Only the fees the seller pays come out of what we receive.
+  const fee = pay?.fee_details
+    ? pay.fee_details.filter((f) => f.fee_payer !== "payer").reduce((acc, f) => acc + (f.amount ?? 0), 0)
+    : null;
+  const net = pay?.transaction_details?.net_received_amount ?? (fee !== null ? gross - fee : null);
+  const status = pay?.status ?? a.payment?.status ?? a.status ?? "unknown";
+  return {
+    date: isoDate(pay?.date_approved ?? pay?.date_created ?? a.date_created),
+    gross,
+    fee,
+    net,
+    status,
+    statusLabel: PAYMENT_STATUS[status] ?? status,
+  };
+}
+
+/** Adds the real charges (and what MercadoPago kept) to a subscription. */
+export function withCharges(sub: Subscription, charges: Charge[]): Subscription {
+  const withFee = charges.find((c) => c.fee !== null && c.gross > 0);
+  const feeRate = withFee ? withFee.fee! / withFee.gross : null;
+  const approved = charges.filter((c) => c.status === "approved" && c.net !== null);
+  const issues = charges
+    .filter((c) => ISSUE_STATUSES.has(c.status))
+    .map((c) => `Cobro${c.date ? ` del ${c.date.split("-").reverse().join("/")}` : ""}: ${c.statusLabel.toLowerCase()}`);
+  return {
+    ...sub,
+    charges,
+    feeRate,
+    monthlyNet: sub.monthly !== null && feeRate !== null ? sub.monthly * (1 - feeRate) : null,
+    chargedNet: approved.length ? approved.reduce((acc, c) => acc + c.net!, 0) : null,
+    issues,
+  };
+}
+
 export function toSubscription(p: MpPreapproval): Subscription {
   const ar = p.auto_recurring ?? {};
   const amount = ar.transaction_amount ?? null;
@@ -158,20 +250,74 @@ export function toSubscription(p: MpPreapproval): Subscription {
     chargedTotal: p.summarized?.charged_amount ?? null,
     chargedCount: p.summarized?.charged_quantity ?? null,
     reference: p.external_reference?.trim() || null,
+    charges: [],
+    feeRate: null,
+    monthlyNet: null,
+    chargedNet: null,
+    issues: [],
   };
 }
 
 export function summarizeRevenue(subs: Subscription[]): RevenueByCurrency[] {
-  const map = new Map<string, RevenueByCurrency>();
+  const map = new Map<string, RevenueByCurrency & { feeBase: number; feeAmount: number }>();
   for (const s of subs) {
     if (!s.active || s.monthly === null) continue;
-    const r = map.get(s.currency) ?? { currency: s.currency, mrr: 0, arr: 0, byProduct: {}, activeCount: 0 };
+    const r = map.get(s.currency) ?? {
+      currency: s.currency,
+      mrr: 0,
+      arr: 0,
+      mrrNet: null,
+      arrNet: null,
+      feeRate: null,
+      byProduct: {},
+      activeCount: 0,
+      feeBase: 0,
+      feeAmount: 0,
+    };
     r.mrr += s.monthly;
     r.byProduct[s.product] = (r.byProduct[s.product] ?? 0) + s.monthly;
     r.activeCount += 1;
+    if (s.feeRate !== null) {
+      r.feeBase += s.monthly;
+      r.feeAmount += s.monthly * s.feeRate;
+    }
     map.set(s.currency, r);
   }
-  return [...map.values()].map((r) => ({ ...r, arr: r.mrr * 12 })).sort((a, b) => b.mrr - a.mrr);
+  return [...map.values()]
+    .map(({ feeBase, feeAmount, ...r }) => {
+      // Subscriptions without a charge yet borrow the rate seen on the others.
+      const feeRate = feeBase > 0 ? feeAmount / feeBase : null;
+      const mrrNet = feeRate !== null ? r.mrr * (1 - feeRate) : null;
+      return { ...r, arr: r.mrr * 12, feeRate, mrrNet, arrNet: mrrNet !== null ? mrrNet * 12 : null };
+    })
+    .sort((a, b) => b.mrr - a.mrr);
+}
+
+/** Charges of one subscription. Best effort: on any error it returns none. */
+async function loadCharges(preapprovalId: string, token: string): Promise<Charge[]> {
+  async function get<T>(path: string): Promise<T | null> {
+    const res = await fetch(`https://api.mercadopago.com${path}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+    return res.ok ? ((await res.json()) as T) : null;
+  }
+  try {
+    const list = await get<{ results?: MpAuthorizedPayment[] }>(
+      `/authorized_payments/search?preapproval_id=${encodeURIComponent(preapprovalId)}`,
+    );
+    const charges: Charge[] = [];
+    // Sequential on purpose: MercadoPago rate-limits bursts (429).
+    for (const a of list?.results ?? []) {
+      if (!a.payment?.id) continue;
+      const pay = await get<MpPayment>(`/v1/payments/${encodeURIComponent(String(a.payment.id))}`);
+      charges.push(toCharge(a, pay));
+    }
+    return charges.sort((x, y) => (y.date ?? "").localeCompare(x.date ?? ""));
+  } catch (err) {
+    console.error("[admin/finance] mercadopago charges", preapprovalId, err);
+    return [];
+  }
 }
 
 async function loadMercadoPago(): Promise<FinancePayload["mp"]> {
@@ -192,8 +338,14 @@ async function loadMercadoPago(): Promise<FinancePayload["mp"]> {
       if (!page.results || page.results.length < 100) break;
     }
 
+    const subscriptions: Subscription[] = [];
+    for (const p of all) {
+      const sub = toSubscription(p);
+      // Only subscriptions that already charged have payments to read.
+      subscriptions.push(sub.chargedCount ? withCharges(sub, await loadCharges(p.id, token)) : sub);
+    }
     const order = (s: Subscription) => (s.active ? 0 : s.status === "paused" || s.status === "pending" ? 1 : 2);
-    const subscriptions = all.map(toSubscription).sort((a, b) => order(a) - order(b) || (b.monthly ?? 0) - (a.monthly ?? 0));
+    subscriptions.sort((a, b) => order(a) - order(b) || (b.monthly ?? 0) - (a.monthly ?? 0));
     return { status: "ok", subscriptions, revenue: summarizeRevenue(subscriptions) };
   } catch (err) {
     console.error("[admin/finance] mercadopago", err);
