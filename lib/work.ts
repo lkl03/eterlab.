@@ -84,12 +84,19 @@ export const SPOTLIGHT_WORK_SLUG = "jinetes";
 
 /** Client work shown in the homepage grid, newest first. */
 export const LATEST_WORK_SLUGS: string[] = [
+  "lippia",
   "bioprotece",
   "kivnon-sas",
   "warriors-sport-arg",
   "dvlegales",
   "bioprotece3d",
 ];
+
+/**
+ * How many of those the homepage grid shows. The first card spans two
+ * columns, so 5 fills the 3-up and 2-up grids with no orphan; /work lists all.
+ */
+export const HOME_LATEST_COUNT = 5;
 
 const JINETES_D = { width: 1600, height: 1000 };
 const PHONE = { width: 520, height: 1125 };
@@ -436,6 +443,67 @@ export const WORKS: Work[] = [
         en: "Thank you to the Bioprotece team for the trust.",
       },
     },
+  },
+  {
+    slug: "lippia",
+    title: "Lippia",
+    badge: {
+      es: "sitio para cliente",
+      en: "client website",
+    },
+    summary: {
+      es: "Web para Lippia — pastas frescas artesanales hechas a mano por Eva. Una carta con carrito que arma el pedido y lo manda por WhatsApp, con precios sincronizados desde nodo.",
+      en: "Website for Lippia — fresh, handmade pasta by Eva. A menu with a cart that builds the order and sends it over WhatsApp, with prices synced from nodo.",
+    },
+    year: "2026",
+    role: {
+      es: "diseño • desarrollo • seo",
+      en: "design • development • seo",
+    },
+    readingTime: {
+      es: "2 min",
+      en: "2 min",
+    },
+    stack: ["next.js", "typescript", "tailwind", "motion", "seo + geo"],
+    liveUrl: "https://pastaslippia.com.ar",
+    coverImage: "/work/previews/lippia-poster.jpg",
+    preview: "/work/previews/lippia",
+    previewPoster: "/work/previews/lippia-poster.jpg",
+    sections: [
+      {
+        title: { es: "contexto", en: "context" },
+        body: {
+          es: `Lippia es el proyecto de Eva: 18 años en cocinas de todo tipo, de bodegones de barrio a cocinas de alto nivel, y unas pastas frescas que amasa, estira y corta a mano, sin conservantes ni máquinas industriales.
+
+Los pedidos llegaban todos por WhatsApp e Instagram, con la carta en una foto. Necesitaba una web que contara quién cocina, mostrara la carta al día y dejara el pedido listo para mandar, sin sumar un sistema de pagos que no hacía falta.`,
+          en: `Lippia is Eva's project: 18 years across every kind of kitchen, from neighborhood bodegones to fine dining, and fresh pasta she kneads, rolls and cuts by hand, with no preservatives and no industrial machines.
+
+Every order came in over WhatsApp and Instagram, with the menu as a photo. She needed a site that told who's cooking, kept the menu up to date and left the order ready to send, without adding a payment system she didn't need.`,
+        },
+      },
+      {
+        title: { es: "qué hicimos", en: "what we built" },
+        body: {
+          es: `- Landing de una sola página con identidad cálida: crema, bordó y lila, Fraunces + Jost, y las fotos reales de la cocina de Eva.
+- Carta inmersiva con carrito: elegís variedad y tamaño, y el pedido sale a WhatsApp ya escrito, con el detalle y un total estimado.
+- Precios sincronizados desde el catálogo de nodo: Eva los cambia ahí y la web se actualiza sola.
+- Galería full-bleed con parallax, sección "Quién cocina" y feed de Instagram.
+- SEO/GEO desde el lanzamiento: dominio propio, datos estructurados, Search Console y Vercel Analytics.`,
+          en: `- A single-page landing with a warm identity: cream, maroon and lilac, Fraunces + Jost, and real photos from Eva's kitchen.
+- An immersive menu with a cart: pick a variety and size, and the order goes out to WhatsApp already written, with the detail and an estimated total.
+- Prices synced from the nodo catalog: Eva changes them there and the site updates on its own.
+- A full-bleed parallax gallery, a "who's cooking" section and an Instagram feed.
+- SEO/GEO from day one: own domain, structured data, Search Console and Vercel Analytics.`,
+        },
+      },
+      {
+        title: { es: "resultado", en: "result" },
+        body: {
+          es: "Una web que se siente como la cocina de Eva: cálida, simple y con olor a pasta fresca. El cliente ve la carta al día, arma su pedido en un minuto y lo manda por el canal donde ya la contactaba.",
+          en: "A site that feels like Eva's kitchen: warm, simple and smelling of fresh pasta. Customers see the up-to-date menu, build their order in a minute and send it through the channel they already used to reach her.",
+        },
+      },
+    ],
   },
   {
     slug: "kivnon-sas",
