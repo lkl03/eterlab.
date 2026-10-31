@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 import { COPY, type Lang } from "../../lib/i18n";
-import { LATEST_WORKS } from "../../lib/work";
+import { HOME_LATEST_COUNT, LATEST_WORKS } from "../../lib/work";
 import { Button } from "../../components/ui/Button";
 import { Reveal } from "../../components/ui/Reveal";
 import { SectionTag } from "../../components/ui/SectionTag";
@@ -76,7 +76,7 @@ export default function FeaturedWorkSection({ lang }: Props) {
         </div>
 
         <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {LATEST_WORKS.map((work, i) => (
+          {LATEST_WORKS.slice(0, HOME_LATEST_COUNT).map((work, i) => (
             <WorkCard key={work.slug} work={work} lang={lang} featured={i === 0} index={i} />
           ))}
         </ul>

@@ -166,7 +166,10 @@ export function parseStatus(raw: string): Client["status"] {
 export function parseNotes(notes: string): Pick<Client, "domain" | "pending"> {
   const registrar = notes.match(/dominio\s+(?:en|con)\s+([\wÀ-ÿ.-]+)/i)?.[1] ?? null;
   const renewRaw = notes.match(/renueva(?:\s+el)?\s+(\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4})/i)?.[1];
-  const managedBy = notes.match(/a\s+cargo\s+de\s+([A-ZÀ-Ý][\wÀ-ÿ]*)/)?.[1] ?? null;
+  // "a cargo de Aaron" → "Aaron"; "a cargo del cliente" → "cliente".
+  const managedBy =
+    notes.match(/a\s+cargo\s+de\s+([A-ZÀ-Ý][\wÀ-ÿ]*)/)?.[1] ??
+    (/a\s+cargo\s+del\s+cliente/i.test(notes) ? "cliente" : null);
   const pending = notes
     .split(/->|→|;|\n/)
     .map((s) => s.trim())

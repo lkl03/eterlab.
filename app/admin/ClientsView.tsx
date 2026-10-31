@@ -496,11 +496,13 @@ function ClientRow({ client: c, index, open, onToggle }: { client: Client; index
   );
 }
 
+const managedLabel = (who: string) => (who === "cliente" ? "a cargo del cliente" : `a cargo de ${who}`);
+
 function ClientDetail({ client: c }: { client: Client }) {
   const domainLine = [
     c.domain.registrar && `en ${c.domain.registrar}`,
     c.domain.renewsOn && `renueva el ${fmtDate(c.domain.renewsOn)} (${inDays(daysUntil(c.domain.renewsOn))})`,
-    c.domain.managedBy && `a cargo de ${c.domain.managedBy}`,
+    c.domain.managedBy && managedLabel(c.domain.managedBy),
   ]
     .filter(Boolean)
     .join(" · ");
@@ -615,7 +617,7 @@ function Renewals({ clients }: { clients: Client[] }) {
             <li key={c.number + c.name} className="flex items-baseline justify-between gap-3 border-t border-dashed border-ink/10 pt-3">
               <span className="truncate text-sm font-semibold text-ink/70">{c.name}</span>
               <span className="shrink-0 text-[11px] text-ink/45">
-                {[c.domain.registrar, c.domain.managedBy && `a cargo de ${c.domain.managedBy}`].filter(Boolean).join(" · ")}
+                {[c.domain.registrar, c.domain.managedBy && managedLabel(c.domain.managedBy)].filter(Boolean).join(" · ")}
               </span>
             </li>
           ))}
