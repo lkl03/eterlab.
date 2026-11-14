@@ -1,0 +1,39 @@
+# eterlab.
+
+> eterlab. es un estudio de diseño y desarrollo web: convirtiendo ideas en soluciones a través del diseño y desarrollo. Sitio oficial: https://eterlab.co
+
+Diseño y desarrollo para resolver problemas reales. Te acompañamos a transformar ideas en productos digitales sólidos: UX cuidado, interfaces limpias y una base técnica rápida. Desde el primer pixel hasta la última línea de código, optimizamos el resultado para tu satisfacción y la de tus usuarios.
+
+## Casos de clientes
+
+- [JINETES](https://eterlab.co/work/jinetes): Sitio web para JINETES, la agencia de publicidad argentina fundada por Salvador Posse y Joaquín Vázquez Blanco. Diseño y desarrollo a medida para llevar su identidad a la web, desde que entrás hasta que salís. (2026; diseño • desarrollo • seo). Sitio: https://jinetes.agency
+- [Lippia](https://eterlab.co/work/lippia): Web para Lippia — pastas frescas artesanales hechas a mano por Eva. Una carta con carrito que arma el pedido y lo manda por WhatsApp, con precios sincronizados desde nodo. (2026; diseño • desarrollo • seo). Sitio: https://pastaslippia.com.ar
+- [Bioprotece S.A.](https://eterlab.co/work/bioprotece): Rebranding y nuevo dashboard para Bioprotece S.A., empresa líder en fabricación de implantes médicos. De un sitio de plantilla a uno a medida: catálogo con buscador, implantes a medida, certificaciones y un panel propio para el equipo. (2026; diseño • desarrollo • dashboard). Sitio: https://www.bioprotece.com.ar
+- [KIVNON SAS](https://eterlab.co/work/kivnon-sas): Web institucional para KIVNON SAS — división de I+D de Milfarma dedicada a implantes personalizados. Diseño y desarrollo bilingüe con foco en respaldo técnico, claridad clínica y captación de consultas. (2026; diseño • frontend). Sitio: https://www.kivnonsas.com.ar
+- [Warriors Sport Arg](https://eterlab.co/work/warriors-sport-arg): Nueva web para Warriors Sport Arg — gimnasio con varias sedes. Diseño y desarrollo con foco en horarios claros, sedes y captación de nuevos socios. (2026; diseño • frontend). Sitio: https://warriorssportarg.com.ar
+- [DV Legales](https://eterlab.co/work/dvlegales): Nueva web para DV Legales — estudio jurídico con foco en asesoramiento claro, estratégico y humano. Rediseño y desarrollo priorizando claridad, confianza y performance. (2026; diseño • frontend). Sitio: https://dvlegales.com.ar
+- [Bioprotece3D](https://eterlab.co/work/bioprotece3d): Nueva web para Bioprotece3D — rediseño y desarrollo con foco en claridad, estructura y performance. (2026; diseño • frontend). Sitio: https://bioprotece3d.com
+
+## Productos propios
+
+- [promptea.me](https://promptea.me): herramienta de IA. Analizá tu prompt, detectá problemas y optimizalo para cada IA.
+- [moonlight web designs](https://moonlightwebdesigns.com/): servicio de suscripción de diseño. Hacemos sitios 100% a medida, hechos a medida para tu negocio. Mejores resultados, a mejor precio.
+- [nodo](https://nodoar.app): software de gestión. El sistema online para ordenar tu negocio: contactos, operaciones, stock y pedidos, centralizados en un solo lugar.
+
+## Contacto
+
+- Email: contact.eterlab@gmail.com
+- WhatsApp: +54 9 11 7136-2144 (https://wa.me/5491171362144)
+- Formulario: https://eterlab.co/#contact
+
+## Perfiles
+
+- Instagram: https://www.instagram.com/eterlab_/
+- LinkedIn: https://www.linkedin.com/company/eterlab-co/
+- TikTok: https://tiktok.com/@.eterlab
+
+## Páginas
+
+- [Inicio](https://eterlab.co/)
+- [Trabajos](https://eterlab.co/work)
+- [Sitemap](https://eterlab.co/sitemap.xml)

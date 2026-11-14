@@ -1,0 +1,9 @@
+GPTBot/1.1; +https://openai.com/gptbot             200 200 
+OAI-SearchBot/1.0; +https://openai.com/searchbot   200 200 
+ChatGPT-User/1.0; +https://openai.com/bot          200 200 
+ClaudeBot/1.0; +claudebot@anthropic.com            200 200 
+Claude-User/1.0                                    200 200 
+Claude-SearchBot/1.0                               200 200 
+Google-Extended                                    200 200 
+Googlebot/2.1                                      200 200 
+Bingbot/2.0                                        200 200 

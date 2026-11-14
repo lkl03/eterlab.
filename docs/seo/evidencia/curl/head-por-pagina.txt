@@ -1,0 +1,89 @@
+=== home.html
+  <title>eterlab.</title>
+  <meta name="description" content="Design &amp; development studio — turning ideas into useful digital products."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co"/>
+  <meta property="og:url" content="https://eterlab.co"
+  <meta property="og:image" content="https://eterlab.co/og.png"
+  <meta property="og:type" content="website"
+=== work.html
+  <title>work – eterlab. – eterlab.</title>
+  <meta name="description" content="Client work, shipped with a performance-first mindset."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work"/>
+  <meta property="og:url" content="https://eterlab.co/work"
+  <meta property="og:image" content="https://eterlab.co/og.png"
+  <meta property="og:type" content="website"
+=== work_bioprotece.html
+  <title>Bioprotece S.A. – eterlab.</title>
+  <meta name="description" content="Rebranding and a new dashboard for Bioprotece S.A., a leading medical-implant manufacturer. From a template site to a custom one: a searchable catalog, custom implants, certifications and an in-house panel for the team."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/bioprotece"/>
+  <meta property="og:url" content="https://eterlab.co/work/bioprotece"
+  <meta property="og:image" content="https://eterlab.co/work/previews/bioprotece-poster.jpg"
+  <meta property="og:type" content="article"
+=== work_bioprotece3d.html
+  <title>Bioprotece3D – eterlab.</title>
+  <meta name="description" content="New website for Bioprotece3D — redesign + build focused on clarity, structure and performance."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/bioprotece3d"/>
+  <meta property="og:url" content="https://eterlab.co/work/bioprotece3d"
+  <meta property="og:image" content="https://eterlab.co/og.png"
+  <meta property="og:type" content="article"
+=== work_dvlegales.html
+  <title>DV Legales – eterlab.</title>
+  <meta name="description" content="New website for DV Legales — a law firm focused on clear, strategic and human legal counsel. Redesign + build prioritizing clarity, trust and performance."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/dvlegales"/>
+  <meta property="og:url" content="https://eterlab.co/work/dvlegales"
+  <meta property="og:image" content="https://eterlab.co/work/dvlegales-cover.jpg"
+  <meta property="og:type" content="article"
+=== work_jinetes.html
+  <title>JINETES – eterlab.</title>
+  <meta name="description" content="Website for JINETES, the Argentine ad agency founded by Salvador Posse and Joaquín Vázquez Blanco. A custom design and build that carries their identity onto the web, from the moment you land until you leave."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/jinetes"/>
+  <meta property="og:url" content="https://eterlab.co/work/jinetes"
+  <meta property="og:image" content="https://eterlab.co/work/previews/jinetes-poster.jpg"
+  <meta property="og:type" content="article"
+=== work_kivnon-sas.html
+  <title>KIVNON SAS – eterlab.</title>
+  <meta name="description" content="Institutional website for KIVNON SAS — Milfarma&#x27;s R&amp;D division for custom implants. Bilingual design and build focused on technical authority, clinical clarity and inbound consultations."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/kivnon-sas"/>
+  <meta property="og:url" content="https://eterlab.co/work/kivnon-sas"
+  <meta property="og:image" content="https://eterlab.co/work/previews/kivnon-sas-poster.jpg"
+  <meta property="og:type" content="article"
+=== work_lippia.html
+  <title>Lippia – eterlab.</title>
+  <meta name="description" content="Website for Lippia — fresh, handmade pasta by Eva. A menu with a cart that builds the order and sends it over WhatsApp, with prices synced from nodo."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/lippia"/>
+  <meta property="og:url" content="https://eterlab.co/work/lippia"
+  <meta property="og:image" content="https://eterlab.co/work/previews/lippia-poster.jpg"
+  <meta property="og:type" content="article"
+=== work_no-existe.html
+  <meta name="robots" content="noindex"/>
+  <title>work – eterlab. – eterlab.</title>
+  <meta name="description" content="Client work, shipped with a performance-first mindset."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work"/>
+  <meta property="og:url" content="https://eterlab.co/work"
+  <meta property="og:image" content="https://eterlab.co/og.png"
+  <meta property="og:type" content="website"
+=== work_warriors-sport-arg.html
+  <title>Warriors Sport Arg – eterlab.</title>
+  <meta name="description" content="New website for Warriors Sport Arg — a multi-location gym. Design and build focused on clear schedules, locations and new-member acquisition."
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://eterlab.co/work/warriors-sport-arg"/>
+  <meta property="og:url" content="https://eterlab.co/work/warriors-sport-arg"
+  <meta property="og:image" content="https://eterlab.co/work/warriors-sport-arg-cover.jpg"
+  <meta property="og:type" content="article"
+=== admin.html
+  <title>admin – eterlab.</title>
+  <meta name="description" content="Design &amp; development studio — turning ideas into useful digital products."
+  <meta name="robots" content="noindex, nofollow, nocache"/>
+  <link rel="canonical" href="https://eterlab.co"/>
+  <meta property="og:url" content="https://eterlab.co"
+  <meta property="og:image" content="https://eterlab.co/og.png"
+  <meta property="og:type" content="website"
