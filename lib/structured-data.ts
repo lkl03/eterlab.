@@ -1,8 +1,8 @@
 // schema.org JSON-LD for the public pages. Only facts already published on
-// the site go here (name, contact, profiles, cases) — no address, ratings,
-// founding date or client claims that the site itself does not state.
+// the site go here (name, city, contact, profiles, cases) — no street
+// address, ratings, founding date or client claims the site does not state.
 import { COPY } from "./i18n";
-import { SITE, SITE_DESCRIPTION, SITE_URL } from "./site";
+import { SITE, SITE_DESCRIPTION, SITE_LOCATION, SITE_URL } from "./site";
 import type { Work } from "./work";
 
 type JsonLd = Record<string, unknown>;
@@ -38,6 +38,11 @@ export function organizationJsonLd(): JsonLd {
     slogan: COPY.es.hero.subtitle,
     email: SITE.email,
     telephone: TELEPHONE,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: SITE_LOCATION.locality,
+      addressCountry: SITE_LOCATION.country,
+    },
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",

@@ -1,7 +1,7 @@
 // /llms.txt — a plain-text map of the site for AI assistants (llmstxt.org).
 // Built from the same data the pages render, so it can't drift from them.
-// Only facts published on the site; nothing about location, team size,
-// prices or results that the site doesn't state.
+// Only facts published on the site; nothing about team size, prices or
+// results that the site doesn't state.
 import { COPY } from "../../lib/i18n";
 import { SITE, SITE_URL } from "../../lib/site";
 import { CLIENT_WORKS } from "../../lib/work";
@@ -22,7 +22,7 @@ function build(): string {
   const lines: string[] = [
     "# eterlab.",
     "",
-    `> eterlab. es un estudio de diseño y desarrollo web: ${es.hero.subtitle} Sitio oficial: ${SITE_URL}`,
+    `> eterlab. es un estudio de diseño y desarrollo web con base en ${es.footer.location}: ${es.hero.subtitle} Sitio oficial: ${SITE_URL}`,
     "",
     `${es.statement.descStrong} ${es.statement.desc.replace(/\s+/g, " ").trim()}`,
     "",
