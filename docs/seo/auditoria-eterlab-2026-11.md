@@ -145,6 +145,7 @@ Rama `feat/seo-geo-audit`, un commit por área:
 | `feat(geo): serve /llms.txt` | Mapa en texto para asistentes, generado desde `lib/i18n` y `lib/work`. | `app/llms.txt/route.ts` |
 | `fix(seo): make the "Inicio" back button a real link` | `<a href="/">` en /work y en los casos cortos (mismo componente `Button`, mismo aspecto). | `app/work/page.tsx`, `components/work/WorkPageClient.tsx` |
 | `feat: show the studio's location under the footer copyright` | "Ciudad Autónoma de Buenos Aires, Argentina" (EN: "Buenos Aires, Argentina") en un `<address>` debajo del copyright. Aprobado por Luca. | `lib/i18n.ts`, `components/Footer.tsx` |
+| `fix(build): self-host Karla instead of fetching it from Google Fonts` | El build de Vercel de esta rama falló en `next/font/google`: Google devolvió URLs `fonts.gstatic.com/l/font?kit=…&skey=…` que Turbopack (Next 16.1.6) no parsea. `main` habría fallado igual en su próximo deploy. Ahora Karla (mismo archivo variable, licencia OFL) se sirve desde `app/fonts` con `next/font/local`. | `app/layout.tsx`, `app/fonts/` |
 | `feat(seo): add the studio's city to metadata, JSON-LD and llms.txt` | Título y descripción de la home "en Buenos Aires", `PostalAddress` a nivel ciudad en Organization, ubicación en `/llms.txt`. | `lib/site.ts`, `lib/structured-data.ts`, `app/llms.txt/route.ts` |
 | `docs(seo): …` | Este informe, la tabla de prompts y la evidencia. | `docs/seo/` |
 
