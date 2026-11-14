@@ -20,6 +20,19 @@ Cuando la IA sí encuentra el sitio (con "eterlab agencia web" o "eterlab.co"), 
 
 El PR arregla lo técnico que estaba mal y suma las señales de entidad que se pueden poner sin inventar nada: dejar de bloquear `/_next/` en robots.txt, un solo dominio canónico, metadata en español y sin duplicados, `lastmod` reales, JSON-LD validado, `/llms.txt` y un enlace interno real en los casos. Lo que más mueve la aguja (contenido de servicios y "quiénes somos", ubicación, perfiles en directorios, reseñas) es decisión y trabajo de Luca y está en la hoja de ruta.
 
+### Puntaje general (1–100)
+
+**Antes: 30/100. Con el PR, una vez reindexado: ~40/100** (estimación).
+
+| Componente | Peso | Antes | Con el PR | Base |
+|---|---|---|---|---|
+| Base técnica (rastreo, indexación, metadata, datos estructurados, velocidad) | 25 % | 15 | 20 | áreas técnicas de abajo |
+| Marca y entidad (Google con "eterlab", IA con el nombre) | 25 % | 12 | 15 | #2 en Google; 25/33 respuestas de marca correctas, Claude 0/6 sin calificador |
+| Visibilidad de categoría (Google + IA) | 35 % | 1 | 2 | 0/30 en IA, fuera del top 10 en Google |
+| Autoridad externa (directorios, reseñas, menciones) | 15 % | 2 | 3 | sin perfiles ni reseñas |
+
+Lo que lleva de 40 a 70+ no es código: páginas de servicios y por rubro, perfiles en directorios con reseñas y menciones externas (ver hoja de ruta).
+
 ### Puntaje por área (1–10)
 
 | Área | Antes | Con el PR | Por qué |
@@ -67,7 +80,7 @@ Impacto: alto / medio / bajo sobre visibilidad o contactos. Esfuerzo: S (horas),
 **A4 · El sitio no dice quién, dónde ni qué servicios** — hecho
 - Texto visible sin JS: "Argentina" 0 veces en la home (solo en el resumen de JINETES), "Buenos Aires" 0, "desarrollo web" 0, "Next.js" 0, ningún nombre de persona, ninguna lista de servicios. H1 de la home: "eterlab.".
 - Efecto medido: Gemini "operan de forma reservada"; ChatGPT saca el nombre de Luca y el tamaño del equipo de LinkedIn; Claude "no pude confirmar precios, tamaño real del equipo, año de fundación, stack". ChatGPT prioriza en P13 "companies that explicitly mention Next.js".
-- No se cambia en el PR (es copy y no corresponde afirmar ubicación ni personas sin que Luca lo decida). Impacto alto · esfuerzo M.
+- **Ubicación: arreglada en el PR** (Luca lo aprobó): "Ciudad Autónoma de Buenos Aires, Argentina" debajo del copyright del footer, en el título y la descripción de la home, en el JSON-LD (`PostalAddress` a nivel ciudad) y en `/llms.txt`. Quedan servicios y quién está detrás (copy). Impacto alto · esfuerzo M.
 
 **A5 · Sin perfiles en directorios ni reseñas de terceros** — hecho
 - No hay perfil de eterlab. en Clutch, GoodFirms, Sortlist, DesignRush, Behance ni Workana, ni ficha de Google Business. Las tres IA lo marcan como la principal debilidad (P05, P16). Impacto alto · esfuerzo M.
@@ -131,9 +144,11 @@ Rama `feat/seo-geo-audit`, un commit por área:
 | `feat(seo): JSON-LD for the studio, the site and each case study` | Organization, WebSite, CreativeWork y BreadcrumbList renderizados en el servidor. | `lib/structured-data.ts`, `components/seo/JsonLd.tsx`, `app/layout.tsx`, `app/work/[slug]/page.tsx` |
 | `feat(geo): serve /llms.txt` | Mapa en texto para asistentes, generado desde `lib/i18n` y `lib/work`. | `app/llms.txt/route.ts` |
 | `fix(seo): make the "Inicio" back button a real link` | `<a href="/">` en /work y en los casos cortos (mismo componente `Button`, mismo aspecto). | `app/work/page.tsx`, `components/work/WorkPageClient.tsx` |
+| `feat: show the studio's location under the footer copyright` | "Ciudad Autónoma de Buenos Aires, Argentina" (EN: "Buenos Aires, Argentina") en un `<address>` debajo del copyright. Aprobado por Luca. | `lib/i18n.ts`, `components/Footer.tsx` |
+| `feat(seo): add the studio's city to metadata, JSON-LD and llms.txt` | Título y descripción de la home "en Buenos Aires", `PostalAddress` a nivel ciudad en Organization, ubicación en `/llms.txt`. | `lib/site.ts`, `lib/structured-data.ts`, `app/llms.txt/route.ts` |
 | `docs(seo): …` | Este informe, la tabla de prompts y la evidencia. | `docs/seo/` |
 
-No se tocó `next.config.ts`, `app/admin/`, `app/api/`, `scripts/`, variables de entorno ni los archivos sueltos de la raíz. No se cambió copy de marketing ni diseño.
+No se tocó `next.config.ts`, `app/admin/`, `app/api/`, `scripts/`, variables de entorno ni los archivos sueltos de la raíz. No se cambió copy de marketing ni diseño, salvo la línea de ubicación del footer que pidió Luca.
 
 **Verificación:** `npx tsc --noEmit` ✔ · `npm run build` ✔ · `npm run lint` ✘ con 9 errores **que ya están en `main`** (set-state-in-effect, no-explicit-any, ban-ts-comment, use-memo en `app/page.tsx`, `Navbar`, `Navbar-copy`, `Preloader`, `useActiveSection`, y los `setLang` de `app/work/page.tsx` y `WorkPageClient`); la rama no agrega ninguno (comprobado corriendo eslint sobre las versiones de `origin/main`). HTML del build servido con `next start` y revisado con curl; JSON-LD validado contra el vocabulario de schema.org.
 
@@ -141,7 +156,7 @@ No se tocó `next.config.ts`, `app/admin/`, `app/api/`, `scripts/`, variables de
 
 ## Qué decide Luca
 
-1. **Decir quién y dónde.** ¿Se puede poner en el sitio "estudio de diseño y desarrollo web en Buenos Aires, Argentina" y el nombre de quién lo dirige? Si sí, se suma al copy, a `llms.txt` y al JSON-LD (`address`/`areaServed`, `founder`). Es el arreglo más directo para C2 y A4.
+1. **Decir quién.** La ubicación ya está (aprobada y en el PR). Falta decidir si el sitio nombra a quién dirige el estudio; si sí, se suma al copy, a `llms.txt` y al JSON-LD (`founder`). Es lo que queda de C2 y A4.
 2. **Páginas de servicios y por rubro** (diseño y desarrollo web a medida, rediseño, dashboards, SEO/GEO; gastronomía, estudios jurídicos, salud/industria) usando los casos que ya existen.
 3. **Directorios y reseñas:** crear perfiles en Clutch, GoodFirms, Sortlist y DesignRush, y la ficha de Google Business (si hay domicilio que se pueda mostrar), y pedir reseñas a JINETES, Lippia, Bioprotece, KIVNON, DV Legales y Warriors.
 4. **Repo público:** ¿se deja público? (M9).
@@ -157,7 +172,7 @@ No se tocó `next.config.ts`, `app/admin/`, `app/api/`, `scripts/`, variables de
 ### 0–30 días
 - Mergear el PR y verificar en producción: `robots.txt`, `sitemap.xml`, `/llms.txt`, JSON-LD en Rich Results Test sobre `/` y `/work/jinetes`.
 - Search Console: enviar `sitemap.xml`, pedir indexación de `/work` y de los 5 casos que faltan (A2), revisar "Páginas" y "Mejoras".
-- Decidir los puntos 1, 3 y 4 de arriba. Con el punto 1, sumar ubicación y responsable al footer o a una sección "estudio".
+- Decidir los puntos 1, 3 y 4 de arriba. Con el punto 1, sumar el responsable a una sección "estudio".
 - Abrir perfiles en Clutch, GoodFirms, Sortlist y DesignRush con los 7 casos, el link a eterlab.co y el mismo nombre "eterlab.". Pedir 3–5 reseñas.
 - Corregir `og.png` y el redirect de `www`.
 

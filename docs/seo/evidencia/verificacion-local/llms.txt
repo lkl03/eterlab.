@@ -1,6 +1,6 @@
 # eterlab.
 
-> eterlab. es un estudio de diseño y desarrollo web: convirtiendo ideas en soluciones a través del diseño y desarrollo. Sitio oficial: https://eterlab.co
+> eterlab. es un estudio de diseño y desarrollo web con base en Ciudad Autónoma de Buenos Aires, Argentina: convirtiendo ideas en soluciones a través del diseño y desarrollo. Sitio oficial: https://eterlab.co
 
 Diseño y desarrollo para resolver problemas reales. Te acompañamos a transformar ideas en productos digitales sólidos: UX cuidado, interfaces limpias y una base técnica rápida. Desde el primer pixel hasta la última línea de código, optimizamos el resultado para tu satisfacción y la de tus usuarios.
 

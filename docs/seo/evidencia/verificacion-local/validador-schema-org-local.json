@@ -12,7 +12,7 @@
       }
     ]
   },
-  "homework.html": {
+  "work.html": {
     "bloques": 2,
     "resultado": [
       {
@@ -25,7 +25,7 @@
       }
     ]
   },
-  "homework_jinetes.html": {
+  "work_jinetes.html": {
     "bloques": 4,
     "resultado": [
       {
@@ -46,112 +46,7 @@
       }
     ]
   },
-  "homework_lippia.html": {
-    "bloques": 4,
-    "resultado": [
-      {
-        "type": "Organization",
-        "errores": []
-      },
-      {
-        "type": "WebSite",
-        "errores": []
-      },
-      {
-        "type": "CreativeWork",
-        "errores": []
-      },
-      {
-        "type": "BreadcrumbList",
-        "errores": []
-      }
-    ]
-  },
-  "homework_bioprotece.html": {
-    "bloques": 4,
-    "resultado": [
-      {
-        "type": "Organization",
-        "errores": []
-      },
-      {
-        "type": "WebSite",
-        "errores": []
-      },
-      {
-        "type": "CreativeWork",
-        "errores": []
-      },
-      {
-        "type": "BreadcrumbList",
-        "errores": []
-      }
-    ]
-  },
-  "homework_kivnon-sas.html": {
-    "bloques": 4,
-    "resultado": [
-      {
-        "type": "Organization",
-        "errores": []
-      },
-      {
-        "type": "WebSite",
-        "errores": []
-      },
-      {
-        "type": "CreativeWork",
-        "errores": []
-      },
-      {
-        "type": "BreadcrumbList",
-        "errores": []
-      }
-    ]
-  },
-  "homework_dvlegales.html": {
-    "bloques": 4,
-    "resultado": [
-      {
-        "type": "Organization",
-        "errores": []
-      },
-      {
-        "type": "WebSite",
-        "errores": []
-      },
-      {
-        "type": "CreativeWork",
-        "errores": []
-      },
-      {
-        "type": "BreadcrumbList",
-        "errores": []
-      }
-    ]
-  },
-  "homework_warriors-sport-arg.html": {
-    "bloques": 4,
-    "resultado": [
-      {
-        "type": "Organization",
-        "errores": []
-      },
-      {
-        "type": "WebSite",
-        "errores": []
-      },
-      {
-        "type": "CreativeWork",
-        "errores": []
-      },
-      {
-        "type": "BreadcrumbList",
-        "errores": []
-      }
-    ]
-  },
-  "homework_bioprotece3d.html": {
+  "work_lippia.html": {
     "bloques": 4,
     "resultado": [
       {
