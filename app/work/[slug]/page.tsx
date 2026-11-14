@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 
 import WorkPageClient from "../../../components/work/WorkPageClient";
 import { getWorkBySlug } from "../../../lib/work";
+import { JsonLd } from "../../../components/seo/JsonLd";
+import { workJsonLd } from "../../../lib/structured-data";
 
 // NOTE:
 // Turbopack + generateStaticParams can be a bit finicky while iterating.
@@ -65,7 +67,12 @@ export default async function WorkSlugPage({ params }: Props) {
   const { slug } = await params;
   const work = getWorkBySlug(slug);
   if (!work) notFound();
-  return <WorkPageClient work={work} />;
+  return (
+    <>
+      <JsonLd data={workJsonLd(work)} />
+      <WorkPageClient work={work} />
+    </>
+  );
 }
 
 

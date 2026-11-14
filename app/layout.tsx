@@ -3,6 +3,8 @@ import { Karla } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "../lib/site";
+import { JsonLd } from "../components/seo/JsonLd";
+import { organizationJsonLd, websiteJsonLd } from "../lib/structured-data";
 
 const karla = Karla({
   subsets: ["latin"],
@@ -58,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${karla.className} bg-paper text-ink antialiased`}>
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {children}
         <Analytics />
       </body>
