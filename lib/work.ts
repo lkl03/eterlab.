@@ -58,6 +58,11 @@ export type Work = {
   badge: Localized; // small label shown in cards
   summary: Localized;
   year: string;
+  /**
+   * Last time this case's content changed (YYYY-MM-DD). Feeds the sitemap's
+   * <lastmod>; bump it whenever the case's copy or media changes.
+   */
+  updatedAt?: string;
   role: Localized;
   readingTime: Localized;
   stack: string[];
@@ -114,6 +119,7 @@ export const WORKS: Work[] = [
       en: "Website for JINETES, the Argentine ad agency founded by Salvador Posse and Joaquín Vázquez Blanco. A custom design and build that carries their identity onto the web, from the moment you land until you leave.",
     },
     year: "2026",
+    updatedAt: "2026-10-01",
     role: {
       es: "diseño • desarrollo • seo",
       en: "design • development • seo",
@@ -284,6 +290,7 @@ export const WORKS: Work[] = [
       en: "Rebranding and a new dashboard for Bioprotece S.A., a leading medical-implant manufacturer. From a template site to a custom one: a searchable catalog, custom implants, certifications and an in-house panel for the team.",
     },
     year: "2026",
+    updatedAt: "2026-10-01",
     role: {
       es: "diseño • desarrollo • dashboard",
       en: "design • development • dashboard",
@@ -456,6 +463,7 @@ export const WORKS: Work[] = [
       en: "Website for Lippia — fresh, handmade pasta by Eva. A menu with a cart that builds the order and sends it over WhatsApp, with prices synced from nodo.",
     },
     year: "2026",
+    updatedAt: "2026-10-30",
     role: {
       es: "diseño • desarrollo • seo",
       en: "design • development • seo",
@@ -517,6 +525,7 @@ Every order came in over WhatsApp and Instagram, with the menu as a photo. She n
       en: "Institutional website for KIVNON SAS — Milfarma's R&D division for custom implants. Bilingual design and build focused on technical authority, clinical clarity and inbound consultations.",
     },
     year: "2026",
+    updatedAt: "2026-08-22",
     role: {
       es: "diseño • frontend",
       en: "design • frontend",
@@ -580,6 +589,7 @@ Their audience isn't mass market: surgeons, institutions and distributors who ne
       en: "New website for DV Legales — a law firm focused on clear, strategic and human legal counsel. Redesign + build prioritizing clarity, trust and performance.",
     },
     year: "2026",
+    updatedAt: "2026-08-22",
     role: {
       es: "diseño • frontend",
       en: "design • frontend",
@@ -645,6 +655,7 @@ They needed a website that conveyed both technical authority and a human, approa
       en: "New website for Warriors Sport Arg — a multi-location gym. Design and build focused on clear schedules, locations and new-member acquisition.",
     },
     year: "2026",
+    updatedAt: "2026-08-22",
     role: {
       es: "diseño • frontend",
       en: "design • frontend",
@@ -704,6 +715,7 @@ They needed a site that conveyed intensity and belonging while solving the pract
       en: "New website for Bioprotece3D — redesign + build focused on clarity, structure and performance.",
     },
     year: "2026",
+    updatedAt: "2026-08-22",
     role: {
       es: "diseño • frontend",
       en: "design • frontend",
