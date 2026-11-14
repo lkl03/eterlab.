@@ -20,19 +20,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const work = getWorkBySlug(slug);
   if (!work) {
     return {
-      title: "work – eterlab.",
-      alternates: { canonical: "/work" },
+      title: "Trabajo no encontrado – eterlab.",
+      robots: { index: false, follow: true },
     };
   }
 
   const canonical = `/work/${work.slug}`;
-  const description = work.summary.en;
+  // The page renders in Spanish first (html lang="es"), so describe it in Spanish.
+  const description = work.summary.es;
+  const title = `${work.title}: caso de diseño y desarrollo web – eterlab.`;
 
-  // Many covers are SVGs; social cards can be picky. Fall back to /og.png.
-  const imageUrl = work.coverImage?.toLowerCase().endsWith(".svg") ? "/og.png" : work.coverImage;
+  // Prefer the scroll-preview poster (a real screenshot); SVG covers are not
+  // accepted by most social cards, so those fall back to /og.png.
+  const cover = work.previewPoster ?? work.coverImage;
+  const image =
+    cover && !cover.toLowerCase().endsWith(".svg")
+      ? { url: cover, alt: work.title }
+      : { url: "/og.png", width: 1200, height: 630, alt: "eterlab." };
 
   return {
-    title: `${work.title} – eterlab.`,
+    // Full string: /work/layout sets a plain title, so no template applies here.
+    title,
     description,
     alternates: {
       canonical,
@@ -40,22 +48,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: "article",
       url: canonical,
-      title: `${work.title} – eterlab.`,
+      title,
       description,
-      images: [
-        {
-          url: imageUrl || "/og.png",
-          width: 1200,
-          height: 630,
-          alt: work.title,
-        },
-      ],
+      images: [image],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${work.title} – eterlab.`,
+      title,
       description,
-      images: [imageUrl || "/og.png"],
+      images: [image.url],
     },
   };
 }

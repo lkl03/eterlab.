@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import { SITE_URL } from "../lib/site";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "../lib/site";
 
 const karla = Karla({
   subsets: ["latin"],
@@ -14,10 +14,10 @@ const karla = Karla({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "eterlab.",
+    default: SITE_TITLE,
     template: "%s – eterlab.",
   },
-  description: "Design & development studio — turning ideas into useful digital products.",
+  description: SITE_DESCRIPTION,
   alternates: {
     canonical: "/",
   },
@@ -25,8 +25,9 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "eterlab.",
-    title: "eterlab.",
-    description: "Design & development studio — turning ideas into useful digital products.",
+    locale: "es_AR",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: "/og.png",
@@ -38,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "eterlab.",
-    description: "Design & development studio — turning ideas into useful digital products.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ["/og.png"],
   },
   robots: {
