@@ -159,6 +159,8 @@ type Copy = {
 
     studioLabel: string;
     copy: string;
+    /** Where the studio is based; shown under the copyright line. */
+    location: string;
     backToTop: string;
 
     emailUs: string;
@@ -368,6 +370,7 @@ export const COPY: Record<Lang, Copy> = {
 
       studioLabel: "Studio",
       copy: "eterlab. All rights reserved.",
+      location: "Buenos Aires, Argentina",
       backToTop: "Back to top",
 
       emailUs: "email us",
@@ -545,6 +548,7 @@ export const COPY: Record<Lang, Copy> = {
 
       studioLabel: "Estudio",
       copy: "eterlab. Todos los derechos reservados.",
+      location: "Ciudad Autónoma de Buenos Aires, Argentina",
       backToTop: "Volver arriba",
 
       emailUs: "escribinos",

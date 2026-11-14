@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 
 import Navbar from "../../components/Navbar";
@@ -56,7 +55,6 @@ function Body({ text }: { text: string }) {
 }
 
 export default function WorkPageClient({ work }: Props) {
-  const router = useRouter();
   const [lang, setLang] = useState<Lang>("es");
 
   useEffect(() => {
@@ -110,9 +108,7 @@ export default function WorkPageClient({ work }: Props) {
       <main className="bg-paperMuted pt-16 sm:pt-20">
         <section className="mx-auto w-[min(1120px,calc(100%-2rem))] pb-16">
           <div className="mb-6">
-            <Button variant="light" onClick={() => router.push("/")}
-              ariaLabel="Back"
-            >
+            <Button variant="light" href="/" ariaLabel="Back">
               <ArrowLeft size={16} />
               {c.nav.home}
             </Button>

@@ -1,0 +1,19 @@
+/llms.txt                    404 11341B text/html; charset=utf-8 0.518592s
+/admin                       200 14327B text/html; charset=utf-8 0.448529s
+/api/contact                 405 0B  0.565025s
+/api/admin/clients           401 24B application/json 0.359697s
+/work                        200 50947B text/html; charset=utf-8 0.404380s
+/work/jinetes                200 65268B text/html; charset=utf-8 0.449922s
+/work/lippia                 200 32018B text/html; charset=utf-8 0.382670s
+/work/bioprotece             200 74006B text/html; charset=utf-8 0.482237s
+/work/kivnon-sas             200 33986B text/html; charset=utf-8 0.347588s
+/work/dvlegales              200 32477B text/html; charset=utf-8 0.356676s
+/work/warriors-sport-arg     200 30931B text/html; charset=utf-8 0.366461s
+/work/bioprotece3d           200 32102B text/html; charset=utf-8 0.359667s
+/work/no-existe              404 10078B text/html; charset=utf-8 0.354409s
+/no-existe                   404 11341B text/html; charset=utf-8 0.193073s
+/work/JINETES                200 65268B text/html; charset=utf-8 0.472022s
+/og.png                      200 16832B image/png 0.503642s
+/logo.avif                   200 11971B image/avif 0.377080s
+/eterlab-logo.svg            200 1030B image/svg+xml 0.361026s
+/favicon.ico                 200 933B image/x-icon 0.243995s

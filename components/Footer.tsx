@@ -123,8 +123,11 @@ export default function Footer({ lang }: Props) {
       {/* dark bar */}
       <div className="bg-ink">
         <div className="mx-auto flex w-[min(1120px,calc(100%-2rem))] items-center justify-between gap-6 py-7">
-          <div className="text-sm font-medium text-white/70">
-            ©{year} {c.footer.copy}
+          <div>
+            <div className="text-sm font-medium text-white/70">
+              ©{year} {c.footer.copy}
+            </div>
+            <address className="mt-1 text-xs not-italic text-white/60">{c.footer.location}</address>
           </div>
           <button
             type="button"

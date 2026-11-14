@@ -1,0 +1,81 @@
+===== home.html | palabras visibles sin JS: 490
+   h1 | eterlab.
+   h2 | Una agencia rebelde, un sitio disruptivo.
+   h2 | trabajos recientes.
+   h3 | Lippia
+   h3 | Bioprotece S.A.
+   h3 | KIVNON SAS
+   h3 | Warriors Sport Arg
+   h3 | DV Legales
+   h2 | proyectos.
+   h3 | promptea.me
+   h3 | moonlight web designs
+   h3 | nodo
+   h2 | hablemos.
+  imgs/media: 11
+     ('audio', '/audio/eterlab-intro-song.mp3', '', '', '', '')
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Flogo-white.webp&w=1080&q=75', 'JINETES', '475', '480', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fjinetes-poster.jpg&w=3840&q=75', 'JINETES', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Flippia-poster.jpg&w=3840&q=75', 'Lippia', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fbioprotece-poster.jpg&w=3840&q=75', 'Bioprotece S.A.', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fkivnon-sas-poster.jpg&w=3840&q=75', 'KIVNON SAS', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fwarriors-sport-arg-poster.jpg&w=3840&q=75', 'Warriors Sport Arg', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fdvlegales-poster.jpg&w=3840&q=75', 'DV Legales', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fpromptea-poster.jpg&w=3840&q=75', 'promptea.me', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fmoonlight-poster.jpg&w=3840&q=75', 'moonlight web designs', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fnodo-poster.jpg&w=3840&q=75', 'nodo', None, None, 'lazy', None)
+  links internos: ['/work', '/work/bioprotece', '/work/dvlegales', '/work/jinetes', '/work/kivnon-sas', '/work/lippia', '/work/warriors-sport-arg']
+  links externos: ['https://dvlegales.com.ar', 'https://jinetes.agency', 'https://moonlightwebdesigns.com/', 'https://nodoar.app', 'https://pastaslippia.com.ar', 'https://promptea.me', 'https://tiktok.com/@.eterlab', 'https://wa.me/5491171362144', 'https://warriorssportarg.com.ar', 'https://www.bioprotece.com.ar', 'https://www.instagram.com/eterlab_/', 'https://www.kivnonsas.com.ar', 'https://www.linkedin.com/company/eterlab-co/']
+===== work.html | palabras visibles sin JS: 299
+   h1 | trabajos.
+   h3 | JINETES
+   h3 | Lippia
+   h3 | Bioprotece S.A.
+   h3 | KIVNON SAS
+   h3 | Warriors Sport Arg
+   h3 | DV Legales
+   h3 | Bioprotece3D
+  imgs/media: 7
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fjinetes-poster.jpg&w=3840&q=75', 'JINETES', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Flippia-poster.jpg&w=3840&q=75', 'Lippia', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fbioprotece-poster.jpg&w=3840&q=75', 'Bioprotece S.A.', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fkivnon-sas-poster.jpg&w=3840&q=75', 'KIVNON SAS', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fwarriors-sport-arg-poster.jpg&w=3840&q=75', 'Warriors Sport Arg', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fdvlegales-poster.jpg&w=3840&q=75', 'DV Legales', None, None, 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fbioprotece3d-poster.jpg&w=3840&q=75', 'Bioprotece3D', None, None, 'lazy', None)
+  links internos: ['/work/bioprotece', '/work/bioprotece3d', '/work/dvlegales', '/work/jinetes', '/work/kivnon-sas', '/work/lippia', '/work/warriors-sport-arg']
+  links externos: ['https://bioprotece3d.com', 'https://dvlegales.com.ar', 'https://jinetes.agency', 'https://pastaslippia.com.ar', 'https://tiktok.com/@.eterlab', 'https://wa.me/5491171362144', 'https://warriorssportarg.com.ar', 'https://www.bioprotece.com.ar', 'https://www.instagram.com/eterlab_/', 'https://www.kivnonsas.com.ar', 'https://www.linkedin.com/company/eterlab-co/']
+===== work_jinetes.html | palabras visibles sin JS: 447
+   h1 | Una agencia rebelde, un sitio disruptivo.
+   h2 | Nuestra misión.
+   h2 | Un mismo paisaje.
+   h2 | Una videoteca propia.
+   h2 | Pensado para cada pantalla.
+   h2 | Detrás del diseño.
+   h2 | ¿Tenés un proyecto en mente?
+  imgs/media: 14
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Flogo-white.webp&w=1080&q=75', 'JINETES', '475', '480', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Fjinetes-poster.jpg&w=3840&q=75', 'JINETES', None, None, None, None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-services.webp&w=3840&q=75', 'Sección Qué hacemos', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-about.webp&w=3840&q=75', 'Sección Nosotros', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-work.webp&w=3840&q=75', 'Sección Trabajos', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-mananita.webp&w=3840&q=75', 'Página de la campaña Mañanita', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-campanas-row.webp&w=3840&q=75', 'Listado de campañas', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fm-hero.webp&w=3840&q=75', 'Home en el celular', '520', '1125', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fm-work.webp&w=3840&q=75', 'Trabajos en el celular', '520', '1125', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fm-campanas.webp&w=3840&q=75', 'Campañas en el celular', '520', '1125', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fm-mananita.webp&w=3840&q=75', 'Una campaña en el celular', '520', '1125', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Fd-repercusion.webp&w=3840&q=75', 'Sección Repercusión', '1600', '1000', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fjinetes%2Flogo-white.webp&w=1080&q=75', 'JINETES', '475', '480', 'lazy', None)
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Flippia-poster.jpg&w=3840&q=75', '', None, None, 'lazy', None)
+  links internos: ['/', '/#contact', '/work', '/work/lippia']
+  links externos: ['https://jinetes.agency', 'https://tiktok.com/@.eterlab', 'https://wa.me/5491171362144', 'https://www.instagram.com/eterlab_/', 'https://www.linkedin.com/company/eterlab-co/']
+===== work_lippia.html | palabras visibles sin JS: 278
+   h1 | Lippia
+   h2 | contexto
+   h2 | qué hicimos
+   h2 | resultado
+  imgs/media: 1
+     ('/_next/image?url=%2Fwork%2Fpreviews%2Flippia-poster.jpg&w=3840&q=75', 'Lippia', None, None, None, None)
+  links internos: []
+  links externos: ['https://pastaslippia.com.ar', 'https://tiktok.com/@.eterlab', 'https://wa.me/5491171362144', 'https://www.instagram.com/eterlab_/', 'https://www.linkedin.com/company/eterlab-co/']

@@ -1,0 +1,70 @@
+{
+  "home.html": {
+    "bloques": 2,
+    "resultado": [
+      {
+        "type": "Organization",
+        "errores": []
+      },
+      {
+        "type": "WebSite",
+        "errores": []
+      }
+    ]
+  },
+  "work.html": {
+    "bloques": 2,
+    "resultado": [
+      {
+        "type": "Organization",
+        "errores": []
+      },
+      {
+        "type": "WebSite",
+        "errores": []
+      }
+    ]
+  },
+  "work_jinetes.html": {
+    "bloques": 4,
+    "resultado": [
+      {
+        "type": "Organization",
+        "errores": []
+      },
+      {
+        "type": "WebSite",
+        "errores": []
+      },
+      {
+        "type": "CreativeWork",
+        "errores": []
+      },
+      {
+        "type": "BreadcrumbList",
+        "errores": []
+      }
+    ]
+  },
+  "work_lippia.html": {
+    "bloques": 4,
+    "resultado": [
+      {
+        "type": "Organization",
+        "errores": []
+      },
+      {
+        "type": "WebSite",
+        "errores": []
+      },
+      {
+        "type": "CreativeWork",
+        "errores": []
+      },
+      {
+        "type": "BreadcrumbList",
+        "errores": []
+      }
+    ]
+  }
+}

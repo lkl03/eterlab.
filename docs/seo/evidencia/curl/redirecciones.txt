@@ -1,0 +1,34 @@
+=== https://eterlab.co
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, must-revalidate
+Content-Type: text/html; charset=utf-8
+Server: Vercel
+X-Matched-Path: /
+X-Vercel-Cache: HIT
+X-Vercel-Id: gru1::7xxkb-1794616896822-68c94ef84dbf
+=== https://www.eterlab.co
+HTTP/1.1 307 Temporary Redirect
+Cache-Control: public, max-age=0, must-revalidate
+Content-Type: text/plain
+Location: https://eterlab.co/
+Server: Vercel
+X-Vercel-Id: gru1::wfsqb-1794616897357-305ab1d262e3
+=== http://eterlab.co
+HTTP/1.0 308 Permanent Redirect
+Content-Type: text/plain
+Location: https://eterlab.co/
+server: Vercel
+=== https://eterlab.com
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset=UTF-8
+location: https://www.eterlab.com/
+Server: cloudflare
+=== https://www.eterlab.com
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Server: cloudflare
+=== http://eterlab.com
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset=UTF-8
+Location: http://www.eterlab.com/
+Server: cloudflare
