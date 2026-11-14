@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import Navbar from "../../components/Navbar";
@@ -13,7 +12,6 @@ import { CLIENT_WORKS, type Work } from "../../lib/work";
 import { WorkCard } from "../../components/work/WorkCard";
 
 export default function WorkIndexPage() {
-  const router = useRouter();
   const [lang, setLang] = useState<Lang>("es");
   const c = COPY[lang];
 
@@ -47,7 +45,7 @@ export default function WorkIndexPage() {
         <main className="bg-paperMuted pt-16 sm:pt-20">
           <section className="mx-auto w-[min(1120px,calc(100%-2rem))] pb-16">
             <div className="mb-6">
-              <Button variant="light" onClick={() => router.push("/")} ariaLabel="Back">
+              <Button variant="light" href="/" ariaLabel="Back">
                 <ArrowLeft size={16} />
                 {c.nav.home}
               </Button>
@@ -73,7 +71,7 @@ export default function WorkIndexPage() {
         <section className="mx-auto w-[min(1120px,calc(100%-2rem))] pb-16">
           {/* Back to home */}
           <div className="mb-6">
-            <Button variant="light" onClick={() => router.push("/")} ariaLabel="Back">
+            <Button variant="light" href="/" ariaLabel="Back">
               <ArrowLeft size={16} />
               {c.nav.home}
             </Button>
